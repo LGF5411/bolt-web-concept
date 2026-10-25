@@ -727,7 +727,7 @@ Build: campaign page = existing hero, video block, fact grid and footer; no new 
    <div class="wrap"><div class="sec-head"><p class="eyebrow">Try it for your trip</p><h2>Ride, scooter or car-sharing? Watch them race.</h2><p>Every dot is a Bolt vehicle moving on real Tallinn streets. Pick a place and see which way wins.</p></div></div>
    <div class="has-pin wrap planner-wrap"><button class="pin" type="button" style="right:14px;top:-12px" data-note="Race: three products, one answer">Why: bolt.eu lists services side by side but never says which one fits a trip.
 Changed: pick a place and Ride, Scooter and Car-sharing race on real streets, including the wait and the walk. Fastest and cheapest are labelled; each lane opens its page with the trip filled in.
-A11y: result announced once; with reduced motion the result shows at once; Skip to result button.
+A11y: result announced once; with reduced motion the camera does not fly; Skip to result button.
 Data: example prices; in production from the pricing service, or a static ‘from’ table where estimates are not allowed.
 Test: clicks from Home to product pages; guardrail Home LCP.</button>
     <div class="mapstage mapcard" id="stageMap">
@@ -1250,7 +1250,6 @@ window.Concept = (() => {
     for (const r of racers) { r.total = r.legs.reduce((n, l) => n + l.dur, 0); r.el = document.createElement('div'); r.el.className = 'racer'; r.el.style.setProperty('--c', col(r.id)); r.el.innerHTML = ICON[r.id]; r.m = map.marker(r.el, f.x, f.y, { events: false }); r.done = false; }
     const maxT = Math.max(...racers.map(r => r.total));
     race = { t0: performance.now() + 1300, k: RACE_MS / maxT, maxT, fx: [], over: false };
-    if (reduced()) race.t0 = performance.now() - maxT * race.k - 50;   // reduced motion: show the result straight away, no race animation
     if (!mB) mB = map.marker(mkB, t.x, t.y, { clamp: '.bub' }); mB.x = t.x; mB.y = t.y; setText(mkB.querySelector('.t'), t.label.length > 30 ? t.label.slice(0, 28) + '…' : t.label);
     // panel
     $('#planView').hidden = true; $('#raceView').hidden = false; $('#raceView').classList.remove('done');

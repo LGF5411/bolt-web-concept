@@ -457,10 +457,9 @@ section.block{padding-block:clamp(112px,11vw,160px)}
 .fact p{color:var(--muted);font-size:16px;line-height:1.55}
 .fact.green{background:#217E53;color:#fff}.fact.green b,.fact.green h3{color:#fff}.fact.green p{color:#fff}
 @supports (animation-timeline: view()){
-  @media (prefers-reduced-motion:no-preference){
-    .fact{animation:rise linear both;animation-timeline:view();animation-range:entry 0% entry 60%}
-    @keyframes rise{from{opacity:0;transform:translateY(40px)}to{opacity:1;transform:none}}
-  }
+  .fact{animation:rise linear both;animation-timeline:view();animation-range:entry 0% entry 60%}
+  @keyframes rise{from{opacity:0;transform:translateY(40px)}to{opacity:1;transform:none}}
+  @media (prefers-reduced-motion:reduce){ @keyframes rise{from{opacity:0}to{opacity:1}} }
 }
 .b7-photo{background:#0E1010;color:#fff;padding:0 0 clamp(96px,9vw,140px)}
 .b7-photo img{display:block;width:100%;max-width:1920px;height:auto;margin:0 auto}
@@ -492,7 +491,7 @@ section.block{padding-block:clamp(112px,11vw,160px)}
   .l-hero::after{background:linear-gradient(0deg,#000 0%,rgba(0,0,0,0) 22%);bottom:auto;height:calc(100vw * .625)}
   .l-hero .wrap{padding-block:8px 56px}
 }
-@media (prefers-reduced-motion:reduce){.story-steps li{opacity:1;transition:none}.limit,.turn svg{transition:none}}
+@media (prefers-reduced-motion:reduce){.limit,.turn svg{transition:none}}
 </style>
 </head>
 <body>
@@ -563,7 +562,7 @@ Test: Rent a scooter clicks from the launch page vs. the Scooters page; scroll d
       <div class="story-grid has-pin"><button class="pin" type="button" style="left:8px;top:-12px" data-note="Scroll story">Why: the four AI and display features are hard to picture from a list.
 Changed: the handlebar display stays in view and changes as each moment scrolls past: route, slow zone, pavement, parking.
 Build: IntersectionObserver sets data-s on the display; text stays in the page, the display is decorative (aria-hidden), so screen-reader users get the same story as plain text.
-A11y: with reduced motion all steps are fully visible and nothing animates.</button>
+A11y: with reduced motion the steps still fade, but nothing moves.</button>
         <div class="story-sticky" aria-hidden="true">
           <div class="handle">
             <span class="lever l"></span><span class="lever r"></span><span class="stem"></span><span class="grip l"></span><span class="grip r"></span>

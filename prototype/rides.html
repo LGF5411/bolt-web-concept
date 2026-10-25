@@ -1069,7 +1069,6 @@ window.Concept = (() => {
       ctx.fillStyle = '#0E1010'; ctx.fillText(label, sx + 9 + w / 2, sy + .5);
     }
     // the pulse: one trip, sped up, then a pause (no motion with reduced-motion settings)
-    if (reduced()) return;
     if (now - draw.t0 - 900 > 3 * (PULSE + GAP)) return;   // three runs, then the route rests
     const t = (now - draw.t0 - 900) % (PULSE + GAP);
     if (t < PULSE) {

@@ -701,7 +701,9 @@ section.block{padding-block:clamp(112px,11vw,160px)}
   .compare{grid-template-columns:minmax(0,1fr)!important}
   .pay{min-height:460px}
 }
-@media (prefers-reduced-motion:reduce){.hero-d.lit h1,.hero-d.lit .beam{animation:none}.hero-d.lit .beam{opacity:.45}.hero-d.holding .shot .l-ind{animation:none}.car-stage.unlocked .l-ind{animation:none}.car-stage.unlocked .l-head{animation:none;opacity:1}}
+@media (prefers-reduced-motion:reduce){.hero-d.lit .beam{animation:fadebeam 900ms ease 250ms both}.car-stage.unlocked .l-head{animation:fadeon 700ms ease 260ms both}}
+@keyframes fadebeam{from{opacity:0}to{opacity:.45}}
+@keyframes fadeon{from{opacity:0}to{opacity:1}}
 @media (max-width:560px){.classes{grid-template-columns:repeat(2,minmax(0,1fr))!important}}
 </style>
 </head>
@@ -790,7 +792,7 @@ section.block{padding-block:clamp(112px,11vw,160px)}
         <button class="pin" type="button" style="left:0;top:0" data-note="Hold to unlock">Why: bolt.eu tells you the phone is the key; the hero shows a car photo.
 Changed: the visitor holds to unlock. Cabin light follows the hold, then indicators, headlights and the green underglow; the card shows it is a real car on the map below, with the live cost counter Bolt&#x27;s own customer praises.
 Build: two 2K studio frames of the same car (off, light layers). Timing: hold 1100 ms, indicators 1100 ms, headlights 900 ms from 1360 ms, card from 1800 ms.
-A11y: Enter works; reduced motion shows the lit car without beams or flicker.
+A11y: Enter works; with reduced motion the lights fade on without the sweep or the flicker.
 Test: clicks to the car map and to Rent a car; guardrail Drive LCP.</button>
       </div>
     </div>
