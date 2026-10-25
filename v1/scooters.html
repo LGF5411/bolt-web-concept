@@ -1,0 +1,947 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex">
+<link rel="preload" href="assets/tallinn.bin" as="fetch" crossorigin>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Bolt Scooters Concept</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400..800&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* ===== shared base for Home and Rides (same system as Scooters and Drive) ===== */
+:root{
+  --bg:#F7F9F8; --surface:#FFFFFF; --ink:#0E1010; --muted:#5C6660; --line:#DCE3DE;
+  --night-ink:#ECEEED; --night-muted:#9AA39E; --night-line:#262B29; --night-surface:#171B1A;
+  --green:#2B8659; --green-text:#23744C; --green-ink:#FFFFFF; --green-soft:#E3F1E8; --green-bright:#6FD39C;
+  --warn:#B4541B; --note:#5B3FD6;
+  --font:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,"SF Mono",Menlo,monospace;
+  --r-m:16px; --r-l:28px; --pill:40px;
+  --glide:cubic-bezier(.16,1,.3,1); --press:cubic-bezier(.3,0,.5,1);
+  --t-fast:140ms; --t-norm:280ms; --t-scene:760ms;
+  color-scheme:light;
+}
+/* Single light look by design: bolt.eu has no dark theme; black bands are part of Bolt's own pattern. */
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.55 var(--font);overflow-x:hidden}
+img,svg{max-width:100%}
+a{color:inherit}
+button{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--green);outline-offset:3px;border-radius:8px}
+.wrap{max-width:1240px;margin:0 auto;padding-left:max(20px,env(safe-area-inset-left,0px));padding-right:max(20px,env(safe-area-inset-right,0px))}
+h1,h2,h3{font-family:var(--font);text-wrap:balance;margin:0}
+h1{font-weight:750;font-size:clamp(40px,5.6vw,72px);line-height:1.02;letter-spacing:-.03em}
+h2{font-weight:750;font-size:clamp(30px,3.6vw,46px);line-height:1.06;letter-spacing:-.03em}
+h3{font-weight:650;font-size:20px;line-height:1.25;letter-spacing:-.01em}
+p{margin:0}
+.eyebrow{font-weight:600;font-size:16px;color:var(--muted)}
+.night .eyebrow{color:var(--night-muted)}
+.mono{font-family:var(--mono);font-variant-numeric:tabular-nums}
+.muted{color:var(--muted)}
+.visually-hidden{position:absolute!important;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.night{background:var(--ink);color:var(--night-ink)}
+
+.concept{background:#000;color:#cfd5d2;font:500 12px/1.4 var(--mono);letter-spacing:.04em}
+.concept .wrap{display:flex;gap:16px;justify-content:space-between;align-items:center;padding-block:8px;flex-wrap:wrap}
+.concept-actions{display:flex;gap:8px;flex-wrap:wrap}
+.notes-toggle{display:inline-flex;gap:8px;align-items:center;background:none;border:1px solid currentColor;border-radius:999px;padding:4px 12px;cursor:pointer;font:inherit;color:inherit}
+.notes-toggle[aria-pressed="true"]{background:var(--note);border-color:var(--note);color:#fff}
+
+.site-head{position:sticky;top:env(safe-area-inset-top,0px);z-index:30;background:rgba(247,249,248,.96);border-bottom:1px solid var(--line)}
+@supports (backdrop-filter:blur(1px)){.site-head{background:rgba(247,249,248,.86);backdrop-filter:saturate(1.4) blur(12px)}}
+.site-head .wrap{display:flex;align-items:center;gap:28px;height:64px}
+.wordmark{font:800 24px/1 var(--font);letter-spacing:-.04em;text-decoration:none;display:flex;align-items:baseline;gap:8px}
+.wordmark small{font:500 10px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.intent{display:flex;gap:4px;margin:0;padding:0;list-style:none}
+.intent > li{position:relative}
+.intent-btn{background:none;border:0;padding:10px 14px;border-radius:var(--pill);font-weight:600;font-size:15px;cursor:pointer;display:flex;gap:6px;align-items:center;text-decoration:none;color:inherit}
+.intent-btn:hover,.intent-btn[aria-expanded="true"]{background:var(--green-soft)}
+.intent-btn[aria-current="true"]{color:var(--green-text)}
+.chev{width:10px;height:10px;transition:transform var(--t-norm) var(--glide)}
+.intent-btn[aria-expanded="true"] .chev{transform:rotate(180deg)}
+.mega{position:absolute;top:calc(100% + 8px);left:0;width:min(560px,90vw);background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:var(--r-m);box-shadow:0 24px 48px -24px rgba(10,30,20,.25);padding:10px;display:grid;grid-template-columns:repeat(3,1fr);gap:6px;
+  opacity:0;transform:translateY(-6px);pointer-events:none;transition:opacity var(--t-norm) var(--glide),transform var(--t-norm) var(--glide)}
+.mega.open{opacity:1;transform:none;pointer-events:auto}
+.mega a{display:grid;gap:4px;padding:14px;border-radius:12px;text-decoration:none}
+.mega a:hover{background:var(--bg)}
+.mega a b{font-weight:650}
+.mega a span{font-size:13px;color:var(--muted);line-height:1.35}
+.mega a[aria-current="page"]{background:var(--green-soft)}
+.mega a[aria-current="page"] b{color:var(--green-text)}
+.head-right{margin-left:auto;display:flex;gap:12px;align-items:center}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;border:0;border-radius:var(--pill);min-height:52px;padding:0 24px;font-weight:650;font-size:16px;cursor:pointer;text-decoration:none;
+  transition:transform var(--t-fast) var(--press),background-color var(--t-norm),box-shadow var(--t-norm)}
+.btn:active{transform:scale(.97)}
+.btn-primary{background:var(--green);color:var(--green-ink)}
+.btn-primary:hover{box-shadow:0 10px 24px -12px var(--green)}
+.btn-quiet{background:var(--surface);border:1px solid var(--line);color:var(--ink)}
+.night .btn-quiet{background:transparent;border-color:var(--night-line);color:var(--night-ink)}
+.btn-small{min-height:40px;padding:0 18px;font-size:14px}
+.menu-btn{display:none;background:none;border:1px solid var(--line);border-radius:var(--pill);width:44px;height:44px;cursor:pointer}
+
+section.block{padding-block:96px}
+.sec-head{display:grid;gap:14px;max-width:44rem;margin-bottom:40px}
+.sec-head p{font-size:18px;color:var(--muted)}
+.night .sec-head p{color:var(--night-muted)}
+.chip{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;border-radius:var(--pill);padding:4px 10px;background:var(--green-soft);color:#1F6B43;white-space:nowrap}
+.chip.out{background:var(--bg);color:var(--muted);border:1px solid var(--line)}
+
+.faq{max-width:52rem;display:grid}
+.faq details{border-bottom:1px solid var(--night-line)}
+.faq summary{cursor:pointer;list-style:none;padding:22px 0;font-weight:650;font-size:19px;display:flex;justify-content:space-between;gap:16px}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{content:"+";font:400 26px/1 var(--font);color:var(--night-muted);transition:transform var(--t-norm) var(--glide)}
+.faq details[open] summary::after{transform:rotate(45deg)}
+.faq details p{padding:0 0 22px;color:var(--night-muted);max-width:44rem}
+
+.final{background:var(--green-soft);border-radius:var(--r-l);padding:48px;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:32px;align-items:center}
+.final p{color:var(--muted)}
+footer{padding-block:64px 48px;background:var(--ink);color:var(--night-ink)}
+.foot{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:24px}
+.foot h4{margin:0 0 12px;font:500 12px/1 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--night-muted)}
+.foot ul{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.foot a{text-decoration:none}
+.foot a:hover{text-decoration:underline}
+.legal{margin-top:40px;padding-top:20px;border-top:1px solid var(--night-line);font-size:13px;color:var(--night-muted);display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+
+/* phone + handoff stage */
+.phone{--w:300px;width:var(--w);aspect-ratio:9/19.3;position:relative}
+.phone .bezel{position:absolute;inset:0;border-radius:calc(var(--w) * .16);background:#0B0F0D;padding:calc(var(--w) * .035);box-shadow:inset 0 0 0 2px #2b332e,inset 0 0 0 5px #0B0F0D,0 50px 80px -40px rgba(0,0,0,.45)}
+.screen{position:relative;width:100%;height:100%;border-radius:calc(var(--w) * .125);overflow:hidden;background:#F2F5F3;color:#121714;font-size:4.4cqi;container-type:inline-size}
+.island{position:absolute;top:3.6cqi;left:50%;width:30%;height:8cqi;border-radius:5cqi;background:#000;transform:translateX(-50%);z-index:5}
+.status{position:absolute;top:0;left:0;right:0;height:15cqi;display:flex;justify-content:space-between;align-items:center;padding:0 9.6cqi;font:600 4.4cqi/1 -apple-system,system-ui,sans-serif;z-index:4}
+.screen.dark .status{color:#fff}
+.view{position:absolute;inset:0;transition:opacity 420ms var(--glide),transform 620ms var(--glide)}
+.view:not(.on){opacity:0;transform:translateX(18%) scale(.98);pointer-events:none}
+.view.left:not(.on){transform:translateX(-18%) scale(.98)}
+.view > svg.full{position:absolute;inset:0;width:100%;height:100%}
+.ph-card{position:absolute;left:3cqi;right:3cqi;bottom:3cqi;background:#fff;border-radius:8cqi;padding:5.2cqi;display:grid;grid-template-columns:minmax(0,1fr);gap:3.6cqi;box-shadow:0 -6px 24px rgba(0,0,0,.08)}
+.ph-row{display:flex;justify-content:space-between;align-items:center;gap:3cqi;min-width:0}
+.ph-row b{font-size:5.4cqi;white-space:nowrap}
+.ph-row span{font-size:4cqi;color:#5C6660}
+.ph-pill{font:600 4.2cqi/1 -apple-system,system-ui,sans-serif;background:#F2F5F3;border-radius:999px;padding:2.6cqi 3.7cqi;white-space:nowrap;flex-shrink:0}
+.ph-btn{background:#2B8659;color:#fff;border-radius:999px;padding:4.4cqi;text-align:center;font-weight:650;font-size:5cqi}
+
+.stage{position:fixed;inset:0;z-index:60;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);align-items:center;gap:56px;background:#F7F9F8;isolation:isolate;color:var(--ink);
+  padding:calc(24px + env(safe-area-inset-top,0px)) max(24px,env(safe-area-inset-right,0px)) calc(24px + env(safe-area-inset-bottom,0px)) max(24px,env(safe-area-inset-left,0px))}
+.stage[hidden]{display:none}
+.stage-phone{position:relative;justify-self:end;display:grid;place-items:center}
+.stage .phone{opacity:0;transform:translateY(40px) scale(.94);transition:opacity 500ms ease,transform var(--t-scene) var(--glide)}
+.stage.in .phone{opacity:1;transform:none}
+.stage-panel{position:relative;max-width:30rem;display:grid;gap:24px;opacity:0;transform:translateX(24px);transition:opacity 420ms ease 220ms,transform var(--t-scene) var(--glide) 160ms}
+.stage.in .stage-panel{opacity:1;transform:none}
+.stage-close{position:absolute;top:calc(20px + env(safe-area-inset-top,0px));right:max(20px,env(safe-area-inset-right,0px));z-index:2;width:44px;height:44px;border-radius:50%;border:1px solid var(--line);background:var(--surface);cursor:pointer;display:grid;place-items:center}
+.steps{list-style:none;margin:0;padding:0;display:grid;gap:4px;counter-reset:s}
+.steps li button{width:100%;text-align:left;background:none;border:0;border-radius:14px;padding:14px 16px;display:grid;grid-template-columns:32px 1fr;gap:4px 14px;cursor:pointer;position:relative;overflow:hidden}
+.steps li button::before{counter-increment:s;content:counter(s);grid-row:span 2;width:32px;height:32px;border-radius:50%;display:grid;place-items:center;font:600 14px/1 var(--mono);border:1.5px solid var(--line)}
+.steps li button b{font-weight:650;font-size:17px}
+.steps li button span{color:var(--muted);font-size:14px}
+.steps li button[aria-current="step"]{background:var(--surface)}
+.steps li button[aria-current="step"]::before{background:var(--green);border-color:var(--green);color:#fff}
+.steps li button .prog{position:absolute;left:0;bottom:0;height:2px;width:100%;background:var(--green);transform-origin:left;transform:scaleX(0)}
+.steps li button[aria-current="step"] .prog.run{animation:prog 2800ms linear forwards}
+@keyframes prog{to{transform:scaleX(1)}}
+.handoff{display:grid;grid-template-columns:auto minmax(0,1fr);gap:18px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:var(--r-m);padding:16px}
+.qr{width:112px;height:112px;border-radius:10px;background:#fff;padding:8px;border:1px solid var(--line)}
+.qr svg{width:100%;height:100%;display:block}
+.handoff-copy{display:grid;gap:10px;min-width:0}
+.send-or{font-size:14px;font-weight:600;margin:0}
+.send-link{justify-self:start}
+.stage.on-phone .send-link{display:none}
+.send{display:flex;gap:8px;flex-wrap:wrap}
+.send input{flex:1 1 140px;min-width:0;font:500 15px/1 var(--font);color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:var(--pill);padding:12px 16px}
+.send-msg{font-size:13px;color:var(--green-text);min-height:1.3em}
+.pause{background:none;border:0;padding:0;color:var(--muted);font:500 13px/1 var(--mono);cursor:pointer;text-decoration:underline;text-underline-offset:3px;justify-self:start}
+.open-app{display:none}
+.stage.on-phone .qr,.stage.on-phone .send,.stage.on-phone .send-msg,.stage.on-phone .send-or{display:none}
+.stage.on-phone .open-app{display:inline-flex;justify-self:start}
+.stage.on-phone .handoff{grid-template-columns:minmax(0,1fr);order:1}
+.stage.on-phone .steps{order:2}
+.stage.on-phone .pause{order:3}
+.stage.on-phone{padding-top:20px}
+.stage.inline{position:absolute;inset:0;min-height:100%;height:auto;align-items:start;align-content:start;overflow:visible;padding-top:var(--stage-top,24px)}
+.stage.inline .stage-close{position:absolute;top:calc(var(--stage-top,24px) - 8px)}
+
+.pin{display:none;position:absolute;z-index:20;width:26px;height:26px;border-radius:50%;background:var(--note);color:#fff;font:600 12px/26px var(--mono);text-align:center;border:2px solid var(--bg);cursor:pointer;box-shadow:0 4px 12px rgba(60,40,180,.35);padding:0}
+body.notes .pin{display:block}
+.has-pin{position:relative}
+.pin-pop{position:absolute;z-index:40;width:290px;max-width:calc(100vw - 32px);background:var(--surface);color:var(--ink);border:1px solid var(--note);border-radius:14px;padding:14px;font-size:14px;line-height:1.45;box-shadow:0 20px 40px -20px rgba(40,20,120,.4)}
+.pin-pop b{display:block;font:600 11px/1.2 var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--note);margin-bottom:6px}
+
+@media (max-width:980px){
+  .intent,.head-right .btn{display:none}
+  .menu-btn{display:grid;place-items:center}
+  .final{grid-template-columns:minmax(0,1fr);padding:32px}
+  .foot{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .stage{grid-template-columns:minmax(0,1fr);align-content:start;gap:20px;overflow-y:auto}
+  .stage-phone{justify-self:center}
+  .stage .phone{--w:230px}
+  .stage.on-phone .phone{--w:180px}
+  .stage-panel{max-width:none}
+}
+.site-head.menu-open .intent{display:flex;position:absolute;top:64px;left:0;right:0;flex-direction:column;background:var(--surface);border-bottom:1px solid var(--line);padding:12px max(20px,env(safe-area-inset-right,0px)) 16px max(20px,env(safe-area-inset-left,0px))}
+.site-head.menu-open .mega{position:static;width:auto;grid-template-columns:minmax(0,1fr);box-shadow:none;margin-top:6px}
+@media (max-width:560px){
+  section.block{padding-block:64px}
+  .foot{grid-template-columns:minmax(0,1fr)}
+  .handoff{grid-template-columns:minmax(0,1fr)}
+  .qr{display:none}
+}
+@media (prefers-reduced-motion:reduce){
+  /* movement off; fades, glows and counters stay */
+  .view:not(.on),.view.left:not(.on){transform:none}
+  .stage .phone,.stage.in .phone,.stage-panel,.stage.in .stage-panel,.mega{transform:none}
+}
+
+
+/* shared: external-link mark, help link */
+.ext{font-size:.8em;margin-left:3px;opacity:.6}
+.help-link{font-weight:600;font-size:15px;text-decoration:none;padding:10px 12px;border-radius:40px}
+.help-link:hover{text-decoration:underline}
+@media (max-width:980px){.help-link{display:none}}
+
+/* Shared map stage: the full-bleed map, the floating panel, place search, markers and controls */
+/* Layout: the hero IS the product — a real map of Tallinn with the booking panel floating on it, like the app. */
+.mapstage{scroll-margin-top:64px;position:relative;height:clamp(640px,calc(100vh - 106px),920px);background:#EEF1EE;overflow:hidden}
+.map{position:absolute;inset:0;overflow:hidden}
+.panel{position:absolute;z-index:5;top:24px;left:max(24px,calc((100vw - 1240px) / 2 + 20px));width:400px;max-height:calc(100% - 48px);overflow:auto;background:var(--surface);border-radius:26px;
+  box-shadow:0 30px 60px -30px rgba(10,30,20,.35),0 0 0 1px rgba(14,16,16,.06);padding:22px;display:grid;gap:16px;scrollbar-width:thin}
+.panel h1{font-size:34px;line-height:1.05}
+.panel [hidden]{display:none!important}
+.panel .eyebrow{font-size:14px}
+.legs{display:grid;grid-template-columns:minmax(0,1fr) 40px;gap:10px;align-items:center}
+.fields{position:relative;display:grid;gap:8px}
+.fields::before{content:"";position:absolute;left:20px;top:30px;bottom:30px;border-left:2px dotted #B8C1BC}
+.field{position:relative;display:grid;grid-template-columns:22px minmax(0,1fr) auto;align-items:center;gap:10px;background:var(--bg);border:1.5px solid transparent;border-radius:14px;padding:0 8px 0 13px;transition:border-color var(--t-norm),background-color var(--t-norm)}
+.field:focus-within{border-color:var(--ink);background:#fff}
+.field .dot{width:12px;height:12px;justify-self:center;border-radius:50%}
+.field .dot.a{background:#2F6BFF;box-shadow:0 0 0 4px rgba(47,107,255,.18)}
+.field .dot.b{background:var(--ink);border-radius:3px}
+.field input{width:100%;min-width:0;border:0;background:transparent;font:600 16px/1.2 var(--font);color:var(--ink);padding:15px 0;outline:none}
+.field input::placeholder{color:#666F6B;font-weight:500}
+.field .clear{border:0;background:none;width:30px;height:30px;border-radius:50%;cursor:pointer;color:var(--muted);display:none}
+.field .clear:hover{background:var(--line)}
+.field.has .clear{display:block}
+.swap{width:40px;height:40px;border-radius:50%;border:1px solid var(--line);background:var(--surface);cursor:pointer;display:grid;place-items:center;transition:transform var(--t-scene) var(--glide),border-color var(--t-norm)}
+.swap:hover{border-color:var(--ink)}
+.swap.spin{transform:rotate(180deg)}
+.list{position:absolute;z-index:10;left:0;right:0;top:calc(100% + 6px);background:#fff;border-radius:16px;box-shadow:0 20px 40px -18px rgba(10,30,20,.35),0 0 0 1px rgba(14,16,16,.08);padding:6px;margin:0;list-style:none;max-height:300px;overflow:auto}
+.list[hidden]{display:none}
+.list li{display:grid;grid-template-columns:28px minmax(0,1fr);gap:10px;align-items:center;padding:10px;border-radius:10px;cursor:pointer}
+.list li[aria-selected="true"],.list li:hover{background:var(--bg)}
+.list li b{font-weight:600;font-size:15px;color:var(--ink);display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.list li span span{font-size:13px;color:var(--muted)}
+.list li > span{min-width:0}
+.list li i{width:28px;height:28px;border-radius:50%;background:var(--bg);display:grid;place-items:center;font-style:normal;font-size:13px}
+.hint{font-size:14px;color:var(--muted);display:flex;gap:8px;align-items:center}
+.pop{display:flex;flex-wrap:wrap;gap:6px}
+.pop button{border:1px solid var(--line);background:#fff;border-radius:var(--pill);padding:8px 12px;font-size:14px;font-weight:600;cursor:pointer}
+.pop button:hover{border-color:var(--ink)}
+.fine{font-size:12px;color:var(--muted)}
+
+.follow{position:absolute;z-index:5;left:50%;bottom:24px;transform:translateX(-50%);border:0;background:var(--ink);color:#fff;border-radius:var(--pill);padding:11px 18px;font:600 14px/1 var(--font);cursor:pointer;box-shadow:0 10px 24px -10px rgba(0,0,0,.5)}
+.follow[hidden]{display:none}
+.chip-top{position:absolute;z-index:4;left:50%;top:18px;transform:translateX(-50%);background:#fff;border-radius:var(--pill);padding:9px 16px;font-size:14px;font-weight:600;box-shadow:0 10px 24px -12px rgba(0,0,0,.4),0 0 0 1px rgba(0,0,0,.05);white-space:nowrap;pointer-events:none;transition:opacity var(--t-norm)}
+.chip-top[hidden]{display:none}
+.touch-hint{display:none}
+@media (hover:none) and (pointer:coarse){#zin,#zout{display:none}.touch-hint{display:block;position:absolute;z-index:4;left:12px;top:10px;font-size:11px;color:#6B756F;background:rgba(255,255,255,.8);padding:3px 8px;border-radius:999px}}
+@media (min-width:861px){.follow,.chip-top{margin-left:calc(var(--panel-w,0px) / 2)}}
+
+/* markers */
+.mk{transform-origin:0 0;will-change:transform}
+.mk .bub{position:absolute;left:0;bottom:16px;transform:translateX(-50%);background:var(--ink);color:#fff;border-radius:var(--pill);padding:7px 12px;font-size:13px;font-weight:600;white-space:nowrap;box-shadow:0 8px 20px -8px rgba(0,0,0,.4)}
+.mk .bub small{color:#9FE3BD;font-weight:600;margin-left:6px}
+.mk .pin-a{position:absolute;left:-9px;top:-9px;width:18px;height:18px;border-radius:50%;background:#2F6BFF;border:3px solid #fff;box-shadow:0 0 0 6px rgba(47,107,255,.2),0 4px 10px rgba(0,0,0,.25)}
+.mk .pin-b{position:absolute;left:-8px;top:-8px;width:16px;height:16px;border-radius:4px;background:var(--ink);border:3px solid #fff;box-shadow:0 4px 10px rgba(0,0,0,.3)}
+.mk.a .bub{background:#fff;color:var(--ink);box-shadow:0 8px 20px -8px rgba(0,0,0,.35),0 0 0 1px rgba(0,0,0,.06)}
+.mk .eta{background:var(--green)}
+.ctrl{position:absolute;z-index:4;right:max(20px,env(safe-area-inset-right,0px));bottom:24px;display:grid;gap:8px}
+.ctrl button{width:44px;height:44px;border-radius:14px;border:0;background:#fff;box-shadow:0 8px 20px -10px rgba(0,0,0,.35),0 0 0 1px rgba(0,0,0,.06);cursor:pointer;font-size:20px;display:grid;place-items:center}
+.attrib{position:absolute;z-index:4;right:12px;top:10px;font-size:11px;color:#6B756F;background:rgba(255,255,255,.75);padding:3px 8px;border-radius:999px}
+.attrib a{color:inherit;display:inline-block;line-height:24px}
+.loading{position:absolute;inset:0;display:grid;place-items:center;color:var(--muted);font-weight:600}
+
+@media (max-width:860px){
+  .mapstage{height:auto;overflow:visible;background:var(--bg)}
+  .map{position:relative;height:clamp(340px,56vh,560px)}
+  .panel{position:relative;top:auto;left:auto;width:auto;max-height:none;margin:-28px 12px 0;border-radius:24px;padding:18px}
+  .panel h1{font-size:28px}
+  .ctrl{bottom:auto;top:calc(clamp(340px,56vh,560px) - 150px)}
+}
+@media (prefers-reduced-motion:reduce){.swap.spin{transform:none}}
+
+.play{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);background:#fff;border-radius:var(--pill);padding:7px 12px;font:600 13px/1 var(--font);cursor:pointer;flex-shrink:0}
+.play:hover{border-color:var(--ink)}
+.play .i-play{display:none}.play.paused .i-play{display:block}.play.paused .i-pause{display:none}
+
+/* Scooters: every parked scooter on the real map, real zones, and a ride previewed on the handlebar display. */
+.panel h1{font-size:34px;letter-spacing:-.03em}
+.seg{display:grid;grid-template-columns:1fr 1fr;background:var(--bg);border-radius:var(--pill);padding:4px}
+.seg button{border:0;background:none;border-radius:var(--pill);padding:10px;font:600 15px/1 var(--font);cursor:pointer;color:var(--muted)}
+.seg button[aria-pressed="true"]{background:#fff;color:var(--ink);box-shadow:0 2px 8px -2px rgba(0,0,0,.18)}
+.pick{display:grid;grid-template-columns:52px minmax(0,1fr) auto;gap:12px;align-items:center;background:var(--bg);border-radius:16px;padding:12px}
+.pick .ic{width:52px;height:52px;border-radius:14px;background:#fff;display:grid;place-items:center;color:var(--green-text)}
+.pick b{display:block;font-weight:650}
+.pick span{font-size:13px;color:var(--muted)}
+.batt{display:inline-flex;align-items:center;gap:6px;font:600 13px/1 var(--font);font-variant-numeric:tabular-nums}
+.batt i{width:24px;height:12px;border:1.5px solid currentColor;border-radius:3px;position:relative;display:inline-block}
+.batt i::after{content:"";position:absolute;left:1.5px;top:1.5px;bottom:1.5px;width:calc((100% - 3px) * var(--b));background:var(--green);border-radius:1px}
+.batt i::before{content:"";position:absolute;right:-4px;top:3px;width:2px;height:4px;background:currentColor;border-radius:0 1px 1px 0}
+.sum{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.sum div{background:var(--bg);border-radius:12px;padding:10px;display:grid;gap:2px}
+.sum b{font:700 18px/1.1 var(--font);font-variant-numeric:tabular-nums}
+.sum span{font-size:12px;color:var(--muted)}
+.check{display:flex;gap:8px;align-items:flex-start;font-size:14px;color:var(--muted)}
+.check svg{flex-shrink:0;margin-top:2px;color:var(--green-text)}
+.check.warn svg{color:#C2410C}
+.cta{display:grid;gap:8px}
+.legend-z{position:absolute;z-index:4;right:16px;top:16px;display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end;max-width:60%}
+.legend-z span{display:inline-flex;align-items:center;gap:7px;background:rgba(255,255,255,.94);border-radius:var(--pill);padding:7px 11px;font:600 12px/1 var(--font);box-shadow:0 0 0 1px rgba(14,16,16,.06)}
+.legend-z[hidden]{display:none}
+.legend-z i{width:12px;height:12px;border-radius:4px;display:inline-block}
+.attrib{top:auto;bottom:10px;right:auto;left:12px}
+.row{display:flex;gap:8px;flex-wrap:wrap}
+.row .btn{flex:1 1 auto}
+
+.rules{list-style:none;margin:0;padding:0;display:grid;gap:8px;counter-reset:r}
+.rules li{counter-increment:r;display:grid;grid-template-columns:28px minmax(0,1fr);column-gap:12px;row-gap:2px;padding:12px;border-radius:14px;background:var(--bg);border:1.5px solid transparent;transition:border-color var(--t-norm),background-color var(--t-norm),opacity var(--t-norm)}
+.rules li::before{content:counter(r);grid-row:span 2;width:28px;height:28px;border-radius:50%;background:#fff;display:grid;place-items:center;font:700 13px/1 var(--font);color:var(--muted);transition:background-color var(--t-norm),color var(--t-norm)}
+.rules li b{font-weight:650;font-size:15px}
+.rules li span{font-size:13px;color:var(--muted)}
+.rules li.on{background:#fff;border-color:var(--green)}
+.rules li.on::before{background:var(--green);color:#fff}
+.rules li.seen::before{background:var(--green-soft);color:var(--green-text)}
+.rules li.off{opacity:.5}
+.ride-sum{font-size:14px;color:var(--muted);font-variant-numeric:tabular-nums}
+/* the handlebar display */
+.bar-wrap{position:absolute;z-index:6;left:calc(50% + var(--panel-w,0px) / 2);bottom:22px;transform:translateX(-50%);width:min(600px,calc(100% - var(--panel-w,0px) - 40px));pointer-events:none;transition:opacity 400ms ease,transform 600ms var(--glide)}
+.bar-wrap[hidden]{display:block;opacity:0;transform:translate(-50%,40px)}
+.handle{position:relative;height:178px}
+.handle .stem{position:absolute;left:4%;right:4%;top:58px;height:22px;border-radius:11px;background:linear-gradient(#3A4240,#1E2422);box-shadow:0 10px 24px -8px rgba(0,0,0,.5)}
+.handle .grip{position:absolute;top:50px;width:15%;height:38px;border-radius:19px;background:repeating-linear-gradient(90deg,#121615 0 5px,#1B201E 5px 9px);box-shadow:0 8px 18px -6px rgba(0,0,0,.5)}
+.handle .grip.l{left:0}.handle .grip.r{right:0}
+.handle .lever{position:absolute;top:84px;width:16%;height:8px;border-radius:4px;background:#4A5350}
+.handle .lever.l{left:9%;transform:rotate(-7deg)}.handle .lever.r{right:9%;transform:rotate(7deg)}
+.screen{position:absolute;left:50%;top:0;transform:translateX(-50%);width:62%;height:172px;border-radius:26px;background:#0B0E0D;border:3px solid #2A3230;box-shadow:0 24px 40px -18px rgba(0,0,0,.6),inset 0 0 0 1px rgba(255,255,255,.05);color:#fff;padding:14px 18px;display:grid;grid-template-rows:auto 1fr auto;gap:6px;overflow:hidden}
+.scr-top{display:flex;justify-content:space-between;align-items:center;font:600 12px/1 var(--font);color:#9AA59F}
+.scr-top .bt{display:inline-flex;gap:6px;align-items:center;color:#fff}
+.scr-top .bt i{width:22px;height:11px;border:1.5px solid #fff;border-radius:3px;position:relative}
+.scr-top .bt i::after{content:"";position:absolute;left:1.5px;top:1.5px;bottom:1.5px;width:calc((100% - 3px) * var(--b,.6));background:#3DDC84;border-radius:1px}
+.scr-mid{display:grid;grid-template-columns:auto 1fr;gap:16px;align-items:center}
+.limit{width:56px;height:56px;border-radius:50%;background:#fff;border:6px solid #E5484D;color:#0B0E0D;display:grid;place-items:center;font:800 20px/1 var(--font);font-variant-numeric:tabular-nums;transition:transform 300ms var(--glide)}
+.limit.pulse{transform:scale(1.15)}
+.spd{display:flex;align-items:baseline;gap:6px}
+.spd b{font:800 54px/1 var(--font);letter-spacing:-.04em;font-variant-numeric:tabular-nums}
+.spd span{font:600 13px/1 var(--font);color:#9AA59F}
+.turn{display:grid;grid-template-columns:30px minmax(0,1fr);gap:8px;align-items:center;font-size:13px}
+.turn svg{width:30px;height:30px;color:#3DDC84;transition:transform 300ms var(--glide)}
+.turn b{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:650;font-size:14px}
+.turn span{color:#9AA59F;font-variant-numeric:tabular-nums}
+.zonepill{display:none;background:#F5A524;color:#0B0E0D;border-radius:var(--pill);padding:4px 8px;font:700 11px/1 var(--font)}
+.screen.slow .zonepill{display:inline-block}
+.screen.park .turn svg{color:#3DDC84}
+.mk.sc .bub{bottom:18px}
+
+/* sections */
+.how{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px;list-style:none;margin:0;padding:0}
+.how li{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-m);padding:24px;display:grid;gap:12px;align-content:start}
+.how .n{font:500 13px/1 var(--mono);color:var(--green-text)}
+.how p{color:var(--muted)}
+.plans{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px}
+.plan{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-m);padding:24px;display:grid;gap:14px;align-content:start}
+.plan.featured{border-color:var(--green);box-shadow:inset 0 0 0 1px var(--green)}
+.plan .tag{font:500 11px/1 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.plan .amt{font:800 34px/1 var(--font);letter-spacing:-.03em;font-variant-numeric:tabular-nums}
+.plan .amt small{font:500 14px/1 var(--font);color:var(--muted);letter-spacing:0}
+.plan dl{margin:0;display:grid;grid-template-columns:auto 1fr;gap:8px 16px;font-size:14px;border-top:1px solid var(--line);padding-top:14px}
+.plan dt{color:var(--muted)}
+.plan dd{margin:0;text-align:right;font-variant-numeric:tabular-nums;font-weight:600}
+.fine2{font-size:13px;color:var(--muted);margin-top:16px}
+.safety{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:20px}
+.safe{display:grid;gap:10px;align-content:start;padding-top:18px;border-top:2px solid var(--ink)}
+.safe .big{font:800 30px/1 var(--font);letter-spacing:-.03em}
+.safe p{color:var(--muted);font-size:15px}
+.faq.light details{border-color:var(--line)}
+.faq.light summary::after{color:var(--muted)}
+.faq.light details p{color:var(--muted)}
+
+@media (max-width:860px){
+  .legend-z{left:12px;right:12px;max-width:none;justify-content:flex-start;top:10px}
+  .bar-wrap{left:50%;width:calc(100% - 16px);top:calc(clamp(340px,56vh,560px) - 170px);bottom:auto}
+  .handle{height:150px}
+  .screen{width:76%;height:146px;padding:10px 14px;border-radius:22px}
+  .handle .stem{top:48px}.handle .grip{top:42px;width:12%}
+  .handle .lever{top:72px}
+  .spd b{font-size:44px}.limit{width:46px;height:46px;font-size:17px;border-width:5px}
+  .how,.plans{grid-template-columns:minmax(0,1fr)}
+  .safety{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media (max-width:560px){.safe .big{font-size:24px}.safe p{font-size:13px}}
+</style>
+</head>
+<body>
+
+<div class="concept">
+  <div class="wrap">
+    <span>Portfolio concept by Andrii · not affiliated with Bolt · scooters, zones and prices are examples · map © OpenStreetMap contributors</span>
+    <span class="concept-actions"><a class="notes-toggle" href="../index.html" style="text-decoration:none">← Case study</a> <button class="notes-toggle" type="button" id="notesToggle" aria-pressed="false">Design notes</button></span>
+  </div>
+</div>
+
+<header class="site-head" id="siteHead">
+  <div class="wrap has-pin">
+    <a class="wordmark" href="index.html" aria-label="Bolt concept home">Bolt <small>concept</small></a>
+    <nav aria-label="Main">
+      <ul class="intent" id="intentNav">
+        <li>
+          <button class="intent-btn" type="button" aria-expanded="false" aria-controls="megaGo" aria-current="true">Get around
+            <svg class="chev" viewBox="0 0 10 10" aria-hidden="true"><path d="M1 3l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.6"/></svg></button>
+          <div class="mega" id="megaGo">
+            <a href="rides.html"><b>Rides</b><span>A driver picks you up in minutes</span></a>
+            <a href="scooters.html" aria-current="page"><b>Scooters &amp; e-bikes</b><span>Grab one on the next corner</span></a>
+            <a href="drive.html"><b>Car-sharing</b><span>Drive yourself, by the minute or day</span></a>
+          </div>
+        </li>
+        <li>
+          <button class="intent-btn" type="button" aria-expanded="false" aria-controls="megaDel">Get delivered
+            <svg class="chev" viewBox="0 0 10 10" aria-hidden="true"><path d="M1 3l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.6"/></svg></button>
+          <div class="mega" id="megaDel">
+            <a href="https://bolt.eu/en/food/" target="_blank" rel="noopener"><b>Food<span class="ext" aria-hidden="true">↗</span><span class="visually-hidden"> (opens bolt.eu)</span></b><span>Order in your browser or the app</span></a>
+            <a href="https://bolt.eu/en/food/market/" target="_blank" rel="noopener"><b>Groceries<span class="ext" aria-hidden="true">↗</span><span class="visually-hidden"> (opens bolt.eu)</span></b><span>Essentials in minutes</span></a>
+            <a href="https://bolt.eu/en/rides/features/bolt-send/" target="_blank" rel="noopener"><b>Parcels<span class="ext" aria-hidden="true">↗</span><span class="visually-hidden"> (opens bolt.eu)</span></b><span>Send something across town</span></a>
+          </div>
+        </li>
+        <li><a class="intent-btn" href="index.html#earn">Earn</a></li>
+        <li><a class="intent-btn" href="index.html#business">For business</a></li>
+      </ul>
+    </nav>
+    <div class="head-right">
+      <a class="help-link" href="https://bolt.eu/en/support/" target="_blank" rel="noopener">Help<span class="ext" aria-hidden="true">↗</span><span class="visually-hidden"> (opens bolt.eu)</span></a>
+      <button class="btn btn-primary btn-small" type="button" data-handoff>Get the app</button>
+      <button class="menu-btn" type="button" id="menuBtn" aria-expanded="false" aria-controls="intentNav" aria-label="Open menu">
+        <svg width="18" height="14" viewBox="0 0 18 14" aria-hidden="true"><path d="M0 1h18M0 7h18M0 13h18" stroke="currentColor" stroke-width="1.8"/></svg></button>
+    </div>
+    
+  </div>
+</header>
+
+<main id="top">
+  <section class="mapstage" aria-label="Scooters and e-bikes on the map">
+    <div class="map" id="map"><div class="loading" id="loading">Loading the map of Tallinn…</div></div>
+    <div class="legend-z" aria-label="Map legend"><span><i style="background:#2B8659"></i>Parking</span><span><i style="background:rgba(245,165,36,.35);box-shadow:inset 0 0 0 2px #F5A524"></i>Slow zone</span><span><i style="background:rgba(229,72,77,.25);box-shadow:inset 0 0 0 2px #E5484D"></i>No parking</span></div>
+    <div class="attrib">© <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a></div>
+    <div class="ctrl" aria-label="Map controls">
+      <button type="button" id="zin" aria-label="Zoom in">+</button>
+      <button type="button" id="zout" aria-label="Zoom out">−</button>
+      <button type="button" id="refit" aria-label="Show the trip"><svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><path d="M2 6V2h4M16 6V2h-4M2 12v4h4M16 12v4h-4" fill="none" stroke="currentColor" stroke-width="1.8"/></svg></button>
+    </div>
+    <p class="chip-top" id="chipTop" hidden></p>
+
+    <div class="bar-wrap" id="barWrap" hidden aria-hidden="true">
+      <div class="handle">
+        <span class="lever l"></span><span class="lever r"></span><span class="stem"></span><span class="grip l"></span><span class="grip r"></span>
+        <div class="screen" id="screen">
+          <div class="scr-top"><span id="scrClock">0:00 · €1.00</span><span class="zonepill">SLOW ZONE</span><span class="bt"><i id="scrBattI"></i><span id="scrBatt">64%</span></span></div>
+          <div class="scr-mid"><div class="limit" id="scrLimit">25</div><div class="spd"><b id="scrSpd">0</b><span>km/h</span></div></div>
+          <div class="turn"><svg viewBox="0 0 30 30" id="scrArrow" aria-hidden="true"><path d="M15 25V8M15 8l-6 6M15 8l6 6" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg><div><b id="scrTurn">Unlocked. Ride safe.</b><span id="scrDist"></span></div></div>
+        </div>
+      </div>
+    </div>
+
+<p class="visually-hidden" id="sr" role="status" aria-live="polite"></p>
+    <div class="panel" id="panel">
+      <div id="browse" style="display:grid;gap:16px">
+        <div style="display:grid;gap:8px"><p class="eyebrow">Scooters &amp; e-bikes · Tallinn</p><h1 id="h1">The nearest scooter is a short walk away.</h1></div>
+        <div class="seg" role="group" aria-label="Vehicle"><button type="button" data-v="scooter" aria-pressed="true">Scooter</button><button type="button" data-v="ebike" aria-pressed="false">E-bike</button></div>
+        <div class="pick" id="pick"><span class="ic" aria-hidden="true"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="18" r="2.2"/><circle cx="18" cy="18" r="2.2"/><path d="M6 18h9l3-12h3M15 6h3"/></svg></span>
+          <div style="min-width:0"><b id="pickName">Scooter</b><span id="pickSub">–</span></div><span class="batt" id="pickBatt"><i style="--b:.6"></i>60%</span></div>
+        <div class="legs">
+          <div class="fields">
+            <div class="field has" id="fFrom"><span class="dot a" aria-hidden="true"></span>
+              <input id="from" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="listFrom" aria-label="You are here" placeholder="You are here" autocomplete="off">
+              <button class="clear" type="button" aria-label="Clear start">✕</button>
+              <ul class="list" id="listFrom" role="listbox" hidden></ul></div>
+            <div class="field" id="fTo"><span class="dot b" aria-hidden="true"></span>
+              <input id="to" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="listTo" aria-label="Where to?" placeholder="Where to?" autocomplete="off">
+              <button class="clear" type="button" aria-label="Clear destination">✕</button>
+              <ul class="list" id="listTo" role="listbox" hidden></ul></div>
+          </div>
+          <button class="swap" type="button" id="swap" aria-label="Swap start and destination"><svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><path d="M5 2v13M5 15l-3-3M5 15l3-3M13 16V3M13 3l-3 3M13 3l3 3" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+        </div>
+        <div id="noTrip" style="display:grid;gap:12px">
+          <p class="hint"><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 1v3M8 12v3M1 8h3M12 8h3" stroke="currentColor" stroke-width="1.6"/><circle cx="8" cy="8" r="3" fill="none" stroke="currentColor" stroke-width="1.6"/></svg>Tap a scooter to choose it, or tap the map to set where you are going.</p>
+          <div class="pop" id="popular"></div>
+        </div>
+        <div id="trip" hidden style="display:grid;gap:12px">
+          <div class="sum"><div><b id="sWalk">–</b><span>walk to it</span></div><div><b id="sRide">–</b><span>ride</span></div><div><b id="sCost">–</b><span>estimate</span></div></div>
+          <p class="check" id="chkBatt"><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8.5l3 3 7-7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span></span></p>
+          <p class="check" id="chkZone"><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8.5l3 3 7-7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span></span></p>
+          <div class="cta"><button class="btn btn-primary" type="button" id="previewBtn">See what the scooter shows you</button><button class="btn btn-quiet" type="button" data-handoff>Unlock in the app</button></div>
+        </div>
+      </div>
+      <div id="riding" hidden style="display:grid;gap:14px">
+        <div class="rv-top" style="display:flex;justify-content:space-between;align-items:center;gap:10px"><p class="eyebrow" id="rEyebrow">On the handlebar</p><button class="play" type="button" id="play" aria-label="Pause"><svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path class="i-pause" d="M3 2h3v10H3zM8 2h3v10H8z"/><path class="i-play" d="M3 1.5l9 5.5-9 5.5z"/></svg><span>Pause</span></button></div>
+        <h2 style="font-size:26px;line-height:1.1">What the scooter shows you</h2>
+        <ol class="rules" id="rules">
+          <li data-r="limit"><b>The speed limit, always in view</b><span>Up to 25 km/h on most streets. The scooter will not go faster.</span></li>
+          <li data-r="slow"><b>Slow zones slow you down by themselves</b><span id="ruleSlow">In the Old Town the limit drops to 10 km/h as you enter.</span></li>
+          <li data-r="park"><b>Park in green to end the ride</b><span id="rulePark">The display points you to the nearest green zone.</span></li>
+        </ol>
+        <p class="ride-sum" id="rideSum">–</p>
+        <div class="cta"><button class="btn btn-primary" type="button" data-handoff>Unlock a scooter in the app</button></div>
+        <div class="row"><button class="btn btn-quiet" type="button" id="back">Change trip</button></div>
+      </div>
+      <button class="pin" type="button" style="right:14px;top:14px" data-note="Rules before the first ride">The current page shows a stock photo and a download button. Here the visitor sees the scooters around them, the zones that change how they ride and park, and the three rules a first-timer worries about, explained by the display they will actually look at. Unlocking stays in the app.</button>
+    </div>
+  </section>
+
+  <section class="block" id="how">
+    <div class="wrap">
+      <div class="sec-head"><p class="eyebrow">How it works</p><h2>Three taps from the pavement to the bike lane.</h2></div>
+      <ol class="how">
+        <li><span class="n">01 · Find</span><h3>Open the map</h3><p>Every parked scooter and e-bike shows its battery and range, so you can pick one with enough charge for the whole trip.</p></li>
+        <li><span class="n">02 · Scan</span><h3>Scan the handlebar code</h3><p>The scooter unlocks in a second. Until your fifth ride, beginner mode keeps the top speed at 15 km/h.</p></li>
+        <li><span class="n">03 · Ride &amp; park</span><h3>End in a green zone</h3><p>The display shows slow zones and parking ahead of you. Take a photo when you park so the next rider finds it upright.</p></li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="block" id="pricing">
+    <div class="wrap">
+      <div class="sec-head"><p class="eyebrow">Pricing in Tallinn</p><h2>One price, shown in full.</h2><p>An unlock fee plus a per-minute rate. The estimate on the map uses the same numbers.</p></div>
+      <div class="plans">
+        <article class="plan"><span class="tag">Most flexible</span><h3>Pay as you go</h3><div class="amt">€0.15<small> / min</small></div><dl><dt>Unlock</dt><dd>€1.00</dd><dt>10-min trip</dt><dd>€2.50</dd></dl></article>
+        <article class="plan featured"><span class="tag">For 3+ rides a week</span><h3>Unlimited unlocks</h3><div class="amt">€0.99<small> / month</small></div><dl><dt>Unlock</dt><dd>€0.00</dd><dt>10-min trip</dt><dd>€1.50</dd></dl></article>
+        <article class="plan"><span class="tag">Lowest price per minute</span><h3>Minute passes</h3><div class="amt">€9.90<small> / 100 min</small></div><dl><dt>Per minute</dt><dd>€0.099</dd><dt>Valid</dt><dd>30 days</dd></dl></article>
+      </div>
+      <p class="fine2">Concept: rates are illustrative, not Bolt's prices. E-bikes in this concept cost €0.18 per minute.</p>
+    </div>
+  </section>
+
+  <section class="block" id="safety">
+    <div class="wrap">
+      <div class="sec-head"><p class="eyebrow">Ride safely</p><h2>The scooter helps you follow the rules.</h2></div>
+      <div class="safety">
+        <div class="safe"><span class="big">15 km/h</span><h3>Beginner mode</h3><p>Your speed stays capped until you have finished five rides.</p></div>
+        <div class="safe"><span class="big">10 km/h</span><h3>Slow zones</h3><p>In busy areas like the Old Town, the scooter slows down by itself.</p></div>
+        <div class="safe"><span class="big">Sober</span><h3>Reaction test</h3><p>At peak night hours, a short in-app test comes before unlocking.</p></div>
+        <div class="safe"><span class="big">Helmet</span><h3>Strongly advised</h3><p>Wear one on every ride, rental or your own.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="faq">
+    <div class="wrap">
+      <div class="sec-head"><p class="eyebrow">Questions</p><h2>Before your first ride</h2></div>
+      <div class="faq light">
+        <details><summary>How much does a ride cost?</summary><p>An unlock fee plus a per-minute rate, both set by city. The estimate on the map uses those rates for the real route and speed limits.</p></details>
+        <details><summary>Do I need the app?</summary><p>Yes. Scooters and e-bikes unlock with the Bolt app. On a computer, scan the QR code or send yourself a link; on a phone, the button opens the app or the store.</p></details>
+        <details><summary>Where can I park?</summary><p>In the green zones on the in-app map. Red zones mean no parking; the ride will not end there.</p></details>
+        <details><summary>What happens in a slow zone?</summary><p>The scooter limits its own speed, often to 10 km/h, while you are inside the zone. The display shows the limit as you enter.</p></details>
+        <details><summary>How fast do they go?</summary><p>Up to 25 km/h in most cities, lower in slow zones. Beginner mode caps you at 15 km/h for your first five rides.</p></details>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" style="padding-top:24px">
+    <div class="wrap">
+      <div class="final">
+        <div style="display:grid;gap:12px;min-width:0"><h2>Your next ride is parked nearby.</h2><p>Get the app on your phone in one scan, then unlock in one more.</p></div>
+        <button class="btn btn-primary" type="button" data-handoff>Get the app</button>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap has-pin">
+    <div class="foot">
+      <div><h4>Get around</h4><ul><li><a href="rides.html">Rides</a></li><li><a href="scooters.html">Scooters &amp; e-bikes</a></li><li><a href="drive.html">Car-sharing</a></li></ul></div>
+      <div><h4>Get delivered</h4><ul><li><a href="https://bolt.eu/en/food/" target="_blank" rel="noopener">Food<span class="ext" aria-hidden="true">↗</span><span class="visually-hidden"> (opens bolt.eu)</span></a></li><li><a href="https://bolt.eu/en/food/market/" target="_blank" rel="noopener">Groceries<span class="ext" aria-hidden="true">↗</span><span class="visually-hidden"> (opens bolt.eu)</span></a></li><li><a href="https://bolt.eu/en/rides/features/bolt-send/" target="_blank" rel="noopener">Parcels<span class="ext" aria-hidden="true">↗</span><span class="visually-hidden"> (opens bolt.eu)</span></a></li></ul></div>
+      <div><h4>Earn</h4><ul><li><a href="https://bolt.eu/en/driver/" target="_blank" rel="noopener">Drive with Bolt<span class="ext" aria-hidden="true">↗</span><span class="visually-hidden"> (opens bolt.eu)</span></a></li><li><a href="https://bolt.eu/en/food/courier/" target="_blank" rel="noopener">Deliver food<span class="ext" aria-hidden="true">↗</span><span class="visually-hidden"> (opens bolt.eu)</span></a></li><li><a href="https://bolt.eu/en/food/merchant/" target="_blank" rel="noopener">Sell on Bolt Food<span class="ext" aria-hidden="true">↗</span><span class="visually-hidden"> (opens bolt.eu)</span></a></li><li><a href="https://bolt.eu/en/fleet/" target="_blank" rel="noopener">Fleets<span class="ext" aria-hidden="true">↗</span><span class="visually-hidden"> (opens bolt.eu)</span></a></li></ul></div>
+      <div><h4>Help &amp; business</h4><ul><li><a href="https://bolt.eu/en/support/" target="_blank" rel="noopener">Help centre<span class="ext" aria-hidden="true">↗</span><span class="visually-hidden"> (opens bolt.eu)</span></a></li><li><a href="https://bolt.eu/en/rides/safety/" target="_blank" rel="noopener">Safety<span class="ext" aria-hidden="true">↗</span><span class="visually-hidden"> (opens bolt.eu)</span></a></li><li><a href="https://bolt.eu/en/business/" target="_blank" rel="noopener">Bolt for Business<span class="ext" aria-hidden="true">↗</span><span class="visually-hidden"> (opens bolt.eu)</span></a></li></ul></div>
+    </div>
+    <div class="legal"><span>Unofficial redesign concept for a portfolio. Not affiliated with or endorsed by Bolt Technology OÜ. Product photos are AI-generated. Links marked ↗ open the real bolt.eu.</span><span class="mono">2026</span></div>
+    
+  </div>
+</footer>
+
+<div class="stage" id="stage" role="dialog" aria-modal="true" aria-labelledby="stageTitle" hidden>
+  <button class="stage-close" type="button" data-close aria-label="Close">
+    <svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M1 1l12 12M13 1L1 13" stroke="currentColor" stroke-width="1.8"/></svg></button>
+  <div class="stage-phone">
+    <div class="phone" aria-hidden="true">
+      <div class="bezel"><div class="screen">
+        <div class="island"></div>
+        <div class="status"><span>9:41</span><span>●●● 5G</span></div>
+        
+        <div class="view on">
+          <svg class="full" viewBox="0 0 270 580" preserveAspectRatio="xMidYMid slice"><rect width="270" height="580" fill="#EEF2EF"/><g stroke="#fff" stroke-width="12" fill="none"><path d="M-10 120 L280 90"/><path d="M-10 260 L280 230"/><path d="M70 -10 L90 420"/><path d="M190 -10 L205 420"/></g><g fill="#2B8659"><rect x="120" y="150" width="18" height="18" rx="5"/><rect x="60" y="300" width="18" height="18" rx="5"/><rect x="200" y="210" width="18" height="18" rx="5"/></g><circle cx="140" cy="260" r="8" fill="#2F6BFF" stroke="#fff" stroke-width="3"/></svg>
+          <div class="ph-card"><div class="ph-row"><b>Scooter · 2 min walk</b><span class="ph-pill" id="phBatt">64%</span></div><div class="ph-row"><span>€1.00 unlock · €0.15/min</span></div><div class="ph-btn">Scan to unlock</div></div>
+        </div>
+        <div class="view">
+          <div style="position:absolute;inset:0;display:grid;place-items:center;background:#0B0E0D;color:#fff;text-align:center"><div><div style="width:46cqi;height:46cqi;border:1.2cqi solid #3DDC84;border-radius:6cqi;margin:0 auto 6cqi"></div><b style="font-size:5.4cqi">Point at the handlebar code</b></div></div>
+        </div>
+        <div class="view">
+          <svg class="full" viewBox="0 0 270 580" preserveAspectRatio="xMidYMid slice"><rect width="270" height="580" fill="#EEF2EF"/><rect x="90" y="200" width="90" height="70" rx="12" fill="rgba(43,134,89,.25)" stroke="#2B8659" stroke-width="3"/></svg>
+          <div class="ph-card"><div class="ph-row"><b>Parked in a green zone</b><span class="ph-pill">✓</span></div><div class="ph-row"><span>Take a photo to end the ride</span></div><div class="ph-btn">End ride</div></div>
+        </div>
+
+      </div></div>
+    </div>
+  </div>
+  <div class="stage-panel">
+    <div style="display:grid;gap:10px">
+      <p class="eyebrow" id="stageEyebrow">Bolt · scooters</p>
+      <h2 id="stageTitle" tabindex="-1" style="outline:none">Your scooter is a short walk away.</h2>
+    </div>
+    <ol class="steps" id="steps">
+      
+      <li><button type="button" data-step="0"><b>Find it on the map</b><span>Battery and walking time first</span><i class="prog"></i></button></li>
+      <li><button type="button" data-step="1"><b>Scan to unlock</b><span>The handlebar code, one second</span><i class="prog"></i></button></li>
+      <li><button type="button" data-step="2"><b>Park in green</b><span>A photo ends the ride</span><i class="prog"></i></button></li>
+
+    </ol>
+    <button class="pause" type="button" id="pauseBtn" aria-pressed="false">Pause walkthrough</button>
+    <div class="handoff">
+      <div class="qr" aria-hidden="true"><svg id="qr" viewBox="0 0 29 29" shape-rendering="crispEdges"></svg></div>
+      <div class="handoff-copy">
+        <b id="handoffTitle">Point your phone camera at the code</b>
+        <p style="font-size:14px;color:var(--muted)" id="handoffText"></p>
+        <p class="send-or">No camera handy?</p>
+        <button class="btn btn-quiet btn-small send-link" type="button" id="sendLink">Send me a link instead</button>
+        <p class="send-msg" id="sendMsg" aria-live="polite"></p>
+        <button class="btn btn-primary open-app" type="button" id="openApp">Open the Bolt app</button>
+        
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<script src="assets/citymap.js"></script>
+<script>/* ===== shared behaviour: header menus, design notes, app handoff stage ===== */
+window.Concept = (() => {
+  const $ = (s, r = document) => r.querySelector(s);
+  const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+  const motionMQ = matchMedia('(prefers-reduced-motion: reduce)');
+  const reduced = () => motionMQ.matches; // gates large movement only
+  const tallFrame = () => window.self !== window.top && innerHeight > Math.max(screen.height || 0, 900) * 1.15;
+  const onPhone = () => matchMedia('(pointer:coarse) and (max-width:980px)').matches;
+
+  /* header */
+  const megaBtns = $$('.intent-btn[aria-controls]');
+  const closeMegas = except => megaBtns.forEach(b => { if (b !== except) { b.setAttribute('aria-expanded', 'false'); $('#' + b.getAttribute('aria-controls')).classList.remove('open'); } });
+  megaBtns.forEach(b => b.addEventListener('click', () => {
+    const open = b.getAttribute('aria-expanded') !== 'true'; closeMegas(b);
+    b.setAttribute('aria-expanded', String(open)); $('#' + b.getAttribute('aria-controls')).classList.toggle('open', open);
+  }));
+  document.addEventListener('click', e => { if (!e.target.closest('.intent > li')) closeMegas(); });
+  $('#menuBtn')?.addEventListener('click', e => { const open = $('#siteHead').classList.toggle('menu-open'); e.currentTarget.setAttribute('aria-expanded', String(open)); });
+
+  /* design notes */
+  let pop = null;
+  const closePop = () => { pop?.remove(); pop = null; };
+  $('#notesToggle')?.addEventListener('click', e => { const on = document.body.classList.toggle('notes'); e.currentTarget.setAttribute('aria-pressed', String(on)); if (!on) closePop(); });
+  $$('.pin').forEach((p, i) => {
+    const text = p.textContent.trim(); p.textContent = i + 1; p.setAttribute('aria-label', `Design note ${i + 1}: ${p.dataset.note}`);
+    p.addEventListener('click', e => {
+      e.stopPropagation();
+      if (pop && pop.dataset.for === String(i)) return closePop();
+      closePop();
+      pop = document.createElement('div'); pop.className = 'pin-pop'; pop.dataset.for = i; pop.setAttribute('role', 'note');
+      pop.innerHTML = '<b></b><span></span>'; pop.querySelector('b').textContent = p.dataset.note; pop.querySelector('span').textContent = text;
+      p.parentElement.appendChild(pop);
+      const pr = p.getBoundingClientRect(), par = p.parentElement.getBoundingClientRect();
+      let left = pr.left - par.left + 34;
+      const maxLeft = Math.min(window.innerWidth - 16, par.right) - par.left - pop.offsetWidth;
+      if (left > maxLeft) left = Math.max(-par.left + 16, pr.left - par.left - pop.offsetWidth - 8);
+      pop.style.left = left + 'px'; pop.style.top = (pr.top - par.top) + 'px';
+    });
+  });
+  document.addEventListener('click', e => { if (!e.target.closest('.pin-pop')) closePop(); });
+
+  /* decorative QR-style code (demo, not scannable) */
+  function drawQR(text) {
+    const el = $('#qr'); if (!el) return;
+    let h = 2166136261; for (const ch of text) { h ^= ch.charCodeAt(0); h = Math.imul(h, 16777619); }
+    const rnd = () => ((h = Math.imul(h ^ (h >>> 15), 2246822507) ^ Math.imul(h ^ (h >>> 13), 3266489909)) >>> 0) / 4294967296;
+    const N = 29, cells = [];
+    const finder = (x, y) => { for (let i = 0; i < 7; i++) for (let j = 0; j < 7; j++) { const e = i === 0 || i === 6 || j === 0 || j === 6, c = i >= 2 && i <= 4 && j >= 2 && j <= 4; if (e || c) cells.push([x + i, y + j]); } };
+    const inF = (x, y) => (x < 8 && y < 8) || (x > N - 9 && y < 8) || (x < 8 && y > N - 9);
+    finder(0, 0); finder(N - 7, 0); finder(0, N - 7);
+    for (let x = 0; x < N; x++) for (let y = 0; y < N; y++) if (!inF(x, y) && rnd() > .52) cells.push([x, y]);
+    el.innerHTML = '<rect width="29" height="29" fill="#fff"/>' + cells.map(([x, y]) => `<rect x="${x}" y="${y}" width="1" height="1" fill="#0E1010"/>`).join('');
+  }
+
+  /* handoff stage */
+  const stage = $('#stage');
+  let current = 0, timer = null, playing = true, opener = null, opts = {};
+  const views = () => $$('#stage .view');
+  function showView(i) {
+    views().forEach((v, k) => { v.classList.toggle('on', k === i); v.classList.toggle('left', k < i); });
+    $('#stage .screen')?.classList.toggle('dark', !!opts.darkViews?.includes(i));
+    current = i;
+    $$('#steps button').forEach((b, k) => {
+      if (k === i) b.setAttribute('aria-current', 'step'); else b.removeAttribute('aria-current');
+      const p = b.querySelector('.prog'); p.classList.remove('run'); void p.offsetWidth;
+      if (k === i && playing) p.classList.add('run');
+    });
+    opts.onView?.(i);
+  }
+  function schedule() { clearTimeout(timer); if (!playing) return; timer = setTimeout(() => { showView((current + 1) % views().length); schedule(); }, 2800); }
+  function open(e, startAt = 0) {
+    if (!stage || !stage.hidden) return;
+    opener = e?.currentTarget || document.activeElement;
+    const phone = onPhone();
+    stage.classList.toggle('on-phone', phone);
+    $('#handoffTitle').textContent = phone ? 'Continue in the app' : 'Point your phone camera at the code';
+    $('#handoffText').textContent = phone ? opts.phoneText : opts.desktopText;
+    stage.classList.toggle('inline', tallFrame());
+    if (stage.classList.contains('inline')) {
+      const r = opener?.getBoundingClientRect ? opener.getBoundingClientRect() : { top: 0 };
+      stage.style.setProperty('--stage-top', Math.max(16, r.top + scrollY - 320) + 'px');
+    }
+    stage.hidden = false; if (!stage.classList.contains('inline')) document.body.style.overflow = 'hidden';
+    requestAnimationFrame(() => requestAnimationFrame(() => stage.classList.add('in')));
+    playing = true; $('#pauseBtn').textContent = 'Pause walkthrough'; $('#pauseBtn').setAttribute('aria-pressed', 'false');
+    showView(startAt); stage.scrollTop = 0; $('#stageTitle').focus({ preventScroll: true }); schedule();
+  }
+  function close() {
+    if (!stage || stage.hidden) return;
+    clearTimeout(timer); stage.classList.remove('in');
+    setTimeout(() => { stage.hidden = true; document.body.style.overflow = ''; opener?.focus?.(); }, 200);
+  }
+  function init(o) {
+    opts = o || {};
+    drawQR(opts.qr || 'bolt-concept');
+    $$('[data-handoff]').forEach(b => b.addEventListener('click', e => open(e)));
+    $$('[data-close]').forEach(b => b.addEventListener('click', close));
+    $$('#steps button').forEach(b => b.addEventListener('click', () => { showView(+b.dataset.step); schedule(); }));
+    $('#pauseBtn')?.addEventListener('click', e => {
+      playing = !playing; e.currentTarget.textContent = playing ? 'Pause walkthrough' : 'Play walkthrough';
+      e.currentTarget.setAttribute('aria-pressed', String(!playing)); showView(current); schedule();
+    });
+    $('#sendLink')?.addEventListener('click', () => { $('#sendMsg').textContent = 'In the live product this asks for your phone number and texts you a link that opens this trip. This concept collects nothing.'; });
+    $('#openApp')?.addEventListener('click', e => { e.currentTarget.textContent = 'Concept demo: this would open the app'; });
+  }
+  document.addEventListener('keydown', e => {
+    if (stage && !stage.hidden) {
+      if (e.key === 'Escape') { close(); return; }
+      if (e.key === 'Tab') {
+        const f = $$('button, input, [href]', stage).filter(x => x.offsetParent !== null);
+        const first = f[0], last = f[f.length - 1];
+        if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+        else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+      }
+    } else if (e.key === 'Escape') closeMegas();
+  });
+  return { $, $$, reduced, init, open, close, showView };
+})();
+
+</script>
+<script src="assets/trip.js"></script>
+<script>
+(async () => {
+  const { $, $$, reduced } = Concept;
+  Concept.init({ qr: 'bolt-concept://scooters',
+    desktopText: 'Opens Bolt on the scooter map. No app yet? It goes to the store first.',
+    phoneText: 'Opens Bolt on the scooter map, or the store if you do not have it yet.' });
+  const D = await CityMap.load('@assets/tallinn.bin');
+  $('#loading').remove();
+  const P = D.places, eur = v => `€${v.toFixed(2)}`, narrow = () => matchMedia('(max-width:860px)').matches;
+  const setText = (el, t) => { if (el && el.textContent !== t) el.textContent = t; };
+  const RATE = { scooter: { unlock: 1, min: .15, name: 'Scooter' }, ebike: { unlock: 1, min: .18, name: 'E-bike' } };
+  const st = { from: { ...P.freedom, label: P.freedom.name }, to: null, focus: 'to', veh: 'scooter', sel: null, trip: null };
+
+  /* ---------- zones (examples drawn on real streets) ---------- */
+  const poly = pts => pts.map(([la, lo]) => CityMap.proj(la, lo));
+  const SLOW = poly([[59.4425, 24.7475], [59.4418, 24.7520], [59.4385, 24.7545], [59.4360, 24.7525], [59.4345, 24.7470], [59.4350, 24.7390], [59.4365, 24.7345], [59.4395, 24.7355], [59.4415, 24.7420]]);
+  const NOPARK = [poly([[59.4380, 24.7441], [59.4380, 24.7464], [59.4367, 24.7464], [59.4367, 24.7441]]), poly([[59.4378, 24.7352], [59.4381, 24.7395], [59.4356, 24.7400], [59.4352, 24.7360]])];
+  const inside = (x, y, pg) => { let c = false; for (let i = 0, j = pg.length - 1; i < pg.length; j = i++) { const [xi, yi] = pg[i], [xj, yj] = pg[j]; if ((yi > y) !== (yj > y) && x < (xj - xi) * (y - yi) / (yj - yi) + xi) c = !c; } return c; };
+  const noPark = (x, y) => NOPARK.some(p => inside(x, y, p));
+
+  // deterministic "random" so the same fleet appears on every visit
+  let seed = 7; const rnd = () => ((seed = (seed * 16807) % 2147483647) - 1) / 2147483646;
+  const centre = CityMap.proj(59.4395, 24.7420);
+  const bikeNodes = []; for (let i = 0; i < D.N; i++) if ((D.nf[i] & 2) && Math.hypot(D.nx[i] - centre[0], D.ny[i] - centre[1]) < 2600) bikeNodes.push(i);
+  const fleet = [], spots = [];
+  for (let n = 0; n < 2000 && fleet.length < 110; n++) { const i = bikeNodes[rnd() * bikeNodes.length | 0], x = D.nx[i] + (rnd() - .5) * 12, y = D.ny[i] + (rnd() - .5) * 12;
+    if (noPark(x, y) || fleet.some(f => Math.hypot(f.x - x, f.y - y) < 35)) continue;
+    fleet.push({ id: fleet.length, x, y, kind: rnd() < .28 ? 'ebike' : 'scooter', batt: Math.round(22 + rnd() * 76) }); }
+  for (const p of Object.values(P)) { const i = CityMap.nearestNode(p.x, p.y, 'bike'); if (i >= 0 && !noPark(D.nx[i], D.ny[i])) spots.push({ x: D.nx[i], y: D.ny[i] }); }
+  for (let n = 0; n < 900 && spots.length < 70; n++) { const i = bikeNodes[rnd() * bikeNodes.length | 0], x = D.nx[i], y = D.ny[i]; if (noPark(x, y) || spots.some(s => Math.hypot(s.x - x, s.y - y) < 160)) continue; spots.push({ x, y }); }
+  const rangeKm = b => Math.round(b * .4);   // ~2.5% battery per km (example)
+
+  /* ---------- map ---------- */
+  const mapEl = $('#map');
+  const map = CityMap.create(mapEl, { theme: 'day', x: centre[0], y: centre[1], s: .6, minZoom: .08, maxZoom: 2.6, onTap: onTap });
+  const panelOffset = () => narrow() ? 0 : ($('#panel').getBoundingClientRect().right - mapEl.getBoundingClientRect().left) / 2;
+  const syncPanel = () => $('.mapstage').style.setProperty('--panel-w', `${panelOffset() * 2}px`);
+  new ResizeObserver(syncPanel).observe($('#panel')); syncPanel();
+  if (narrow()) map.setView(st.from.x + 60, st.from.y - 90, .7); else map.setView(st.from.x + 120 - panelOffset() / .62, st.from.y - 150, .62);
+  $('#zin').onclick = () => map.zoomBy(1.6); $('#zout').onclick = () => map.zoomBy(1 / 1.6); $('#refit').onclick = () => frame();
+  const mkA = document.createElement('div'); mkA.className = 'mk a'; mkA.innerHTML = '<span class="bub">You</span><span class="pin-a"></span>';
+  const mkB = document.createElement('div'); mkB.className = 'mk'; mkB.innerHTML = '<span class="bub"><span class="t"></span></span><span class="pin-b"></span>';
+  const mkS = document.createElement('div'); mkS.className = 'mk sc'; mkS.innerHTML = '<span class="bub" style="background:var(--green)"></span>';
+  const mA = map.marker(mkA, st.from.x, st.from.y, { clamp: '.bub' }); let mB = null; const mS = map.marker(mkS, 0, 0, { clamp: '.bub', events: false });
+
+  function onTap(x, y, e) {
+    if (ride) return;
+    // a scooter under the finger wins over setting a destination
+    let best = null, bd = 1e9; for (const f of fleet) { if (f.kind !== st.veh) continue; const [sx, sy] = map.w2s(f.x, f.y), r = mapEl.getBoundingClientRect(); const d = Math.hypot(sx - (e.clientX - r.left), sy - (e.clientY - r.top)); if (d < bd) { bd = d; best = f; } }
+    if (best && bd < 20) { choose(best); plan(); return; }
+    search.tap(x, y);
+  }
+  function choose(f) { st.sel = f; mS.x = f.x; mS.y = f.y; }
+  function nearest() { let best = null, bd = 1e9; for (const f of fleet) { if (f.kind !== st.veh) continue; const d = Math.hypot(f.x - st.from.x, f.y - st.from.y); if (d < bd) { bd = d; best = f; } } return best; }
+  $$('.seg button').forEach(b => b.addEventListener('click', () => { st.veh = b.dataset.v; $$('.seg button').forEach(x => x.setAttribute('aria-pressed', String(x === b))); choose(nearest()); plan(); }));
+
+  /* ---------- drawing: zones, parking, the fleet, the trip ---------- */
+  map.onFrame((ctx, now, v) => {
+    const s = v.cam.s, path = pg => { ctx.beginPath(); pg.forEach(([x, y], i) => { const [sx, sy] = v.w2s(x, y); i ? ctx.lineTo(sx, sy) : ctx.moveTo(sx, sy); }); ctx.closePath(); };
+    // slow zone
+    path(SLOW); ctx.fillStyle = 'rgba(245,165,36,.12)'; ctx.fill(); ctx.setLineDash([8, 6]); ctx.lineWidth = 2; ctx.strokeStyle = '#F5A524'; ctx.stroke(); ctx.setLineDash([]);
+    if (s > .25) { const [lx, ly] = v.w2s(...CityMap.proj(59.4418, 24.7445)); ctx.font = '700 12px Inter, system-ui, sans-serif'; ctx.textAlign = 'center'; ctx.lineWidth = 4; ctx.strokeStyle = '#fff'; ctx.strokeText('SLOW ZONE · 10 km/h', lx, ly); ctx.fillStyle = '#94560A'; ctx.fillText('SLOW ZONE · 10 km/h', lx, ly); }
+    for (const pg of NOPARK) { path(pg); ctx.fillStyle = 'rgba(229,72,77,.13)'; ctx.fill(); ctx.lineWidth = 2; ctx.strokeStyle = '#E5484D'; ctx.stroke(); }
+    // parking spots
+    if (s > .18) for (const p of spots) { const [sx, sy] = v.w2s(p.x, p.y); if (sx < -20 || sy < -20 || sx > v.W + 20 || sy > v.H + 20) continue; const z = Math.max(9, Math.min(16, s * 18));
+      ctx.fillStyle = 'rgba(43,134,89,.16)'; ctx.beginPath(); ctx.roundRect(sx - z, sy - z, 2 * z, 2 * z, 5); ctx.fill(); ctx.strokeStyle = '#2B8659'; ctx.lineWidth = 1.5; ctx.stroke();
+      if (z > 11) { ctx.fillStyle = '#2B8659'; ctx.font = '800 11px Inter, system-ui, sans-serif'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText('P', sx, sy + .5); } }
+    // trip lines
+    if (st.trip) { const T = st.trip;
+      line(ctx, v, T.walk ? T.walk.pts : [], 3, '#6E7873', [1, 7]);
+      line(ctx, v, T.ride.pts, 9, '#fff'); line(ctx, v, T.ride.pts, 5, '#2B8659');
+      if (T.walk2) line(ctx, v, T.walk2.pts, 3, '#6E7873', [1, 7]);
+      if (ride && ride.d > 0) { const pts = []; for (let i = 0; i < T.ride.pts.length && T.ride.cum[i] <= ride.d; i++) pts.push(T.ride.pts[i]); const p = CityMap.along(T.ride.pts, T.ride.cum, ride.d); pts.push([p[0], p[1]]); line(ctx, v, pts, 5, '#0E1010'); } }
+    // the fleet (zoomed out: dots; zoomed in: little badges with battery)
+    for (const f of fleet) {
+      if (f.kind !== st.veh) continue; const [sx, sy] = v.w2s(f.x, f.y); if (sx < -20 || sy < -20 || sx > v.W + 20 || sy > v.H + 20) continue;
+      const sel = st.sel === f, z = sel ? 15 : Math.max(5, Math.min(12, s * 15));
+      if (ride && sel) continue;
+      ctx.beginPath(); ctx.arc(sx, sy, z, 0, 7); ctx.fillStyle = sel ? '#0E1010' : (f.kind === 'ebike' ? '#1D6B8F' : '#2B8659'); ctx.fill(); ctx.lineWidth = 2; ctx.strokeStyle = '#fff'; ctx.stroke();
+      if (z >= 9) { ctx.beginPath(); ctx.arc(sx, sy, z + 3.5, -Math.PI / 2, -Math.PI / 2 + Math.PI * 2 * f.batt / 100); ctx.strokeStyle = f.batt < 35 ? '#E5484D' : '#3DDC84'; ctx.lineWidth = 3; ctx.stroke();
+        ctx.fillStyle = '#fff'; ctx.font = `700 ${Math.round(z * .8)}px Inter, system-ui, sans-serif`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText(f.kind === 'ebike' ? 'B' : 'S', sx, sy + .5); }
+    }
+    if (st.sel && !ride) { const [sx, sy] = v.w2s(st.sel.x, st.sel.y); ctx.beginPath(); ctx.arc(sx, sy, 22 + 4 * Math.sin(now / 280), 0, 7); ctx.strokeStyle = 'rgba(14,16,16,.25)'; ctx.lineWidth = 2; ctx.stroke(); }
+    if (ride) tick(ctx, now, v);
+  });
+  function line(ctx, v, pts, w, c, dash) { if (pts.length < 2) return; ctx.beginPath(); pts.forEach((p, i) => { const [sx, sy] = v.w2s(p[0], p[1]); i ? ctx.lineTo(sx, sy) : ctx.moveTo(sx, sy); }); ctx.setLineDash(dash || []); ctx.lineCap = 'round'; ctx.lineJoin = 'round'; ctx.lineWidth = w; ctx.strokeStyle = c; ctx.stroke(); ctx.setLineDash([]); }
+
+  /* ---------- search + planning ---------- */
+  const search = TripSearch({ state: st, panel: $('#panel'), locked: () => !!ride, popularKeys: ['telliskivi', 'seaplane', 'noblessner', 'balti', 'kadriorg', 'viru'],
+    onSet: (w) => { if (w === 'from') { mA.x = st.from.x; mA.y = st.from.y; choose(nearest()); } plan(true); }, onClear: () => plan(true),
+    onSwap: () => { mA.x = st.from.x; mA.y = st.from.y; choose(nearest()); plan(true); } });
+  function plan(fly) {
+    if (!st.sel) choose(nearest());
+    const f = st.sel, R = RATE[st.veh], walkTo = CityMap.route(st.from.x, st.from.y, f.x, f.y, 'walk');
+    const wmin = walkTo && walkTo.pts.length > 1 ? Math.max(1, Math.round(walkTo.time / 60)) : 1;
+    setText($('#pickName'), `${R.name} · ${wmin} min walk`);
+    setText($('#pickSub'), `Range about ${rangeKm(f.batt)} km · ${eur(R.unlock)} unlock + ${eur(R.min)}/min`);
+    const pb = $('#pickBatt'); pb.lastChild.textContent = `${f.batt}%`; pb.querySelector('i').style.setProperty('--b', f.batt / 100);
+    setText(mkS.querySelector('.bub'), `${f.batt}% · ${wmin} min walk`);
+    setText($('#h1'), st.to ? `To ${st.to.label}, on two wheels.` : `The nearest ${R.name.toLowerCase()} is ${wmin} min away.`);
+    $('#phBatt') && setText($('#phBatt'), `${f.batt}%`);
+    if (!st.to) { st.trip = null; if (mB) { map.removeMarker(mB); mB = null; } $('#trip').hidden = true; $('#noTrip').hidden = false; if (fly) frame(); return; }
+    // ride to the parking spot closest to the destination, then walk the last metres
+    const spot = spots.reduce((a, b) => Math.hypot(a.x - st.to.x, a.y - st.to.y) <= Math.hypot(b.x - st.to.x, b.y - st.to.y) ? a : b);
+    const ride0 = CityMap.route(f.x, f.y, spot.x, spot.y, 'bike');
+    if (!ride0 || ride0.pts.length < 2) { $('#trip').hidden = true; $('#noTrip').hidden = false; return; }
+    // slow zone: the scooter limits itself to 10 km/h inside it
+    let tt = 0; const steps = ride0.steps.map(s0 => { const m = CityMap.along(ride0.pts, ride0.cum, (s0.d0 + s0.d1) / 2), slow = inside(m[0], m[1], SLOW), kmh = slow ? 10 : Math.min(20, s0.kmh), t = s0.len / (kmh / 3.6); const o = { ...s0, slow, kmh, t, t0: tt }; tt += t; return o; });
+    const rideR = { ...ride0, steps, time: tt };
+    const walk2 = CityMap.route(spot.x, spot.y, st.to.x, st.to.y, 'walk');
+    st.trip = { walk: walkTo && walkTo.pts.length > 1 ? walkTo : null, ride: rideR, walk2: walk2 && walk2.pts.length > 1 && walk2.len > 25 ? walk2 : null, spot, wmin,
+      rmin: Math.max(1, Math.round(tt / 60)), slowM: steps.filter(s0 => s0.slow).reduce((n, s0) => n + s0.len, 0) };
+    const T = st.trip, cost = R.unlock + R.min * T.rmin, km = rideR.len / 1000, need = Math.ceil(km * 2.5 + 3);
+    setText($('#sWalk'), `${wmin} min`); setText($('#sRide'), `${T.rmin} min`); setText($('#sCost'), eur(cost));
+    const cb = $('#chkBatt'); cb.classList.toggle('warn', f.batt < need);
+    setText(cb.querySelector('span'), f.batt < need ? `Battery ${f.batt}% may not last ${km.toFixed(1)} km. Tap another one with more charge.` : `Battery ${f.batt}% is enough for ${km.toFixed(1)} km (about ${need}% needed).`);
+    setText($('#chkZone').querySelector('span'), (T.slowM > 30 ? `${Math.round(T.slowM)} m in the Old Town slow zone at 10 km/h. ` : '') + `Parking ${Math.round(Math.hypot(spot.x - st.to.x, spot.y - st.to.y))} m from ${st.to.label}.`);
+    if (!mB) mB = map.marker(mkB, st.to.x, st.to.y, { clamp: '.bub' }); mB.x = st.to.x; mB.y = st.to.y; setText(mkB.querySelector('.t'), st.to.label);
+    $('#trip').hidden = false; $('#noTrip').hidden = true;
+    setText($('#sr'), `${R.name} ${wmin} minutes walk, battery ${f.batt} percent. Ride to ${st.to.label} about ${T.rmin} minutes, ${eur(cost)}.`);
+    if (fly !== false) frame();
+    if (narrow() && fly) $('.mapstage').scrollIntoView({ behavior: reduced() ? 'auto' : 'smooth', block: 'start' });
+  }
+  function frame() {
+    const xs = [st.from.x, st.sel ? st.sel.x : st.from.x], ys = [st.from.y, st.sel ? st.sel.y : st.from.y];
+    if (st.trip) { for (const p of st.trip.ride.pts) { xs.push(p[0]); ys.push(p[1]); } xs.push(st.to.x); ys.push(st.to.y); }
+    else { xs.push(st.from.x + 350, st.from.x - 350); ys.push(st.from.y + 250, st.from.y - 250); }
+    const f = map.fit(Math.min(...xs), Math.min(...ys), Math.max(...xs), Math.max(...ys), narrow() ? { l: 50, r: 60, t: 80, b: ride ? 190 : 60 } : { l: panelOffset() * 2 + 60, r: 110, t: 90, b: ride ? 230 : 80 });
+    map.flyTo(f, reduced() ? 300 : 1100, .15);
+  }
+
+  /* ---------- the handlebar display, as a short explainer of the rules (riding itself happens in the app) ---------- */
+  let ride = null;
+  $('#previewBtn').addEventListener('click', () => startRide());
+  $('#back').addEventListener('click', () => stopRide());
+  const playUI = t => { const b = $('#play'); b.classList.toggle('paused', t !== 'Pause'); setText(b.querySelector('span'), t); b.setAttribute('aria-label', t === 'Pause' ? 'Pause' : t === 'Play' ? 'Play' : 'Play again'); };
+  $('#play').addEventListener('click', () => { if (!ride) return; if (ride.P >= 1) return startRide(); ride.paused = !ride.paused; if (!ride.paused) ride.tBase = performance.now() - ride.P * ride.dur; playUI(ride.paused ? 'Play' : 'Pause'); });
+  function startRide() {
+    if (!st.trip) return;
+    const T = st.trip;
+    ride = { P: 0, d: 0, tBase: performance.now() + 700, dur: Math.min(11000, Math.max(7000, T.ride.time * 14)), paused: false, spd: 0, lastLimit: 0, arrived: false, seen: {} };
+    $('.legend-z').hidden = true;
+    $('#browse').hidden = true; $('#riding').hidden = false; $('#barWrap').hidden = false; playUI('Pause');
+    setText($('#rEyebrow'), `On the way to ${st.to.label}`);
+    const slowOn = T.slowM > 30; $('#rules li[data-r="slow"]').classList.toggle('off', !slowOn);
+    setText($('#ruleSlow'), slowOn ? `${Math.round(T.slowM)} m of this route is in the Old Town zone: the limit drops to 10 km/h as you enter.` : 'This route avoids the Old Town zone, where the limit drops to 10 km/h.');
+    setText($('#rulePark'), `The display points you to a green zone ${fmtM(Math.hypot(T.spot.x - st.to.x, T.spot.y - st.to.y))} from ${st.to.label}.`);
+    $$('#rules li').forEach(li => li.classList.remove('on', 'seen'));
+    mS.el.style.visibility = 'hidden';
+    frame();
+    if (narrow()) $('.mapstage').scrollIntoView({ behavior: reduced() ? 'auto' : 'smooth', block: 'start' });
+  }
+  function stopRide() { $('.legend-z').hidden = false; ride = null; $('#browse').hidden = false; $('#riding').hidden = true; $('#barWrap').hidden = true; $('#chipTop').hidden = true; mS.el.style.visibility = ''; $('#screen').classList.remove('park', 'slow'); frame(); }
+  const ARROWS = { straight: 0, right: 90, left: -90, sright: 40, sleft: -40, uturn: 180 };
+  function turnAt(r, d0) {   // which way the street bends at a step boundary
+    const a = CityMap.along(r.pts, r.cum, Math.max(0, d0 - 18)), b = CityMap.along(r.pts, r.cum, Math.min(r.len, d0 + 18));
+    let dh = (b[2] - a[2]) * 180 / Math.PI; while (dh > 180) dh -= 360; while (dh < -180) dh += 360;
+    return Math.abs(dh) < 25 ? 'straight' : dh > 0 ? (dh > 60 ? 'right' : 'sright') : (dh < -60 ? 'left' : 'sleft');
+  }
+  const fmtM = m => m >= 950 ? `${(m / 1000).toFixed(1)} km` : `${Math.max(10, Math.round(m / 10) * 10)} m`;
+  function tick(ctx, now, v) {
+    const R = ride, T = st.trip, r = T.ride, Rate = RATE[st.veh];
+    if (!R.paused) R.P = Math.max(0, Math.min(1, (now - R.tBase) / R.dur));
+    const f = R.P, d = CityMap.distAtTime(r, f); R.d = d;
+    const p = CityMap.along(r.pts, r.cum, d), i = CityMap.stepAt(r, d), stp = r.steps[i];
+    // the scooter + rider
+    const [sx, sy] = v.w2s(p[0], p[1]);
+    ctx.beginPath(); ctx.arc(sx, sy, 24 + 3 * Math.sin(now / 240), 0, 7); ctx.fillStyle = 'rgba(43,134,89,.18)'; ctx.fill();
+    ctx.beginPath(); ctx.arc(sx, sy, 12, 0, 7); ctx.fillStyle = '#fff'; ctx.fill(); ctx.lineWidth = 3; ctx.strokeStyle = '#2B8659'; ctx.stroke();
+    ctx.save(); ctx.translate(sx, sy); ctx.rotate(p[2] + Math.PI / 2); ctx.fillStyle = '#0E1010'; ctx.beginPath(); ctx.roundRect(-2.5, -7, 5, 14, 2); ctx.fill(); ctx.fillStyle = '#2B8659'; ctx.beginPath(); ctx.roundRect(-6, -6, 12, 2.4, 1.2); ctx.fill(); ctx.restore();
+    // speed: the street's speed, capped by the zone, easing in and out at the ends
+    const limit = stp.slow ? 10 : 25, ends = Math.min(1, d / 40, (r.len - d) / 40);
+    const target = R.P >= 1 ? 0 : Math.min(limit, stp.kmh + Math.sin(now / 700) * 1.2) * Math.max(.15, ends);
+    R.spd += (target - R.spd) * (R.paused ? 1 : .08);
+    setText($('#scrSpd'), String(Math.max(0, Math.round(R.spd))));
+    const L = $('#scrLimit'); if (R.lastLimit !== limit) { setText(L, String(limit)); if (R.lastLimit) { L.classList.add('pulse'); setTimeout(() => L.classList.remove('pulse'), 320); } R.lastLimit = limit; }
+    $('#screen').classList.toggle('slow', !!stp.slow);
+    const mins = r.time * f / 60, batt = Math.max(1, Math.round(st.sel.batt - d / 1000 * 2.5)), cost = Rate.unlock + Rate.min * Math.ceil(Math.max(mins, .01));
+    setText($('#scrBatt'), `${batt}%`); $('#scrBattI').style.setProperty('--b', batt / 100);
+    setText($('#scrClock'), `${Math.floor(mins)}:${String(Math.floor(mins % 1 * 60)).padStart(2, '0')} · ${eur(cost)}`);
+    // next turn from the real street names
+    let cur = ''; for (let k = i; k >= 0 && !cur; k--) cur = r.steps[k].name;
+    let nx = null; for (let k = i + 1; k < r.steps.length; k++) if (r.steps[k].name && r.steps[k].name !== cur) { nx = r.steps[k]; break; }
+    const toEnd = r.len - d, arrow = $('#scrArrow');
+    if (R.P >= 1) { setText($('#scrTurn'), 'Parked in a green zone'); setText($('#scrDist'), 'Take a photo to end the ride'); arrow.style.transform = 'rotate(0deg)'; $('#screen').classList.add('park'); }
+    else if (toEnd < 160 || !nx) { setText($('#scrTurn'), 'Parking ahead'); setText($('#scrDist'), `Green zone in ${fmtM(toEnd)}`); arrow.style.transform = 'rotate(0deg)'; }
+    else { const dir = turnAt(r, nx.d0); setText($('#scrTurn'), `${dir === 'straight' ? 'Continue onto' : dir.includes('left') ? 'Turn left onto' : 'Turn right onto'} ${nx.name}`); setText($('#scrDist'), `in ${fmtM(nx.d0 - d)}`); arrow.style.transform = `rotate(${ARROWS[dir]}deg)`; }
+    // panel: the rule the display is showing right now lights up
+    const now3 = R.P >= 1 || toEnd < 160 ? 'park' : stp.slow ? 'slow' : 'limit';
+    if (now3 !== R.rule) { R.rule = now3; setText($('#sr'), $(`#rules li[data-r="${now3}"] b`).textContent); }
+    if (R.P > 0) { R.seen[now3] = true; $$('#rules li').forEach(li => { li.classList.toggle('on', li.dataset.r === now3); li.classList.toggle('seen', !!R.seen[li.dataset.r] && li.dataset.r !== now3); }); }
+    setText($('#rideSum'), `${(d / 1000).toFixed(1)} of ${(r.len / 1000).toFixed(1)} km · ${Math.floor(mins)}:${String(Math.floor(mins % 1 * 60)).padStart(2, '0')} · ${eur(cost)} · battery ${batt}%`);
+    if (R.P >= 1 && !R.arrived) { R.arrived = true; playUI('Replay'); }
+    if (R.P < 1 && R.arrived) { R.arrived = false; $('#screen').classList.remove('park'); playUI(R.paused ? 'Play' : 'Pause'); }
+  }
+
+  choose(nearest()); plan(false);
+  if (st.to) frame();
+  Object.defineProperty(window, '__sc', { get: () => ({ st, ride, map, fleet }) });
+})();
+</script>
+</body>
+</html>

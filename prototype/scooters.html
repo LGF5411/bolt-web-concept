@@ -1,0 +1,1299 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Bolt Scooters Concept</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@700..900&family=Inter:wght@400..800&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* ===== shared base for Home and Rides (same system as Scooters and Drive) ===== */
+:root{
+  --bg:#F7F9F8; --surface:#FFFFFF; --ink:#0E1010; --muted:#5C6660; --line:#DCE3DE;
+  --night-ink:#ECEEED; --night-muted:#9AA39E; --night-line:#262B29; --night-surface:#171B1A;
+  --green:#2B8659; --green-text:#23744C; --green-ink:#FFFFFF; --green-soft:#E3F1E8; --green-bright:#6FD39C;
+  --warn:#B4541B; --note:#5B3FD6;
+  --font:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,"SF Mono",Menlo,monospace;
+  --r-m:16px; --r-l:28px; --pill:40px;
+  --glide:cubic-bezier(.16,1,.3,1); --press:cubic-bezier(.3,0,.5,1);
+  --t-fast:140ms; --t-norm:280ms; --t-scene:760ms;
+  color-scheme:light;
+}
+/* Single light look by design: bolt.eu has no dark theme; black bands are part of Bolt's own pattern. */
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.55 var(--font);overflow-x:hidden}
+img,svg{max-width:100%}
+a{color:inherit}
+button{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--green);outline-offset:3px;border-radius:8px}
+.wrap{max-width:1240px;margin:0 auto;padding-left:max(20px,env(safe-area-inset-left,0px));padding-right:max(20px,env(safe-area-inset-right,0px))}
+h1,h2,h3{font-family:var(--font);text-wrap:balance;margin:0}
+h1{font-weight:750;font-size:clamp(40px,5.6vw,72px);line-height:1.02;letter-spacing:-.03em}
+h2{font-weight:750;font-size:clamp(30px,3.6vw,46px);line-height:1.06;letter-spacing:-.03em}
+h3{font-weight:650;font-size:20px;line-height:1.25;letter-spacing:-.01em}
+p{margin:0}
+.eyebrow{font-weight:600;font-size:16px;color:var(--muted)}
+.night .eyebrow{color:var(--night-muted)}
+.mono{font-family:var(--mono);font-variant-numeric:tabular-nums}
+.muted{color:var(--muted)}
+.visually-hidden{position:absolute!important;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.night{background:var(--ink);color:var(--night-ink)}
+
+.concept{background:#000;color:#cfd5d2;font:500 12px/1.4 var(--mono);letter-spacing:.04em}
+.concept .wrap{display:flex;gap:16px;justify-content:space-between;align-items:center;padding-block:8px;flex-wrap:wrap}
+.concept-actions{display:flex;gap:8px;flex-wrap:wrap}
+.notes-toggle{display:inline-flex;gap:8px;align-items:center;background:none;border:1px solid currentColor;border-radius:999px;padding:4px 12px;cursor:pointer;font:inherit;color:inherit}
+.notes-toggle[aria-pressed="true"]{background:var(--note);border-color:var(--note);color:#fff}
+
+.site-head{position:sticky;top:env(safe-area-inset-top,0px);z-index:30;background:rgba(247,249,248,.96);border-bottom:1px solid var(--line)}
+@supports (backdrop-filter:blur(1px)){.site-head{background:rgba(247,249,248,.86);backdrop-filter:saturate(1.4) blur(12px)}}
+.site-head .wrap{display:flex;align-items:center;gap:28px;height:64px}
+.wordmark{font:800 24px/1 var(--font);letter-spacing:-.04em;text-decoration:none;display:flex;align-items:baseline;gap:8px}
+.wordmark small{font:500 10px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.intent{display:flex;gap:4px;margin:0;padding:0;list-style:none}
+.intent > li{position:relative}
+.intent-btn{background:none;border:0;padding:10px 14px;border-radius:var(--pill);font-weight:600;font-size:15px;cursor:pointer;display:flex;gap:6px;align-items:center;text-decoration:none;color:inherit}
+.intent-btn:hover,.intent-btn[aria-expanded="true"]{background:var(--green-soft)}
+.intent-btn[aria-current="true"]{color:var(--green-text)}
+.chev{width:10px;height:10px;transition:transform var(--t-norm) var(--glide)}
+.intent-btn[aria-expanded="true"] .chev{transform:rotate(180deg)}
+.mega{position:absolute;top:calc(100% + 8px);left:0;width:min(560px,90vw);background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:var(--r-m);box-shadow:0 24px 48px -24px rgba(10,30,20,.25);padding:10px;display:grid;grid-template-columns:repeat(3,1fr);gap:6px;
+  opacity:0;transform:translateY(-6px);pointer-events:none;transition:opacity var(--t-norm) var(--glide),transform var(--t-norm) var(--glide)}
+.mega.open{opacity:1;transform:none;pointer-events:auto}
+.mega a{display:grid;gap:4px;padding:14px;border-radius:12px;text-decoration:none}
+.mega a:hover{background:var(--bg)}
+.mega a b{font-weight:650}
+.mega a span{font-size:13px;color:var(--muted);line-height:1.35}
+.mega a[aria-current="page"]{background:var(--green-soft)}
+.mega a[aria-current="page"] b{color:var(--green-text)}
+.head-right{margin-left:auto;display:flex;gap:12px;align-items:center}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;border:0;border-radius:var(--pill);min-height:52px;padding:0 24px;font-weight:650;font-size:16px;cursor:pointer;text-decoration:none;
+  transition:transform var(--t-fast) var(--press),background-color var(--t-norm),box-shadow var(--t-norm)}
+.btn:active{transform:scale(.97)}
+.btn-primary{background:var(--green);color:var(--green-ink)}
+.btn-primary:hover{box-shadow:0 10px 24px -12px var(--green)}
+.btn-quiet{background:var(--surface);border:1px solid var(--line);color:var(--ink)}
+.night .btn-quiet{background:transparent;border-color:var(--night-line);color:var(--night-ink)}
+.btn-small{min-height:40px;padding:0 18px;font-size:14px}
+.menu-btn{display:none;background:none;border:1px solid var(--line);border-radius:var(--pill);width:44px;height:44px;cursor:pointer}
+
+section.block{padding-block:96px}
+.sec-head{display:grid;gap:14px;max-width:44rem;margin-bottom:40px}
+.sec-head p{font-size:18px;color:var(--muted)}
+.night .sec-head p{color:var(--night-muted)}
+.chip{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;border-radius:var(--pill);padding:4px 10px;background:var(--green-soft);color:#1F6B43;white-space:nowrap}
+.chip.out{background:var(--bg);color:var(--muted);border:1px solid var(--line)}
+
+.faq{max-width:52rem;display:grid}
+.faq details{border-bottom:1px solid var(--night-line)}
+.faq summary{cursor:pointer;list-style:none;padding:22px 0;font-weight:650;font-size:19px;display:flex;justify-content:space-between;gap:16px}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{content:"+";font:400 26px/1 var(--font);color:var(--night-muted);transition:transform var(--t-norm) var(--glide)}
+.faq details[open] summary::after{transform:rotate(45deg)}
+.faq details p{padding:0 0 22px;color:var(--night-muted);max-width:44rem}
+
+.final{background:var(--green-soft);border-radius:var(--r-l);padding:48px;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:32px;align-items:center}
+.final p{color:var(--muted)}
+footer{padding-block:64px 48px;background:var(--ink);color:var(--night-ink)}
+.foot{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:24px}
+.fcol summary{list-style:none;font:700 15px/1.2 var(--font);color:#fff;margin-bottom:18px;pointer-events:none}
+.fcol summary::-webkit-details-marker{display:none}
+.foot ul{gap:14px!important}
+.foot li{font-size:15px;color:var(--night-ink)}
+.foot-bar{display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap;margin-top:56px;padding-top:28px;border-top:1px solid var(--night-line)}
+.foot-id{display:flex;align-items:center;gap:20px;flex-wrap:wrap}
+.foot-mark{color:#fff;font-size:30px}
+.region{display:inline-flex;align-items:center;gap:6px;font-size:14px;color:var(--night-muted)}
+.foot-cta{display:flex;gap:10px;flex-wrap:wrap}
+.foot-btn{background:#16352A;color:#fff;border:0}
+.foot-btn:hover{background:#1D4636}
+footer .legal{margin-top:24px}
+@media (max-width:860px){
+  .foot{grid-template-columns:minmax(0,1fr);gap:0}
+  .fcol{border-bottom:1px solid var(--night-line)}
+  .fcol summary{pointer-events:auto;cursor:pointer;margin:0;padding:18px 0;display:flex;justify-content:space-between}
+  .fcol summary::after{content:"+";font-weight:400;color:var(--night-muted)}
+  .fcol[open] summary::after{content:"−"}
+  .fcol ul{padding-bottom:18px!important}
+  .foot-bar{margin-top:32px}
+}
+.foot ul{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.foot a{text-decoration:none}
+.foot a:hover{text-decoration:underline}
+.legal{margin-top:40px;padding-top:20px;border-top:1px solid var(--night-line);font-size:13px;color:var(--night-muted);display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+
+/* phone + handoff stage */
+.phone{--w:300px;width:var(--w);aspect-ratio:9/19.3;position:relative}
+.phone .bezel{position:absolute;inset:0;border-radius:calc(var(--w) * .16);background:#0B0F0D;padding:calc(var(--w) * .035);box-shadow:inset 0 0 0 2px #2b332e,inset 0 0 0 5px #0B0F0D,0 50px 80px -40px rgba(0,0,0,.45)}
+.screen{position:relative;width:100%;height:100%;border-radius:calc(var(--w) * .125);overflow:hidden;background:#F2F5F3;color:#121714;font-size:4.4cqi;container-type:inline-size}
+.island{position:absolute;top:3.6cqi;left:50%;width:30%;height:8cqi;border-radius:5cqi;background:#000;transform:translateX(-50%);z-index:5}
+.status{position:absolute;top:0;left:0;right:0;height:15cqi;display:flex;justify-content:space-between;align-items:center;padding:0 9.6cqi;font:600 4.4cqi/1 -apple-system,system-ui,sans-serif;z-index:4}
+.screen.dark .status,.screen:has(.view.on.v-dark) .status{color:#fff}
+.view{position:absolute;inset:0;transition:opacity 420ms var(--glide),transform 620ms var(--glide)}
+.view:not(.on){opacity:0;transform:translateX(18%) scale(.98);pointer-events:none}
+.view.left:not(.on){transform:translateX(-18%) scale(.98)}
+.view > svg.full{position:absolute;inset:0;width:100%;height:100%}
+.ph-card{position:absolute;left:3cqi;right:3cqi;bottom:3cqi;background:#fff;border-radius:8cqi;padding:5.2cqi;display:grid;grid-template-columns:minmax(0,1fr);gap:3.6cqi;box-shadow:0 -6px 24px rgba(0,0,0,.08)}
+.ph-row{display:flex;justify-content:space-between;align-items:center;gap:3cqi;min-width:0}
+.ph-row b{font-size:5.4cqi;white-space:nowrap}
+.ph-row span{font-size:4cqi;color:#5C6660}
+.ph-pill{font:600 4.2cqi/1 -apple-system,system-ui,sans-serif;background:#F2F5F3;border-radius:999px;padding:2.6cqi 3.7cqi;white-space:nowrap;flex-shrink:0}
+.ph-btn{background:#2B8659;color:#fff;border-radius:999px;padding:4.4cqi;text-align:center;font-weight:650;font-size:5cqi}
+
+.stage{position:fixed;inset:0;z-index:60;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);align-items:center;gap:56px;background:#F7F9F8;isolation:isolate;color:var(--ink);
+  padding:calc(24px + env(safe-area-inset-top,0px)) max(24px,env(safe-area-inset-right,0px)) calc(24px + env(safe-area-inset-bottom,0px)) max(24px,env(safe-area-inset-left,0px))}
+.stage[hidden]{display:none}
+.stage-phone{position:relative;justify-self:end;display:grid;place-items:center}
+.stage .phone{opacity:0;transform:translateY(40px) scale(.94);transition:opacity 500ms ease,transform var(--t-scene) var(--glide)}
+.stage.in .phone{opacity:1;transform:none}
+.stage-panel{position:relative;max-width:30rem;display:grid;gap:24px;opacity:0;transform:translateX(24px);transition:opacity 420ms ease 220ms,transform var(--t-scene) var(--glide) 160ms}
+.stage.in .stage-panel{opacity:1;transform:none}
+.stage-close{position:absolute;top:calc(20px + env(safe-area-inset-top,0px));right:max(20px,env(safe-area-inset-right,0px));z-index:2;width:44px;height:44px;border-radius:50%;border:1px solid var(--line);background:var(--surface);cursor:pointer;display:grid;place-items:center}
+.steps{list-style:none;margin:0;padding:0;display:grid;gap:4px;counter-reset:s}
+.steps li button{width:100%;text-align:left;background:none;border:0;border-radius:14px;padding:14px 16px;display:grid;grid-template-columns:32px 1fr;gap:4px 14px;cursor:pointer;position:relative;overflow:hidden}
+.steps li button::before{counter-increment:s;content:counter(s);grid-row:span 2;width:32px;height:32px;border-radius:50%;display:grid;place-items:center;font:600 14px/1 var(--mono);border:1.5px solid var(--line)}
+.steps li button b{font-weight:650;font-size:17px}
+.steps li button span{color:var(--muted);font-size:14px}
+.steps li button[aria-current="step"]{background:var(--surface)}
+.steps li button[aria-current="step"]::before{background:var(--green);border-color:var(--green);color:#fff}
+.steps li button .prog{position:absolute;left:0;bottom:0;height:2px;width:100%;background:var(--green);transform-origin:left;transform:scaleX(0)}
+.steps li button[aria-current="step"] .prog.run{animation:prog 2800ms linear forwards}
+@keyframes prog{to{transform:scaleX(1)}}
+.handoff{display:grid;grid-template-columns:auto minmax(0,1fr);gap:18px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:var(--r-m);padding:16px}
+.qr{width:112px;height:112px;border-radius:10px;background:#fff;padding:8px;border:1px solid var(--line)}
+.qr svg{width:100%;height:100%;display:block}
+.handoff-copy{display:grid;gap:10px;min-width:0}
+.send-or{font-size:14px;font-weight:600;margin:0}
+.send-link{justify-self:start}
+.stage.on-phone .send-link{display:none}
+.send{display:flex;gap:8px;flex-wrap:wrap}
+.send input{flex:1 1 140px;min-width:0;font:500 15px/1 var(--font);color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:var(--pill);padding:12px 16px}
+.send-msg{font-size:13px;color:var(--green-text);min-height:1.3em}
+.pause{background:none;border:0;padding:0;color:var(--muted);font:500 13px/1 var(--mono);cursor:pointer;text-decoration:underline;text-underline-offset:3px;justify-self:start}
+.open-app{display:none}
+.stage.on-phone .qr,.stage.on-phone .send,.stage.on-phone .send-msg,.stage.on-phone .send-or{display:none}
+.stage.on-phone .open-app{display:inline-flex;justify-self:start}
+.stage.on-phone .handoff{grid-template-columns:minmax(0,1fr);order:1}
+.stage.on-phone .steps{order:2}
+.stage.on-phone .pause{order:3}
+.stage.on-phone{padding-top:20px}
+.stage.inline{position:absolute;inset:0;min-height:100%;height:auto;align-items:start;align-content:start;overflow:visible;padding-top:var(--stage-top,24px)}
+.stage.inline .stage-close{position:absolute;top:calc(var(--stage-top,24px) - 8px)}
+
+.pin{display:none;position:absolute;z-index:20;width:26px;height:26px;border-radius:50%;background:var(--note);color:#fff;font:600 12px/26px var(--mono);text-align:center;border:2px solid var(--bg);cursor:pointer;box-shadow:0 4px 12px rgba(60,40,180,.35);padding:0}
+body.notes .pin{display:block}
+.has-pin{position:relative}
+.pin-pop{position:absolute;z-index:40;width:290px;max-width:calc(100vw - 32px);background:var(--surface);color:var(--ink);border:1px solid var(--note);border-radius:14px;padding:14px;font-size:14px;line-height:1.45;box-shadow:0 20px 40px -20px rgba(40,20,120,.4)}
+.pin-pop b{display:block;font:600 11px/1.2 var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--note);margin-bottom:6px}
+
+@media (max-width:980px){
+  .intent,.head-right .btn{display:none}
+  .menu-btn{display:grid;place-items:center}
+  .final{grid-template-columns:minmax(0,1fr);padding:32px}
+  .foot{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .stage{grid-template-columns:minmax(0,1fr);align-content:start;gap:20px;overflow-y:auto}
+  .stage-phone{justify-self:center}
+  .stage .phone{--w:230px}
+  .stage.on-phone .phone{--w:180px}
+  .stage-panel{max-width:none}
+}
+.site-head.menu-open .intent{display:flex;position:absolute;top:64px;left:0;right:0;flex-direction:column;background:var(--surface);border-bottom:1px solid var(--line);padding:12px max(20px,env(safe-area-inset-right,0px)) 16px max(20px,env(safe-area-inset-left,0px))}
+.site-head.menu-open .mega{position:static;width:auto;grid-template-columns:minmax(0,1fr);box-shadow:none;margin-top:6px}
+@media (max-width:560px){
+  section.block{padding-block:64px}
+  .foot{grid-template-columns:minmax(0,1fr)}
+  .handoff{grid-template-columns:minmax(0,1fr)}
+  .qr{display:none}
+}
+@media (prefers-reduced-motion:reduce){
+  /* movement off; fades, glows and counters stay */
+  .view:not(.on),.view.left:not(.on){transform:none}
+  .stage .phone,.stage.in .phone,.stage-panel,.stage.in .stage-panel,.mega{transform:none}
+}
+
+
+/* shared: external-link mark, help link */
+.ext{font-size:.8em;margin-left:3px;opacity:.6}
+.help-link{font-weight:600;font-size:15px;text-decoration:none;padding:10px 12px;border-radius:40px}
+.help-link:hover{text-decoration:underline}
+@media (max-width:980px){.help-link{display:none}}
+
+/* Shared map stage: the full-bleed map, the floating panel, place search, markers and controls */
+/* Layout: the hero IS the product — a real map of Tallinn with the booking panel floating on it, like the app. */
+.mapstage{scroll-margin-top:64px;position:relative;height:clamp(640px,calc(100vh - 106px),920px);background:#EEF1EE;overflow:hidden}
+.map{position:absolute;inset:0;overflow:hidden}
+.panel{position:absolute;z-index:5;top:24px;left:max(24px,calc((100vw - 1240px) / 2 + 20px));width:400px;max-height:calc(100% - 48px);overflow:auto;background:var(--surface);border-radius:26px;
+  box-shadow:0 30px 60px -30px rgba(10,30,20,.35),0 0 0 1px rgba(14,16,16,.06);padding:22px;display:grid;gap:16px;scrollbar-width:thin}
+.panel h1{font-size:34px;line-height:1.05}
+.panel [hidden]{display:none!important}
+.panel .eyebrow{font-size:14px}
+.legs{display:grid;grid-template-columns:minmax(0,1fr) 40px;gap:10px;align-items:center}
+.fields{position:relative;display:grid;gap:8px}
+.fields::before{content:"";position:absolute;left:20px;top:30px;bottom:30px;border-left:2px dotted #B8C1BC}
+.field{position:relative;display:grid;grid-template-columns:22px minmax(0,1fr) auto;align-items:center;gap:10px;background:var(--bg);border:1.5px solid transparent;border-radius:14px;padding:0 8px 0 13px;transition:border-color var(--t-norm),background-color var(--t-norm)}
+.field:focus-within{border-color:var(--ink);background:#fff}
+.field .dot{width:12px;height:12px;justify-self:center;border-radius:50%}
+.field .dot.a{background:#2F6BFF;box-shadow:0 0 0 4px rgba(47,107,255,.18)}
+.field .dot.b{background:var(--ink);border-radius:3px}
+.field input{width:100%;min-width:0;border:0;background:transparent;font:600 16px/1.2 var(--font);color:var(--ink);padding:15px 0;outline:none}
+.field input::placeholder{color:#666F6B;font-weight:500}
+.field .clear{border:0;background:none;width:30px;height:30px;border-radius:50%;cursor:pointer;color:var(--muted);display:none}
+.field .clear:hover{background:var(--line)}
+.field.has .clear{display:block}
+.swap{width:40px;height:40px;border-radius:50%;border:1px solid var(--line);background:var(--surface);cursor:pointer;display:grid;place-items:center;transition:transform var(--t-scene) var(--glide),border-color var(--t-norm)}
+.swap:hover{border-color:var(--ink)}
+.swap.spin{transform:rotate(180deg)}
+.list{position:absolute;z-index:10;left:0;right:0;top:calc(100% + 6px);background:#fff;border-radius:16px;box-shadow:0 20px 40px -18px rgba(10,30,20,.35),0 0 0 1px rgba(14,16,16,.08);padding:6px;margin:0;list-style:none;max-height:300px;overflow:auto}
+.list[hidden]{display:none}
+.list li{display:grid;grid-template-columns:28px minmax(0,1fr);gap:10px;align-items:center;padding:10px;border-radius:10px;cursor:pointer}
+.list li[aria-selected="true"],.list li:hover{background:var(--bg)}
+.list li b{font-weight:600;font-size:15px;color:var(--ink);display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.list li span span{font-size:13px;color:var(--muted)}
+.list li > span{min-width:0}
+.list li i{width:28px;height:28px;border-radius:50%;background:var(--bg);display:grid;place-items:center;font-style:normal;font-size:13px}
+.hint{font-size:14px;color:var(--muted);display:flex;gap:8px;align-items:center}
+.pop{display:flex;flex-wrap:wrap;gap:6px}
+.pop button{border:1px solid var(--line);background:#fff;border-radius:var(--pill);padding:8px 12px;font-size:14px;font-weight:600;cursor:pointer}
+.pop button:hover{border-color:var(--ink)}
+.fine{font-size:12px;color:var(--muted)}
+
+.follow{position:absolute;z-index:5;left:50%;bottom:24px;transform:translateX(-50%);border:0;background:var(--ink);color:#fff;border-radius:var(--pill);padding:11px 18px;font:600 14px/1 var(--font);cursor:pointer;box-shadow:0 10px 24px -10px rgba(0,0,0,.5)}
+.follow[hidden]{display:none}
+.chip-top{position:absolute;z-index:4;left:50%;top:18px;transform:translateX(-50%);background:#fff;border-radius:var(--pill);padding:9px 16px;font-size:14px;font-weight:600;box-shadow:0 10px 24px -12px rgba(0,0,0,.4),0 0 0 1px rgba(0,0,0,.05);white-space:nowrap;pointer-events:none;transition:opacity var(--t-norm)}
+.chip-top[hidden]{display:none}
+.touch-hint{display:none}
+@media (hover:none) and (pointer:coarse){#zin,#zout{display:none}.touch-hint{display:block;position:absolute;z-index:4;left:12px;top:10px;font-size:11px;color:#6B756F;background:rgba(255,255,255,.8);padding:3px 8px;border-radius:999px}}
+@media (min-width:861px){.follow,.chip-top{margin-left:calc(var(--panel-w,0px) / 2)}}
+
+/* markers */
+.mk{transform-origin:0 0;will-change:transform}
+.mk .bub{position:absolute;left:0;bottom:16px;transform:translateX(-50%);background:var(--ink);color:#fff;border-radius:var(--pill);padding:7px 12px;font-size:13px;font-weight:600;white-space:nowrap;box-shadow:0 8px 20px -8px rgba(0,0,0,.4)}
+.mk .bub small{color:#9FE3BD;font-weight:600;margin-left:6px}
+.mk .pin-a{position:absolute;left:-9px;top:-9px;width:18px;height:18px;border-radius:50%;background:#2F6BFF;border:3px solid #fff;box-shadow:0 0 0 6px rgba(47,107,255,.2),0 4px 10px rgba(0,0,0,.25)}
+.mk .pin-b{position:absolute;left:-8px;top:-8px;width:16px;height:16px;border-radius:4px;background:var(--ink);border:3px solid #fff;box-shadow:0 4px 10px rgba(0,0,0,.3)}
+.mk.a .bub{background:#fff;color:var(--ink);box-shadow:0 8px 20px -8px rgba(0,0,0,.35),0 0 0 1px rgba(0,0,0,.06)}
+.mk .eta{background:var(--green)}
+.ctrl{position:absolute;z-index:4;right:max(20px,env(safe-area-inset-right,0px));bottom:24px;display:grid;gap:8px}
+.ctrl button{width:44px;height:44px;border-radius:14px;border:0;background:#fff;box-shadow:0 8px 20px -10px rgba(0,0,0,.35),0 0 0 1px rgba(0,0,0,.06);cursor:pointer;font-size:20px;display:grid;place-items:center}
+.attrib{position:absolute;z-index:4;right:12px;top:10px;font-size:11px;color:#6B756F;background:rgba(255,255,255,.75);padding:3px 8px;border-radius:999px}
+.attrib a{color:inherit;display:inline-block;line-height:24px}
+.loading{position:absolute;inset:0;display:grid;place-items:center;color:var(--muted);font-weight:600}
+
+@media (max-width:860px){
+  .mapstage{height:auto;overflow:visible;background:var(--bg)}
+  .map{position:relative;height:clamp(340px,56vh,560px)}
+  .panel{position:relative;top:auto;left:auto;width:auto;max-height:none;margin:-28px 12px 0;border-radius:24px;padding:18px}
+  .panel h1{font-size:28px}
+  .ctrl{bottom:auto;top:calc(clamp(340px,56vh,560px) - 150px)}
+}
+@media (prefers-reduced-motion:reduce){.swap.spin{transform:none}}
+
+.play{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);background:#fff;border-radius:var(--pill);padding:7px 12px;font:600 13px/1 var(--font);cursor:pointer;flex-shrink:0}
+.play:hover{border-color:var(--ink)}
+.play .i-play{display:none}.play.paused .i-play{display:block}.play.paused .i-pause{display:none}
+
+/* ===== v2 brand layer: look like bolt.eu first, improve second =====
+   bolt.eu signatures kept: very heavy tight headlines, centred home hero, rounded-rectangle buttons (green + grey),
+   white rounded cards on a light grey page, plain header with one dark pill, black product bands, 3D characters in green.
+   Bolt's own typeface and illustrations are not used: Inter Tight and original illustrations stand in for them. */
+:root{
+  --bg:#F5F7F6; --line:#E1E6E3;
+  --display:"Inter Tight","Inter Display","Inter",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --r-btn:14px; --r-card:24px; --dark:#24282C;
+  --card-shadow:0 1px 2px rgba(14,16,16,.04),0 12px 32px -18px rgba(14,16,16,.16);
+}
+body{background:var(--bg)}
+h1,h2{font-family:var(--display);font-weight:800;letter-spacing:-.015em}
+h1{font-size:clamp(44px,7.2vw,104px);line-height:1.02}
+h2{font-size:clamp(34px,4.8vw,64px);line-height:1.05}
+h3{font-family:var(--display);font-weight:700;letter-spacing:-.02em;font-size:22px}
+.eyebrow{font-size:15px}
+
+/* header: plain, like bolt.eu */
+.site-head{background:rgba(245,247,246,.92);border-bottom:0}
+@supports (backdrop-filter:blur(1px)){.site-head{background:rgba(245,247,246,.82)}}
+.site-head .wrap{height:76px}
+.wordmark{font:900 32px/1 var(--display);letter-spacing:-.02em}
+.intent-btn{font-size:16px;font-weight:600;padding:10px 12px;border-radius:12px}
+.intent-btn:hover,.intent-btn[aria-expanded="true"]{background:#E8ECEA}
+.mega{border-radius:20px;border:0;box-shadow:0 2px 6px rgba(14,16,16,.05),0 24px 48px -20px rgba(14,16,16,.22)}
+.head-right .help-link{font-weight:600}
+.btn-dark{background:var(--dark);color:#fff}
+.btn-dark:hover{background:#000}
+.head-right .btn{border-radius:999px}
+
+/* buttons: rounded rectangles, green or grey */
+.btn{border-radius:var(--r-btn);min-height:56px;padding:0 28px;font-weight:700;font-size:17px}
+.btn-small{min-height:44px;padding:0 18px;font-size:15px;border-radius:12px}
+.btn-primary:hover{background:#257A50;box-shadow:none}
+.btn-quiet{background:#E9ECEB;border:0;color:var(--ink)}
+.btn-quiet:hover{background:#DEE3E0}
+.night .btn-quiet{background:rgba(255,255,255,.12);color:#fff;border:0}
+
+.btn-light{background:#E7F8EE;color:#0E1010}
+.btn-light:hover{background:#fff}
+
+/* cards */
+.bcard{background:var(--surface);border-radius:var(--r-card);box-shadow:var(--card-shadow);overflow:hidden}
+
+/* sections */
+section.block{padding-block:clamp(112px,11vw,160px)}
+.sec-head{gap:20px;margin-bottom:72px}
+.sec-head p{max-width:38rem}
+.sec-head p{font-size:19px}
+.final{border-radius:var(--r-card);background:var(--surface);box-shadow:var(--card-shadow)}
+
+/* Explore apps: Food is a separate app, so it sits in a list of all Bolt apps instead of being the hero's second CTA */
+.apps{border:0;border-radius:28px;padding:28px;width:min(520px,calc(100vw - 32px));box-shadow:0 30px 80px -20px rgba(0,0,0,.35);background:var(--surface);color:var(--ink)}
+.apps::backdrop{background:rgba(14,16,16,.45)}
+.apps-head{display:flex;justify-content:space-between;align-items:center}
+.apps h2{font-size:36px}
+.apps-x{width:44px;height:44px;border-radius:50%;border:0;background:#E9ECEB;font-size:16px;cursor:pointer;color:var(--ink)}
+.apps-sub{color:var(--muted);margin:6px 0 18px}
+.apps-list{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.app{display:grid;grid-template-columns:64px minmax(0,1fr) auto;gap:14px;align-items:center;width:100%;padding:10px 14px 10px 10px;border:0;border-radius:18px;background:var(--bg);text-align:left;font:inherit;color:inherit;text-decoration:none;cursor:pointer;transition:background-color var(--t-norm)}
+.app:hover{background:#E9EEEB}
+.app img{width:64px;height:64px;border-radius:14px;object-fit:cover;object-position:center 30%;background:#fff}
+.app>span{display:grid;gap:3px;min-width:0}
+.app b{font-size:17px}
+.app>span>span{font-size:14px;color:var(--muted)}
+.app i{font-style:normal;font-weight:700;font-size:14px;color:var(--green-text);white-space:nowrap}
+.app[data-handoff] i{background:var(--green);color:#fff;padding:9px 16px;border-radius:12px}
+
+
+/* v2: bolt.eu product-page frame — headline left, character right, then the planner as one white card */
+.hero-s{padding:48px 0 32px}
+.hero-s .wrap{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);grid-template-areas:"head img" "body img";grid-template-rows:auto 1fr;column-gap:32px;align-items:center}
+.hs-head{grid-area:head;align-self:end}.hs-body{grid-area:body;align-self:start}.hs-img{grid-area:img}
+.hero-s h1{font-size:clamp(48px,6.4vw,92px)}
+.hero-s .sub{font-size:20px;line-height:1.45;color:var(--muted);max-width:30rem;margin-top:24px}
+.hs-head h1{max-width:11ch}
+.hero-s .ctas{justify-content:flex-start}
+.hero-s img{width:100%;max-width:600px;height:auto;justify-self:end;background:#fff;border-radius:32px;box-shadow:var(--card-shadow);padding:12px 8px 0}
+.facts{display:flex;gap:28px;flex-wrap:wrap;margin-top:34px;padding:0;list-style:none}
+.facts li{display:grid;gap:2px}
+.facts b{font:800 28px/1 var(--display);letter-spacing:-.015em}
+.facts span{font-size:14px;color:var(--muted)}
+.tag{justify-self:start;font-size:12px;font-weight:700;color:var(--green-text);background:#E6F4EC;padding:5px 9px;border-radius:999px}
+
+.qa{background:var(--surface);border-radius:var(--r-card);box-shadow:var(--card-shadow);padding:40px}
+.qa h2{font-size:clamp(32px,3.4vw,46px);margin:8px 0 12px}
+.faq.light details{border-color:var(--line)}
+.faq.light summary::after{color:var(--muted)}
+.faq.light details p{color:var(--muted)}
+
+/* news and stories (home, scooters) */
+.news-head{display:flex;justify-content:space-between;align-items:end;gap:20px;margin-bottom:40px;flex-wrap:wrap}
+.news2{display:grid;grid-template-columns:minmax(0,1.45fr) minmax(0,1fr);gap:28px}
+.feat{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);background:var(--surface);border-radius:var(--r-card);box-shadow:var(--card-shadow);overflow:hidden;color:inherit;text-decoration:none}
+.feat-img{background:#fff;display:flex;align-items:flex-end;justify-content:center;overflow:hidden;padding:16px 16px 0}
+.feat-img img{width:100%;height:auto;transition:transform 900ms var(--glide)}
+.feat:hover .feat-img img{transform:scale(1.04)}
+.feat-t{padding:32px;display:grid;gap:14px;align-content:center}
+.feat-meta{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.feat b{font:800 28px/1.12 var(--display);letter-spacing:-.025em}
+.feat-x{color:var(--muted)}
+.nlist{list-style:none;margin:0;padding:8px 24px;background:var(--surface);border-radius:var(--r-card);box-shadow:var(--card-shadow)}
+.nlist li+li{border-top:1px solid var(--line)}
+.nlist a{display:grid;gap:6px;padding:18px 0;color:inherit;text-decoration:none}
+.nlist a:hover b{text-decoration:underline}
+.nlist b{font-size:17px;line-height:1.3}
+.pt{justify-self:start;font-size:12px;font-weight:700;padding:5px 9px;border-radius:999px}
+.pt.c1{background:#E6F4EC;color:var(--green-text)}.pt.c2{background:#E8EEFF;color:#2747B8}.pt.c3{background:#FFF0E0;color:#9A4A0C}.pt.c4{background:#EEF0EF;color:#3B4440}
+
+.feat.photo .feat-img{padding:0;background:none}
+.feat.photo .feat-img img{height:100%;object-fit:cover}
+.nlist.thumbs a{grid-template-columns:72px minmax(0,1fr);align-items:center;gap:16px}
+.nlist.thumbs img{width:72px;height:72px;border-radius:14px;object-fit:cover}
+.nlist.thumbs a>span{display:grid;gap:4px}
+
+/* map module as a Bolt card, not a full-bleed app */
+.mapcard{position:relative;border-radius:28px;overflow:hidden;background:#EEF1EE;box-shadow:var(--card-shadow)}
+.ctas{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:34px}
+.planner{padding-bottom:8px}
+.mapstage.mapcard{height:clamp(640px,calc(100vh - 120px),780px);scroll-margin-top:92px}
+.mapcard .panel{top:20px;left:20px;bottom:auto;width:384px;max-height:calc(100% - 40px);border-radius:22px}
+.mapcard .panel h2{font-size:44px;letter-spacing:-.015em}
+.live-note{text-align:center;font-size:14px;color:var(--muted);margin-top:16px}
+.final-c{text-align:center;padding:24px 0 32px}
+.final-c p{font-size:20px;color:var(--muted);margin-top:18px}
+.mapcard .attrib{top:auto;bottom:12px;left:auto;right:76px}
+@media (max-width:860px){
+  h1{font-size:clamp(40px,11vw,60px)}
+  .site-head .wrap{height:64px}
+  .wordmark{font-size:28px}
+  section.block{padding-block:96px}
+  .sec-head{margin-bottom:48px}
+  .hero-s{padding:32px 0 20px}
+  .hero-s .wrap{grid-template-columns:minmax(0,1fr);grid-template-areas:"head" "img" "body";grid-template-rows:auto;row-gap:0}
+  .hs-head h1{max-width:none}
+  .hero-s img{justify-self:stretch;max-width:520px;margin:24px auto 0;border-radius:24px}
+  .hero-s .sub{font-size:18px;margin-top:16px}
+  .facts{gap:20px;margin-top:26px}.facts b{font-size:24px}
+  .ctas{margin-top:26px}
+  .news2,.feat{grid-template-columns:minmax(0,1fr)}
+  .planner-wrap{padding-left:12px;padding-right:12px}
+  .mapstage.mapcard{height:auto;background:var(--surface)}
+  .mapcard .panel{margin:0;border-radius:0;box-shadow:none;width:auto;left:auto;top:auto;max-height:none}
+  .mapcard .panel h2{font-size:36px}
+  .mapcard .attrib{bottom:auto;top:calc(clamp(340px,56vh,560px) - 34px);right:auto;left:12px}
+}
+
+/* handoff stage: fit any window height (the phone and the QR were cut off on shorter laptop screens) */
+.stage{overflow-y:auto;align-items:safe center}
+@media (min-width:981px){.stage .phone{--w:clamp(200px,calc((100dvh - 96px) * 9 / 19.3),300px)}}
+.stage-panel h2{font-size:clamp(34px,min(4.2vw,6.4vh),58px);line-height:1}
+.stage-panel{gap:20px}
+@media (max-height:760px) and (min-width:981px){.stage-panel .steps span{display:none}}
+
+/* Scooters: every parked scooter on the real map, real zones, and a ride previewed on the handlebar display. */
+.mapcard .panel #h1{font-size:34px;letter-spacing:-.02em;line-height:1.02}
+.seg{display:grid;grid-template-columns:1fr 1fr;background:var(--bg);border-radius:var(--pill);padding:4px}
+.seg button{border:0;background:none;border-radius:var(--pill);padding:10px;font:600 15px/1 var(--font);cursor:pointer;color:var(--muted)}
+.seg button[aria-pressed="true"]{background:#fff;color:var(--ink);box-shadow:0 2px 8px -2px rgba(0,0,0,.18)}
+.pick{display:grid;grid-template-columns:52px minmax(0,1fr) auto;gap:12px;align-items:center;background:var(--bg);border-radius:16px;padding:12px}
+.pick .ic{width:52px;height:52px;border-radius:14px;background:#fff;display:grid;place-items:center;color:var(--green-text)}
+.pick b{display:block;font-weight:650}
+.pick span{font-size:13px;color:var(--muted)}
+.batt{display:inline-flex;align-items:center;gap:6px;font:600 13px/1 var(--font);font-variant-numeric:tabular-nums}
+.batt i{width:24px;height:12px;border:1.5px solid currentColor;border-radius:3px;position:relative;display:inline-block}
+.batt i::after{content:"";position:absolute;left:1.5px;top:1.5px;bottom:1.5px;width:calc((100% - 3px) * var(--b));background:var(--green);border-radius:1px}
+.batt i::before{content:"";position:absolute;right:-4px;top:3px;width:2px;height:4px;background:currentColor;border-radius:0 1px 1px 0}
+.sum{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.sum div{background:var(--bg);border-radius:12px;padding:10px;display:grid;gap:2px}
+.sum b{font:700 18px/1.1 var(--font);font-variant-numeric:tabular-nums}
+.sum span{font-size:12px;color:var(--muted)}
+.check{display:flex;gap:8px;align-items:flex-start;font-size:14px;color:var(--muted)}
+.check svg{flex-shrink:0;margin-top:2px;color:var(--green-text)}
+.check.warn svg{color:#C2410C}
+.cta{display:grid;gap:8px}
+.legend-z{position:absolute;z-index:4;right:16px;top:16px;display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end;max-width:60%}
+.legend-z span{display:inline-flex;align-items:center;gap:7px;background:rgba(255,255,255,.94);border-radius:var(--pill);padding:7px 11px;font:600 12px/1 var(--font);box-shadow:0 0 0 1px rgba(14,16,16,.06)}
+.legend-z[hidden]{display:none}
+.legend-z i{width:12px;height:12px;border-radius:4px;display:inline-block}
+.row{display:flex;gap:8px;flex-wrap:wrap}
+.row .btn{flex:1 1 auto}
+
+.rules{list-style:none;margin:0;padding:0;display:grid;gap:8px;counter-reset:r}
+.rules li{counter-increment:r;display:grid;grid-template-columns:28px minmax(0,1fr);column-gap:12px;row-gap:2px;padding:12px;border-radius:14px;background:var(--bg);border:1.5px solid transparent;transition:border-color var(--t-norm),background-color var(--t-norm),opacity var(--t-norm)}
+.rules li::before{content:counter(r);grid-row:span 2;width:28px;height:28px;border-radius:50%;background:#fff;display:grid;place-items:center;font:700 13px/1 var(--font);color:var(--muted);transition:background-color var(--t-norm),color var(--t-norm)}
+.rules li b{font-weight:650;font-size:15px}
+.rules li span{font-size:13px;color:var(--muted)}
+.rules li.on{background:#fff;border-color:var(--green)}
+.rules li.on::before{background:var(--green);color:#fff}
+.rules li.seen::before{background:var(--green-soft);color:var(--green-text)}
+.rules li.off{opacity:.5}
+.ride-sum{font-size:14px;color:var(--muted);font-variant-numeric:tabular-nums}
+/* the handlebar display */
+.bar-wrap{position:absolute;z-index:6;left:calc(50% + var(--panel-w,0px) / 2);bottom:22px;transform:translateX(-50%);width:min(600px,calc(100% - var(--panel-w,0px) - 40px));pointer-events:none;transition:opacity 400ms ease,transform 600ms var(--glide)}
+.bar-wrap[hidden]{display:block;opacity:0;transform:translate(-50%,40px)}
+.handle{position:relative;height:178px}
+.handle .stem{position:absolute;left:4%;right:4%;top:58px;height:22px;border-radius:11px;background:linear-gradient(#3A4240,#1E2422);box-shadow:0 10px 24px -8px rgba(0,0,0,.5)}
+.handle .grip{position:absolute;top:50px;width:15%;height:38px;border-radius:19px;background:repeating-linear-gradient(90deg,#121615 0 5px,#1B201E 5px 9px);box-shadow:0 8px 18px -6px rgba(0,0,0,.5)}
+.handle .grip.l{left:0}.handle .grip.r{right:0}
+.handle .lever{position:absolute;top:84px;width:16%;height:8px;border-radius:4px;background:#4A5350}
+.handle .lever.l{left:9%;transform:rotate(-7deg)}.handle .lever.r{right:9%;transform:rotate(7deg)}
+.hb-screen{position:absolute;left:50%;top:0;transform:translateX(-50%);width:62%;height:172px;border-radius:26px;background:#0B0E0D;border:3px solid #2A3230;box-shadow:0 24px 40px -18px rgba(0,0,0,.6),inset 0 0 0 1px rgba(255,255,255,.05);color:#fff;padding:14px 18px;display:grid;grid-template-rows:auto 1fr auto;gap:6px;overflow:hidden}
+.scr-top{display:flex;justify-content:space-between;align-items:center;font:600 12px/1 var(--font);color:#9AA59F}
+.scr-top .bt{display:inline-flex;gap:6px;align-items:center;color:#fff}
+.scr-top .bt i{width:22px;height:11px;border:1.5px solid #fff;border-radius:3px;position:relative}
+.scr-top .bt i::after{content:"";position:absolute;left:1.5px;top:1.5px;bottom:1.5px;width:calc((100% - 3px) * var(--b,.6));background:#3DDC84;border-radius:1px}
+.scr-mid{display:grid;grid-template-columns:auto 1fr;gap:16px;align-items:center}
+.limit{width:56px;height:56px;border-radius:50%;background:#fff;border:6px solid #E5484D;color:#0B0E0D;display:grid;place-items:center;font:800 20px/1 var(--font);font-variant-numeric:tabular-nums;transition:transform 300ms var(--glide)}
+.limit.pulse{transform:scale(1.15)}
+.spd{display:flex;align-items:baseline;gap:6px}
+.spd b{font:800 54px/1 var(--font);letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.spd span{font:600 13px/1 var(--font);color:#9AA59F}
+.turn{display:grid;grid-template-columns:30px minmax(0,1fr);gap:8px;align-items:center;font-size:13px}
+.turn svg{width:30px;height:30px;color:#3DDC84;transition:transform 300ms var(--glide)}
+.turn b{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:650;font-size:14px}
+.turn span{color:#9AA59F;font-variant-numeric:tabular-nums}
+.zonepill{display:none;background:#F5A524;color:#0B0E0D;border-radius:var(--pill);padding:4px 8px;font:700 11px/1 var(--font)}
+.hb-screen.slow .zonepill{display:inline-block}
+.hb-screen.park .turn svg{color:#3DDC84}
+.mk.sc .bub{bottom:18px}
+
+/* v3: bolt.eu's own scooter page order (photo hero, lifestyle, how-to, gallery, pricing, docks, safety, Bolt 7, FAQ, stories)
+   with the parts it cannot do: a live map as step 1, your own trip priced, and the handlebar display playing a ride */
+.hero-p{background:linear-gradient(180deg,#B5BFBB 0%,#CBD5D0 48%,#C2CDC9 100%);overflow:hidden}
+.hp-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);align-items:center;gap:24px;min-height:min(620px,72vh)}
+.hp-text{padding:56px 0}
+.hp-text h1{font-size:clamp(46px,5.6vw,80px);margin-top:14px}
+.hp-text .sub{font-size:19px;line-height:1.5;color:#2D3532;max-width:32rem;margin-top:22px}
+.hp-text .ctas{justify-content:flex-start}
+.hp-text .eyebrow{color:#2D3532}
+.btn-ghost{background:rgba(255,255,255,.55);color:var(--ink)}
+.btn-ghost:hover{background:#fff}
+.hp-img{width:100%;height:auto;align-self:center;--m1:linear-gradient(90deg,transparent,#000 22%,#000 80%,transparent);--m2:linear-gradient(180deg,transparent,#000 14%,#000 86%,transparent);-webkit-mask-image:var(--m1),var(--m2);-webkit-mask-composite:source-in;mask-image:var(--m1),var(--m2);mask-composite:intersect}  /* the photo melts into the hero colour instead of showing its edges */
+.wide{width:100%;height:auto;border-radius:28px;display:block}
+.bento{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin-top:16px}
+.b-card{position:relative;margin:0;border-radius:28px;overflow:hidden;background:#0B100E;aspect-ratio:4/3}
+.b-card img{width:100%;height:100%;object-fit:cover;object-position:center 70%}
+.b-card figcaption{position:absolute;left:28px;top:28px;right:28px;display:grid;gap:6px;color:#fff}
+.b-card b{font:800 26px/1.1 var(--display);letter-spacing:-.02em}
+.b-card figcaption span{color:#B9C1BD;max-width:24rem}
+.steps3{list-style:none;padding:0;margin:0 0 24px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.steps3 li{background:var(--surface);border-radius:20px;padding:22px 24px;display:grid;gap:6px;box-shadow:var(--card-shadow);border:2px solid transparent}
+.steps3 li.on{border-color:var(--green)}
+.steps3 .sn{font-size:13px;font-weight:700;color:var(--green-text)}
+.steps3 b{font:800 21px/1.15 var(--display);letter-spacing:-.02em}
+.steps3 li>span:last-child{color:var(--muted);font-size:15px}
+.gallery{display:flex;gap:16px;overflow-x:auto;scroll-snap-type:x mandatory;padding:0 max(20px,calc((100vw - 1240px) / 2 + 20px)) 8px;scroll-padding-inline:max(20px,calc((100vw - 1240px) / 2 + 20px));scrollbar-width:none}
+.gallery::-webkit-scrollbar{display:none}
+.gallery img{flex:0 0 auto;height:clamp(200px,24vw,300px);width:auto;border-radius:22px;scroll-snap-align:start;object-fit:cover}
+.plans{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:28px}
+.plan{background:var(--surface);border-radius:var(--r-card);box-shadow:var(--card-shadow);padding:32px;display:grid;gap:14px;align-content:start;border:2px solid transparent}
+.plan.featured{border-color:var(--green)}
+.plan h3{font-size:24px}
+.plan .amt{font:900 44px/1 var(--display);letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.plan .amt small{font:500 15px/1 var(--font);color:var(--muted);letter-spacing:0}
+.plan dl{margin:0;display:grid;grid-template-columns:auto 1fr;gap:8px 16px;font-size:14px;border-top:1px solid var(--line);padding-top:14px}
+.plan dt{color:var(--muted)}
+.plan dd{margin:0;text-align:right;font-variant-numeric:tabular-nums;font-weight:600}
+.your-trip{justify-self:start;background:#E6F4EC;color:var(--green-text);font-weight:700;padding:10px 14px;border-radius:12px;font-size:15px}
+.fine2{font-size:13px;color:var(--muted);margin-top:16px}
+.dock{background:#0E1010;color:#F2F5F3;padding:clamp(120px,12vw,168px) 0 0;text-align:center;overflow:hidden}
+.dock-head{display:grid;gap:18px;justify-items:center}
+.dock .eyebrow{color:#9AA39E}
+.dock h2{max-width:16ch}
+.dock-head p{max-width:40rem;color:#B9C1BD;font-size:18px}
+.dock-img{display:block;width:min(1400px,100%);height:auto;margin:24px auto 0}
+.sec-head.center{text-align:center;justify-items:center;margin-inline:auto}
+.safe-rail{display:flex;gap:16px;overflow-x:auto;scroll-snap-type:x mandatory;padding:0 max(20px,calc((100vw - 1240px) / 2 + 20px)) 8px;scroll-padding-inline:max(20px,calc((100vw - 1240px) / 2 + 20px));scrollbar-width:none;scroll-behavior:smooth}
+.safe-rail::-webkit-scrollbar{display:none}
+.scard{flex:0 0 min(320px,78vw);aspect-ratio:3/4;border-radius:24px;overflow:hidden;position:relative;background:#0B100E;color:#fff;scroll-snap-align:start}
+.scard img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.75}
+.scard::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(6,10,8,.92) 0%,rgba(6,10,8,.35) 45%,rgba(6,10,8,0) 70%)}
+.scard div{position:relative;z-index:1;padding:26px;display:grid;gap:10px}
+.scard b{font:800 24px/1.1 var(--display)}
+.scard span{color:#D5DCD8;font-size:15px}
+.rail-nav{display:flex;justify-content:flex-end;gap:8px;margin-top:16px}
+.rbtn{width:44px;height:44px;border-radius:12px;border:0;background:#E9ECEB;font-size:18px;cursor:pointer;color:var(--ink)}
+.rbtn:hover{background:#DEE3E0}
+.report{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:28px;align-items:center;background:var(--surface);border-radius:var(--r-card);box-shadow:var(--card-shadow);padding:32px 36px}
+.rep-ico{width:72px;height:72px;border-radius:50%;background:#F5B82E;color:#fff;display:grid;place-items:center;font:900 40px/1 var(--display)}
+.report h3{font-size:26px}
+.report p{color:var(--muted);margin-top:6px;max-width:44rem}
+.b7s{position:relative;background:#000;color:#fff;min-height:min(760px,90vh);display:grid;align-items:center;overflow:hidden}
+.b7s-vid{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.9}
+.b7s::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(0,0,0,.85) 0%,rgba(0,0,0,.35) 60%,rgba(0,0,0,0) 100%)}
+.b7s-in{position:relative;z-index:1;display:grid;gap:22px;padding-block:96px}
+.b7s h2{font-size:clamp(44px,6vw,84px);max-width:13ch}
+.b7s-in>p{max-width:36rem;color:#C9D1CD;font-size:18px}
+.b7s .ctas{justify-content:flex-start;margin-top:4px}
+.btn-ghost-dark{background:rgba(255,255,255,.12);color:#fff}
+.btn-ghost-dark:hover{background:rgba(255,255,255,.2)}
+.b7s-note{font-size:14px;color:#8E9993!important;max-width:30rem}
+.photo-cta{padding:0 0 32px}
+.pc-grid{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:48px;align-items:center}
+.pc-grid img{width:100%;height:auto;border-radius:28px}
+.pc-grid p{color:var(--muted);font-size:19px;margin-top:16px}
+.pc-grid .ctas{justify-content:flex-start}
+
+@media (max-width:860px){
+  .legend-z{left:12px;right:12px;max-width:none;justify-content:flex-start;top:10px}
+  .bar-wrap{left:50%;width:calc(100% - 16px);top:calc(clamp(340px,56vh,560px) - 170px);bottom:auto}
+  .handle{height:150px}
+  .mapcard:has(#barWrap:not([hidden])) .ctrl{display:none}   /* the handlebar covers the zoom buttons while a ride plays */
+  .hb-screen{width:76%;height:146px;padding:10px 14px;border-radius:22px}
+  .handle .stem{top:48px}.handle .grip{top:42px;width:12%}
+  .handle .lever{top:72px}
+  .spd b{font-size:44px}.limit{width:46px;height:46px;font-size:17px;border-width:5px}
+  .plans,.steps3,.bento{grid-template-columns:minmax(0,1fr)}
+  .plan{padding:26px}.qa{padding:28px 24px 16px}
+  .hp-grid{grid-template-columns:minmax(0,1fr);min-height:0;gap:0}
+  .hp-text{padding:40px 0 8px}
+  .hp-img{-webkit-mask-image:none;mask-image:none;max-width:520px;justify-self:center}
+  .wide,.b-card{border-radius:20px}
+  .dock{padding-top:72px}
+  .report{grid-template-columns:minmax(0,1fr);padding:26px;gap:16px}
+  .b7s{min-height:0}.b7s-in{padding-block:72px}
+  .b7s::after{background:linear-gradient(180deg,rgba(0,0,0,.8),rgba(0,0,0,.5))}
+  .pc-grid{grid-template-columns:minmax(0,1fr);gap:24px}
+}
+
+</style>
+</head>
+<body>
+
+<div class="concept">
+  <div class="wrap">
+    <span>Portfolio concept by Andrii · not affiliated with Bolt · scooters, zones and prices are examples · map © OpenStreetMap contributors</span>
+    <span class="concept-actions"><a class="notes-toggle" href="../index.html" style="text-decoration:none">← Case study</a> <button class="notes-toggle" type="button" id="notesToggle" aria-pressed="false">Design notes</button></span>
+  </div>
+</div>
+
+<header class="site-head" id="siteHead">
+  <div class="wrap has-pin">
+    <a class="wordmark" href="index.html" aria-label="Bolt concept home">Bolt <small>concept</small></a>
+    <nav aria-label="Main">
+      <ul class="intent" id="intentNav">
+        <li>
+          <button class="intent-btn" type="button" aria-expanded="false" aria-controls="megaGo" aria-current="true">Get around
+            <svg class="chev" viewBox="0 0 10 10" aria-hidden="true"><path d="M1 3l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.6"/></svg></button>
+          <div class="mega" id="megaGo">
+            <a href="rides.html"><b>Rides</b><span>A driver picks you up in minutes</span></a>
+            <a href="scooters.html" aria-current="page"><b>Scooters &amp; e-bikes</b><span>Grab one on the next corner</span></a>
+            <a href="drive.html"><b>Car-sharing</b><span>Drive yourself, by the minute or day</span></a>
+          </div>
+        </li>
+        <li>
+          <button class="intent-btn" type="button" aria-expanded="false" aria-controls="megaDel">Get delivered
+            <svg class="chev" viewBox="0 0 10 10" aria-hidden="true"><path d="M1 3l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.6"/></svg></button>
+          <div class="mega" id="megaDel">
+            <a href="https://bolt.eu/en/food/" target="_blank" rel="noopener"><b>Food<span class="ext" aria-hidden="true">↗</span><span class="visually-hidden"> (opens bolt.eu)</span></b><span>Order in your browser or the app</span></a>
+            <a href="https://bolt.eu/en/food/market/" target="_blank" rel="noopener"><b>Groceries<span class="ext" aria-hidden="true">↗</span><span class="visually-hidden"> (opens bolt.eu)</span></b><span>Essentials in minutes</span></a>
+            <a href="https://bolt.eu/en/rides/features/bolt-send/" target="_blank" rel="noopener"><b>Parcels<span class="ext" aria-hidden="true">↗</span><span class="visually-hidden"> (opens bolt.eu)</span></b><span>Send something across town</span></a>
+          </div>
+        </li>
+        <li><a class="intent-btn" href="index.html#earn">Earn</a></li>
+        <li><a class="intent-btn" href="index.html#business">For business</a></li>
+      </ul>
+    </nav>
+    <div class="head-right">
+      <a class="help-link" href="https://bolt.eu/en/support/" target="_blank" rel="noopener">Help<span class="ext" aria-hidden="true">↗</span><span class="visually-hidden"> (opens bolt.eu)</span></a>
+      <button class="btn btn-dark btn-small" type="button" data-handoff>Get the app</button>
+      <button class="menu-btn" type="button" id="menuBtn" aria-expanded="false" aria-controls="intentNav" aria-label="Open menu">
+        <svg width="18" height="14" viewBox="0 0 18 14" aria-hidden="true"><path d="M0 1h18M0 7h18M0 13h18" stroke="currentColor" stroke-width="1.8"/></svg></button>
+    </div>
+    
+  </div>
+</header>
+
+<main id="top">
+  <section class="hero-p">
+    <div class="wrap hp-grid">
+      <div class="hp-text">
+        <p class="eyebrow">Bolt electric scooters</p>
+        <h1>Rent a scooter in Tallinn</h1>
+        <p class="sub">Spend less time in traffic and more time on the move. Built for safety, designed for fun, priced for any budget.</p>
+        <div class="ctas"><button class="btn btn-primary" type="button" data-handoff>Rent a scooter</button><a class="btn btn-ghost" href="#how">Find one near you <span aria-hidden="true">↓</span></a></div>
+      </div>
+      <img class="hp-img" src="assets/img/sc-hero.webp" alt="Two Bolt scooters, a green one and a light green one, side by side" width="768" height="576" fetchpriority="high">
+    </div>
+  </section>
+
+  <section class="block" style="padding-bottom:0">
+    <div class="wrap">
+      <div class="sec-head"><h2>Not every day is a car day</h2><p>Why sit in traffic when the same route takes a few minutes on a scooter? Faster commutes, lower-cost trips, or simply more time outdoors.</p></div>
+      <img class="wide" src="assets/img/sc-man.webp" alt="A rider checks his phone next to a Bolt scooter outside a glass building" loading="lazy" width="1600" height="900">
+      <div class="bento">
+        <figure class="b-card dark"><img src="assets/img/sc-display.webp" alt="Close-up of a scooter display showing speed, battery and zone icons" loading="lazy" width="577" height="768"><figcaption><b>The display shows the rules</b><span>Speed, battery and the zone you are in.</span></figcaption></figure>
+        <figure class="b-card dark"><img src="assets/img/sc-grip.webp" alt="Close-up of a scooter handlebar grip and brake lever" loading="lazy" width="736" height="980"><figcaption><b>Built for the street</b><span>Big wheels, two brakes, a bell you can find without looking.</span></figcaption></figure>
+      </div>
+    </div>
+  </section>
+
+  <section class="planner block" id="how" aria-label="How to rent a scooter, with the live map">
+   <div class="wrap">
+    <div class="sec-head"><h2>How to rent a Bolt scooter in Tallinn</h2><p>All you need is the app, a place to go, and a helmet, please. Step one works right here.</p></div>
+    <ol class="steps3">
+      <li class="on"><span class="sn">Step 1</span><b>Find a scooter near you</b><span>Pick one on the map below and see the walk, the ride and the price.</span></li>
+      <li><span class="sn">Step 2</span><b>Scan and go</b><span>Scan the code on the handlebar in the Bolt app. It unlocks in a second.</span></li>
+      <li><span class="sn">Step 3</span><b>Park in green</b><span>End the ride in a green zone and take a photo of the parked scooter.</span></li>
+    </ol>
+   </div>
+   <div class="wrap planner-wrap">
+    <div class="mapstage mapcard" id="find">
+    <div class="map" id="map"><div class="loading" id="loading">Loading the map of Tallinn…</div></div>
+    <div class="legend-z" aria-label="Map legend"><span><i style="background:#2B8659"></i>Parking</span><span><i style="background:rgba(245,165,36,.35);box-shadow:inset 0 0 0 2px #F5A524"></i>Slow zone</span><span><i style="background:rgba(229,72,77,.25);box-shadow:inset 0 0 0 2px #E5484D"></i>No parking</span></div>
+    <div class="attrib">© <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a></div>
+    <div class="ctrl" aria-label="Map controls">
+      <button type="button" id="zin" aria-label="Zoom in">+</button>
+      <button type="button" id="zout" aria-label="Zoom out">−</button>
+      <button type="button" id="refit" aria-label="Show the trip"><svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><path d="M2 6V2h4M16 6V2h-4M2 12v4h4M16 12v4h-4" fill="none" stroke="currentColor" stroke-width="1.8"/></svg></button>
+    </div>
+    <p class="chip-top" id="chipTop" hidden></p>
+
+    <div class="bar-wrap" id="barWrap" hidden aria-hidden="true">
+      <div class="handle">
+        <span class="lever l"></span><span class="lever r"></span><span class="stem"></span><span class="grip l"></span><span class="grip r"></span>
+        <div class="hb-screen" id="screen">
+          <div class="scr-top"><span id="scrClock">0:00 · €1.00</span><span class="zonepill">SLOW ZONE</span><span class="bt"><i id="scrBattI"></i><span id="scrBatt">64%</span></span></div>
+          <div class="scr-mid"><div class="limit" id="scrLimit">25</div><div class="spd"><b id="scrSpd">0</b><span>km/h</span></div></div>
+          <div class="turn"><svg viewBox="0 0 30 30" id="scrArrow" aria-hidden="true"><path d="M15 25V8M15 8l-6 6M15 8l6 6" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg><div><b id="scrTurn">Unlocked. Ride safe.</b><span id="scrDist"></span></div></div>
+        </div>
+      </div>
+    </div>
+
+<p class="visually-hidden" id="sr" role="status" aria-live="polite"></p>
+    <div class="panel" id="panel">
+      <div id="browse" style="display:grid;gap:16px">
+        <div style="display:grid;gap:8px"><p class="eyebrow">Find a scooter · Tallinn</p><h2 id="h1">The nearest scooter is a short walk away.</h2></div>
+        <div class="seg" role="group" aria-label="Vehicle"><button type="button" data-v="scooter" aria-pressed="true">Scooter</button><button type="button" data-v="ebike" aria-pressed="false">E-bike</button></div>
+        <div class="pick" id="pick"><span class="ic" aria-hidden="true"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="18" r="2.2"/><circle cx="18" cy="18" r="2.2"/><path d="M6 18h9l3-12h3M15 6h3"/></svg></span>
+          <div style="min-width:0"><b id="pickName">Scooter</b><span id="pickSub">–</span></div><span class="batt" id="pickBatt"><i style="--b:.6"></i>60%</span></div>
+        <div class="legs">
+          <div class="fields">
+            <div class="field has" id="fFrom"><span class="dot a" aria-hidden="true"></span>
+              <input id="from" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="listFrom" aria-label="You are here" placeholder="You are here" autocomplete="off">
+              <button class="clear" type="button" aria-label="Clear start">✕</button>
+              <ul class="list" id="listFrom" role="listbox" hidden></ul></div>
+            <div class="field" id="fTo"><span class="dot b" aria-hidden="true"></span>
+              <input id="to" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="listTo" aria-label="Where to?" placeholder="Where to?" autocomplete="off">
+              <button class="clear" type="button" aria-label="Clear destination">✕</button>
+              <ul class="list" id="listTo" role="listbox" hidden></ul></div>
+          </div>
+          <button class="swap" type="button" id="swap" aria-label="Swap start and destination"><svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><path d="M5 2v13M5 15l-3-3M5 15l3-3M13 16V3M13 3l-3 3M13 3l3 3" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+        </div>
+        <div id="noTrip" style="display:grid;gap:12px">
+          <p class="hint"><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 1v3M8 12v3M1 8h3M12 8h3" stroke="currentColor" stroke-width="1.6"/><circle cx="8" cy="8" r="3" fill="none" stroke="currentColor" stroke-width="1.6"/></svg>Tap a scooter to choose it, or tap the map to set where you are going.</p>
+          <div class="pop" id="popular"></div>
+        </div>
+        <div id="trip" hidden style="display:grid;gap:12px">
+          <div class="sum"><div><b id="sWalk">–</b><span>walk to it</span></div><div><b id="sRide">–</b><span>ride</span></div><div><b id="sCost">–</b><span>estimate</span></div></div>
+          <p class="check" id="chkBatt"><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8.5l3 3 7-7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span></span></p>
+          <p class="check" id="chkZone"><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8.5l3 3 7-7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span></span></p>
+          <div class="cta"><button class="btn btn-primary" type="button" id="previewBtn">See what the scooter shows you</button><button class="btn btn-quiet" type="button" data-handoff>Unlock in the app</button></div>
+        </div>
+      </div>
+      <div id="riding" hidden style="display:grid;gap:14px">
+        <div class="rv-top" style="display:flex;justify-content:space-between;align-items:center;gap:10px"><p class="eyebrow" id="rEyebrow">On the handlebar</p><button class="play" type="button" id="play" aria-label="Pause"><svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path class="i-pause" d="M3 2h3v10H3zM8 2h3v10H8z"/><path class="i-play" d="M3 1.5l9 5.5-9 5.5z"/></svg><span>Pause</span></button></div>
+        <h2 style="font-size:26px;line-height:1.1">What the scooter shows you</h2>
+        <ol class="rules" id="rules">
+          <li data-r="limit"><b>The speed limit, always in view</b><span>Up to 25 km/h on most streets. The scooter will not go faster.</span></li>
+          <li data-r="slow"><b>Slow zones slow you down by themselves</b><span id="ruleSlow">In the Old Town the limit drops to 10 km/h as you enter.</span></li>
+          <li data-r="park"><b>Park in green to end the ride</b><span id="rulePark">The display points you to the nearest green zone.</span></li>
+        </ol>
+        <p class="ride-sum" id="rideSum">–</p>
+        <div class="cta"><button class="btn btn-primary" type="button" data-handoff>Unlock a scooter in the app</button></div>
+        <div class="row"><button class="btn btn-quiet" type="button" id="back">Change trip</button></div>
+      </div>
+      <button class="pin" type="button" style="right:14px;top:14px" data-note="Rules before the first ride">The current page shows a stock photo and a download button. Here the visitor sees the scooters around them, the zones that change how they ride and park, and the three rules a first-timer worries about, explained by the display they will actually look at. Unlocking stays in the app. v2 puts this inside the bolt.eu product-page frame, so it reads as Bolt first and as a tool second.</button>
+    </div>
+    </div>
+    <p class="live-note">Real Tallinn streets. Scooters, zones and prices are examples.</p>
+   </div>
+  </section>
+
+  <section class="block" style="padding-top:24px">
+    <div class="gallery" aria-label="Riders in the city">
+      <img src="assets/img/g-woman.webp" alt="A woman checks her phone before riding" loading="lazy" width="800" height="600">
+      <img src="assets/img/g-water.webp" alt="Two riders on scooters by the water" loading="lazy" width="800" height="600">
+      <img src="assets/img/sc-phone.webp" alt="A hand holds a phone with the Bolt app open" loading="lazy" width="1280" height="818">
+      <img src="assets/img/g-helmet.webp" alt="A rider holding a helmet next to his scooter" loading="lazy" width="800" height="600">
+      <img src="assets/img/g-pair.webp" alt="Two riders in helmets smiling in an old town street" loading="lazy" width="800" height="600">
+    </div>
+  </section>
+
+  <section class="block" id="pricing">
+    <div class="wrap">
+      <div class="sec-head"><h2>Ride more, spend less</h2><p>Three ways to pay. Your own trip from the map above is priced the same way.</p><p class="your-trip" id="yourTrip" hidden></p></div>
+      <div class="plans">
+        <article class="plan"><span class="tag">Most flexible</span><h3>Pay as you go</h3><div class="amt">€0.15<small> / min</small></div><dl><dt>Unlock</dt><dd>€1.00</dd><dt>10-min trip</dt><dd>€2.50</dd></dl></article>
+        <article class="plan featured"><span class="tag">For 3+ rides a week</span><h3>Unlimited unlocks</h3><div class="amt">€0.99<small> / month</small></div><dl><dt>Unlock</dt><dd>€0.00</dd><dt>10-min trip</dt><dd>€1.50</dd></dl></article>
+        <article class="plan"><span class="tag">Lowest price per minute</span><h3>Minute passes</h3><div class="amt">€9.90<small> / 100 min</small></div><dl><dt>Per minute</dt><dd>€0.099</dd><dt>Valid</dt><dd>30 days</dd></dl></article>
+      </div>
+      <p class="fine2">Concept: rates are illustrative, not Bolt's prices. E-bikes in this concept cost €0.18 per minute.</p>
+    </div>
+  </section>
+
+  <section class="dock" aria-labelledby="dockT">
+    <div class="wrap dock-head">
+      <p class="eyebrow">Making cities for people, not cars</p>
+      <h2 id="dockT">Sharing Bolt scooters. And charging docks.</h2>
+      <p>Bolt charging docks in Estonia work with every micromobility brand, hold up to 10 rental scooters and keep pavements clear.</p>
+    </div>
+    <img class="dock-img" src="assets/img/sc-dock.webp" alt="A dark charging dock with a single green light" loading="lazy" width="1600" height="1022">
+  </section>
+
+
+  <section class="block" id="safety" aria-labelledby="safeT">
+    <div class="wrap">
+      <div class="sec-head center"><h2 id="safeT">Ride safely</h2><p>Rules and habits that keep you and the people around you safe.</p></div>
+    </div>
+    <div class="safe-rail" tabindex="0" aria-label="Safety rules, scroll sideways">
+      <article class="scard"><img src="assets/img/sc-grip.webp" alt="" loading="lazy"><div><b>Beginner mode</b><span>Until you finish 5 rides, your speed is capped at 15 km/h.</span></div></article>
+      <article class="scard"><img src="assets/img/g-helmet.webp" alt="" loading="lazy"><div><b>Helmets on</b><span>Strongly advised on every ride, rental or your own.</span></div></article>
+      <article class="scard"><img src="assets/img/g-water.webp" alt="" loading="lazy"><div><b>Ride solo</b><span>One scooter, one rider. Riding two up is detected.</span></div></article>
+      <article class="scard"><img src="assets/img/sc-display.webp" alt="" loading="lazy"><div><b>Slow zones</b><span>In busy places like the Old Town the scooter slows to 10 km/h by itself.</span></div></article>
+      <article class="scard"><img src="assets/img/g-pair.webp" alt="" loading="lazy"><div><b>Ride sober</b><span>At night a short reaction test comes before unlocking.</span></div></article>
+    </div>
+    <div class="wrap rail-nav"><button class="rbtn" type="button" data-d="-1" aria-label="Previous safety rule">←</button><button class="rbtn" type="button" data-d="1" aria-label="Next safety rule">→</button></div>
+  </section>
+
+  <section class="block" style="padding-top:0">
+    <div class="wrap report">
+      <div class="rep-ico" aria-hidden="true">!</div>
+      <div><h3>Report a badly parked scooter</h3><p>Is a scooter blocking the pavement, or parked where it should not be? Report it in the app or online. It keeps the city safer and more accessible for everyone.</p></div>
+      <a class="btn btn-primary" href="https://bolt.eu/en/support/" target="_blank" rel="noopener">Report a scooter <span class="ext" aria-hidden="true">↗</span></a>
+    </div>
+  </section>
+
+  <section class="b7s" aria-labelledby="b7sT">
+    <video class="b7s-vid" id="b7vid" src="assets/img/sc-video.mp4" poster="assets/img/sc-video-poster.webp" muted loop playsinline preload="none" aria-hidden="true"></video>
+    <div class="wrap b7s-in">
+      <h2 id="b7sT">The scooter that knows the rules</h2>
+      <p>Bolt 7 is the first shared scooter with a full-colour display on the handlebar: maps, zone guidance and where you may park.</p>
+      <div class="ctas"><button class="btn btn-primary" type="button" id="seeRide">See it on a ride</button><button class="btn btn-ghost-dark" type="button" id="vidBtn" aria-pressed="false">Pause video</button></div>
+      <p class="b7s-note">This page goes one step further: start a ride on the map and the handlebar display plays the trip, zone by zone.</p>
+    </div>
+  </section>
+
+
+  <section class="block" id="faq">
+    <div class="wrap">
+      <div class="qa qa-wrap"><p class="eyebrow">Questions</p><h2>Before your first ride</h2>
+      <div class="faq light">
+        <details><summary>How much does a ride cost?</summary><p>An unlock fee plus a per-minute rate, both set by city. The estimate on the map uses those rates for the real route and speed limits.</p></details>
+        <details><summary>Do I need the app?</summary><p>Yes. Scooters and e-bikes unlock with the Bolt app. On a computer, scan the QR code or send yourself a link; on a phone, the button opens the app or the store.</p></details>
+        <details><summary>Where can I park?</summary><p>In the green zones on the in-app map. Red zones mean no parking; the ride will not end there.</p></details>
+        <details><summary>What happens in a slow zone?</summary><p>The scooter limits its own speed, often to 10 km/h, while you are inside the zone. The display shows the limit as you enter.</p></details>
+        <details><summary>How fast do they go?</summary><p>Up to 25 km/h in most cities, lower in slow zones. Beginner mode caps you at 15 km/h for your first five rides.</p></details>
+      </div></div>
+    </div>
+  </section>
+
+  <section class="photo-cta" aria-labelledby="pcT">
+    <div class="wrap pc-grid">
+      <img src="assets/img/sc-phone.webp" alt="A hand holds a phone with the Bolt app open in front of parked scooters" loading="lazy" width="1280" height="818">
+      <div><h2 id="pcT">Your next ride is parked nearby.</h2><p>Get Bolt in one scan, then unlock in one more.</p><div class="ctas"><button class="btn btn-primary" type="button" data-handoff>Get Bolt</button><button class="btn btn-quiet apps-open" type="button" aria-haspopup="dialog">Explore apps</button></div></div>
+    </div>
+  </section>
+
+  <section class="block" aria-labelledby="newsT">
+    <div class="wrap">
+      <div class="news-head"><h2 id="newsT">Recent stories</h2><a class="btn btn-primary" href="https://bolt.eu/en/blog/" target="_blank" rel="noopener">View all <span class="ext" aria-hidden="true">↗</span></a></div>
+      <div class="news2">
+        <a class="feat photo" href="https://bolt.eu/en/blog/bolt-send-package-delivery/" target="_blank" rel="noopener">
+          <span class="feat-img"><img src="assets/img/news-send.webp" alt="" loading="lazy" width="768" height="384"></span>
+          <span class="feat-t"><span class="feat-meta"><span class="pt c1">Company news</span><span class="pd">21 Jul 2026</span></span><b>Meet Bolt Send: your fast package delivery service</b><span class="feat-x">Send a gift, return something a friend left behind, or get an item across town the same day.</span></span>
+        </a>
+        <ul class="nlist thumbs">
+          <li><a href="https://bolt.eu/en/blog/" target="_blank" rel="noopener"><img src="assets/img/news-scoot.webp" alt="" loading="lazy"><span><b>Replacing cars with shared scooters avoids greenhouse gas emissions</b><span class="pd">26 Jun 2026</span></span></a></li>
+          <li><a href="https://bolt.eu/en/blog/" target="_blank" rel="noopener"><img src="assets/img/news-climate.webp" alt="" loading="lazy"><span><b>Progress report: one year of global climate impact</b><span class="pd">26 Jun 2026</span></span></a></li>
+          <li><a href="https://bolt.eu/en/blog/" target="_blank" rel="noopener"><img src="assets/img/news-dei.webp" alt="" loading="lazy"><span><b>Empowering diverse voices: bringing D&amp;I to life at Bolt</b><span class="pd">15 Jun 2026</span></span></a></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+</main>
+
+<dialog class="apps" id="apps" aria-labelledby="appsTitle">
+  <div class="apps-head"><h2 id="appsTitle">Bolt apps</h2><button class="apps-x" type="button" aria-label="Close">✕</button></div>
+  <p class="apps-sub">One account works in all of them.</p>
+  <ul class="apps-list">
+    <li><button type="button" class="app" data-handoff><img loading="lazy" decoding="async" src="assets/img/ill-ride.webp" alt=""><span><b>Bolt</b><span>Rides, scooters, car-sharing and parcels</span></span><i>Get</i></button></li>
+    <li><a class="app" href="https://bolt.eu/en/food/" target="_blank" rel="noopener"><img loading="lazy" decoding="async" src="assets/img/ill-food.webp" alt=""><span><b>Bolt Food</b><span>Restaurants and groceries, delivered</span></span><i>bolt.eu <span aria-hidden="true">↗</span></i></a></li>
+    <li><a class="app" href="https://bolt.eu/en/driver/" target="_blank" rel="noopener"><img loading="lazy" decoding="async" src="assets/img/ill-driver.webp" alt=""><span><b>Bolt Driver</b><span>Drive and earn on your own schedule</span></span><i>bolt.eu <span aria-hidden="true">↗</span></i></a></li>
+    <li><a class="app" href="https://bolt.eu/en/business/" target="_blank" rel="noopener"><img loading="lazy" decoding="async" src="assets/img/ill-business.webp" alt=""><span><b>Bolt Business</b><span>Rides and meals for your team, one invoice</span></span><i>bolt.eu <span aria-hidden="true">↗</span></i></a></li>
+  </ul>
+</dialog>
+<footer>
+  <div class="wrap has-pin">
+    <div class="foot"><details class="fcol"><summary>Products</summary><ul><li><a href="rides.html">Rides</a></li><li><a href="scooters.html">Scooters &amp; e-bikes</a></li><li><a href="drive.html">Car-sharing</a></li><li><a href="https://bolt.eu/en/food/" target="_blank" rel="noopener">Bolt Food<span class="ext" aria-hidden="true">↗</span><span class="visually-hidden"> (opens bolt.eu)</span></a></li><li><a href="https://bolt.eu/en/food/market/" target="_blank" rel="noopener">Bolt Market<span class="ext" aria-hidden="true">↗</span><span class="visually-hidden"> (opens bolt.eu)</span></a></li><li><a href="https://bolt.eu/en/rides/features/bolt-send/" target="_blank" rel="noopener">Bolt Send<span class="ext" aria-hidden="true">↗</span><span class="visually-hidden"> (opens bolt.eu)</span></a></li><li><a href="https://bolt.eu/en/business/" target="_blank" rel="noopener">Bolt for Business<span class="ext" aria-hidden="true">↗</span><span class="visually-hidden"> (opens bolt.eu)</span></a></li></ul></details><details class="fcol"><summary>Earn</summary><ul><li><a href="https://bolt.eu/en/driver/" target="_blank" rel="noopener">Drive with Bolt<span class="ext" aria-hidden="true">↗</span><span class="visually-hidden"> (opens bolt.eu)</span></a></li><li><a href="https://bolt.eu/en/food/courier/" target="_blank" rel="noopener">Deliver with Bolt Food<span class="ext" aria-hidden="true">↗</span><span class="visually-hidden"> (opens bolt.eu)</span></a></li><li><a href="https://bolt.eu/en/food/merchant/" target="_blank" rel="noopener">Sell on Bolt Food<span class="ext" aria-hidden="true">↗</span><span class="visually-hidden"> (opens bolt.eu)</span></a></li><li><a href="https://bolt.eu/en/fleet/" target="_blank" rel="noopener">Bolt Fleets<span class="ext" aria-hidden="true">↗</span><span class="visually-hidden"> (opens bolt.eu)</span></a></li></ul></details><details class="fcol"><summary>Company</summary><ul><li><a href="https://bolt.eu/en/about/mission/" target="_blank" rel="noopener">About Bolt<span class="ext" aria-hidden="true">↗</span><span class="visually-hidden"> (opens bolt.eu)</span></a></li><li><a href="https://bolt.eu/en/careers/" target="_blank" rel="noopener">Careers<span class="ext" aria-hidden="true">↗</span><span class="visually-hidden"> (opens bolt.eu)</span></a></li><li><a href="https://bolt.eu/en/blog/" target="_blank" rel="noopener">Blog<span class="ext" aria-hidden="true">↗</span><span class="visually-hidden"> (opens bolt.eu)</span></a></li></ul></details><details class="fcol"><summary>Support</summary><ul><li><a href="https://bolt.eu/en/support/" target="_blank" rel="noopener">Help centre<span class="ext" aria-hidden="true">↗</span><span class="visually-hidden"> (opens bolt.eu)</span></a></li><li><a href="https://bolt.eu/en/business/" target="_blank" rel="noopener">Bolt for Business<span class="ext" aria-hidden="true">↗</span><span class="visually-hidden"> (opens bolt.eu)</span></a></li></ul></details><details class="fcol"><summary>Safety</summary><ul><li><a href="rides.html#safety">Rider safety</a></li><li><a href="scooters.html#safety">Scooter safety</a></li></ul></details><details class="fcol"><summary>Locations</summary><ul><li><a href="https://bolt.eu/en/cities/" target="_blank" rel="noopener">Our cities<span class="ext" aria-hidden="true">↗</span><span class="visually-hidden"> (opens bolt.eu)</span></a></li></ul></details></div>
+    <div class="foot-bar">
+      <div class="foot-id"><span class="wordmark foot-mark">Bolt</span><span class="region"><svg width="14" height="14" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 15s5-4.6 5-8.5A5 5 0 0 0 3 6.5C3 10.4 8 15 8 15z" fill="none" stroke="currentColor" stroke-width="1.6"/><circle cx="8" cy="6.5" r="1.8" fill="currentColor"/></svg>Tallinn, Estonia · English</span></div>
+      <div class="foot-cta"><button class="btn btn-small foot-btn" type="button" data-handoff>Get Bolt</button><a class="btn btn-small foot-btn" href="https://bolt.eu/en/food/" target="_blank" rel="noopener">Get Bolt Food<span class="ext" aria-hidden="true">↗</span><span class="visually-hidden"> (opens bolt.eu)</span></a></div>
+    </div>
+    <div class="legal"><span>Unofficial redesign concept for a portfolio by Andrii. Not affiliated with or endorsed by Bolt Technology OÜ. Illustrations are AI-generated; Bolt 7 and app images are Bolt’s own, from bolt.eu. Links marked ↗ open the real bolt.eu.</span><span class="mono">2026</span></div>
+    
+  </div>
+</footer>
+
+<div class="stage" id="stage" role="dialog" aria-modal="true" aria-labelledby="stageTitle" hidden>
+  <button class="stage-close" type="button" data-close aria-label="Close">
+    <svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M1 1l12 12M13 1L1 13" stroke="currentColor" stroke-width="1.8"/></svg></button>
+  <div class="stage-phone">
+    <div class="phone" aria-hidden="true">
+      <div class="bezel"><div class="screen">
+        <div class="island"></div>
+        <div class="status"><span>9:41</span><span>●●● 5G</span></div>
+        
+        <div class="view on">
+          <svg class="full" viewBox="0 0 270 580" preserveAspectRatio="xMidYMid slice"><rect width="270" height="580" fill="#EEF2EF"/><g stroke="#fff" stroke-width="12" fill="none"><path d="M-10 120 L280 90"/><path d="M-10 260 L280 230"/><path d="M70 -10 L90 420"/><path d="M190 -10 L205 420"/></g><g fill="#2B8659"><rect x="120" y="150" width="18" height="18" rx="5"/><rect x="60" y="300" width="18" height="18" rx="5"/><rect x="200" y="210" width="18" height="18" rx="5"/></g><circle cx="140" cy="260" r="8" fill="#2F6BFF" stroke="#fff" stroke-width="3"/></svg>
+          <div class="ph-card"><div class="ph-row"><b>Scooter · 2 min walk</b><span class="ph-pill" id="phBatt">64%</span></div><div class="ph-row"><span>€1.00 unlock · €0.15/min</span></div><div class="ph-btn">Scan to unlock</div></div>
+        </div>
+        <div class="view v-dark">
+          <div style="position:absolute;inset:0;display:grid;place-items:center;background:#0B0E0D;color:#fff;text-align:center"><div><div style="width:46cqi;height:46cqi;border:1.2cqi solid #3DDC84;border-radius:6cqi;margin:0 auto 6cqi"></div><b style="font-size:5.4cqi">Point at the handlebar code</b></div></div>
+        </div>
+        <div class="view">
+          <svg class="full" viewBox="0 0 270 580" preserveAspectRatio="xMidYMid slice"><rect width="270" height="580" fill="#EEF2EF"/><rect x="90" y="200" width="90" height="70" rx="12" fill="rgba(43,134,89,.25)" stroke="#2B8659" stroke-width="3"/></svg>
+          <div class="ph-card"><div class="ph-row"><b>Parked in a green zone</b><span class="ph-pill">✓</span></div><div class="ph-row"><span>Take a photo to end the ride</span></div><div class="ph-btn">End ride</div></div>
+        </div>
+
+      </div></div>
+    </div>
+  </div>
+  <div class="stage-panel">
+    <div style="display:grid;gap:10px">
+      <p class="eyebrow" id="stageEyebrow">Bolt · scooters</p>
+      <h2 id="stageTitle" tabindex="-1" style="outline:none">Your scooter is a short walk away.</h2>
+    </div>
+    <ol class="steps" id="steps">
+      
+      <li><button type="button" data-step="0"><b>Find it on the map</b><span>Battery and walking time first</span><i class="prog"></i></button></li>
+      <li><button type="button" data-step="1"><b>Scan to unlock</b><span>The handlebar code, one second</span><i class="prog"></i></button></li>
+      <li><button type="button" data-step="2"><b>Park in green</b><span>A photo ends the ride</span><i class="prog"></i></button></li>
+
+    </ol>
+    <button class="pause" type="button" id="pauseBtn" aria-pressed="false">Pause walkthrough</button>
+    <div class="handoff">
+      <div class="qr" aria-hidden="true"><svg id="qr" viewBox="0 0 29 29" shape-rendering="crispEdges"></svg></div>
+      <div class="handoff-copy">
+        <b id="handoffTitle">Point your phone camera at the code</b>
+        <p style="font-size:14px;color:var(--muted)" id="handoffText"></p>
+        <p class="send-or">No camera handy?</p>
+        <button class="btn btn-quiet btn-small send-link" type="button" id="sendLink">Send me a link instead</button>
+        <p class="send-msg" id="sendMsg" aria-live="polite"></p>
+        <button class="btn btn-primary open-app" type="button" id="openApp">Open the Bolt app</button>
+        
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<script src="assets/citymap.js"></script>
+<script>/* ===== shared behaviour: header menus, design notes, app handoff stage ===== */
+window.Concept = (() => {
+  const $ = (s, r = document) => r.querySelector(s);
+  const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+  const motionMQ = matchMedia('(prefers-reduced-motion: reduce)');
+  const reduced = () => motionMQ.matches; // gates large movement only
+  const tallFrame = () => window.self !== window.top && innerHeight > Math.max(screen.height || 0, 900) * 1.15;
+  const onPhone = () => matchMedia('(pointer:coarse) and (max-width:980px)').matches;
+
+  /* header */
+  const megaBtns = $$('.intent-btn[aria-controls]');
+  const closeMegas = except => megaBtns.forEach(b => { if (b !== except) { b.setAttribute('aria-expanded', 'false'); $('#' + b.getAttribute('aria-controls')).classList.remove('open'); } });
+  megaBtns.forEach(b => b.addEventListener('click', () => {
+    const open = b.getAttribute('aria-expanded') !== 'true'; closeMegas(b);
+    b.setAttribute('aria-expanded', String(open)); $('#' + b.getAttribute('aria-controls')).classList.toggle('open', open);
+  }));
+  document.addEventListener('click', e => { if (!e.target.closest('.intent > li')) closeMegas(); });
+  $('#menuBtn')?.addEventListener('click', e => { const open = $('#siteHead').classList.toggle('menu-open'); e.currentTarget.setAttribute('aria-expanded', String(open)); });
+
+  /* design notes */
+  let pop = null;
+  const closePop = () => { pop?.remove(); pop = null; };
+  $('#notesToggle')?.addEventListener('click', e => { const on = document.body.classList.toggle('notes'); e.currentTarget.setAttribute('aria-pressed', String(on)); if (!on) closePop(); });
+  $$('.pin').forEach((p, i) => {
+    const text = p.textContent.trim(); p.textContent = i + 1; p.setAttribute('aria-label', `Design note ${i + 1}: ${p.dataset.note}`);
+    p.addEventListener('click', e => {
+      e.stopPropagation();
+      if (pop && pop.dataset.for === String(i)) return closePop();
+      closePop();
+      pop = document.createElement('div'); pop.className = 'pin-pop'; pop.dataset.for = i; pop.setAttribute('role', 'note');
+      pop.innerHTML = '<b></b><span></span>'; pop.querySelector('b').textContent = p.dataset.note; pop.querySelector('span').textContent = text;
+      p.parentElement.appendChild(pop);
+      const pr = p.getBoundingClientRect(), par = p.parentElement.getBoundingClientRect();
+      let left = pr.left - par.left + 34;
+      const maxLeft = Math.min(window.innerWidth - 16, par.right) - par.left - pop.offsetWidth;
+      if (left > maxLeft) left = Math.max(-par.left + 16, pr.left - par.left - pop.offsetWidth - 8);
+      pop.style.left = left + 'px'; pop.style.top = (pr.top - par.top) + 'px';
+    });
+  });
+  document.addEventListener('click', e => { if (!e.target.closest('.pin-pop')) closePop(); });
+
+  /* decorative QR-style code (demo, not scannable) */
+  function drawQR(text, el = $('#qr')) {
+    if (!el) return;
+    let h = 2166136261; for (const ch of text) { h ^= ch.charCodeAt(0); h = Math.imul(h, 16777619); }
+    const rnd = () => ((h = Math.imul(h ^ (h >>> 15), 2246822507) ^ Math.imul(h ^ (h >>> 13), 3266489909)) >>> 0) / 4294967296;
+    const N = 29, cells = [];
+    const finder = (x, y) => { for (let i = 0; i < 7; i++) for (let j = 0; j < 7; j++) { const e = i === 0 || i === 6 || j === 0 || j === 6, c = i >= 2 && i <= 4 && j >= 2 && j <= 4; if (e || c) cells.push([x + i, y + j]); } };
+    const inF = (x, y) => (x < 8 && y < 8) || (x > N - 9 && y < 8) || (x < 8 && y > N - 9);
+    finder(0, 0); finder(N - 7, 0); finder(0, N - 7);
+    for (let x = 0; x < N; x++) for (let y = 0; y < N; y++) if (!inF(x, y) && rnd() > .52) cells.push([x, y]);
+    el.innerHTML = '<rect width="29" height="29" fill="#fff"/>' + cells.map(([x, y]) => `<rect x="${x}" y="${y}" width="1" height="1" fill="#0E1010"/>`).join('');
+  }
+
+  /* handoff stage */
+  const stage = $('#stage');
+  let current = 0, timer = null, playing = true, opener = null, opts = {};
+  const views = () => $$('#stage .view');
+  function showView(i) {
+    views().forEach((v, k) => { v.classList.toggle('on', k === i); v.classList.toggle('left', k < i); });
+    $('#stage .screen')?.classList.toggle('dark', !!opts.darkViews?.includes(i));
+    current = i;
+    $$('#steps button').forEach((b, k) => {
+      if (k === i) b.setAttribute('aria-current', 'step'); else b.removeAttribute('aria-current');
+      const p = b.querySelector('.prog'); p.classList.remove('run'); void p.offsetWidth;
+      if (k === i && playing) p.classList.add('run');
+    });
+    opts.onView?.(i);
+  }
+  function schedule() { clearTimeout(timer); if (!playing) return; timer = setTimeout(() => { showView((current + 1) % views().length); schedule(); }, 2800); }
+  function open(e, startAt = 0) {
+    if (!stage || !stage.hidden) return;
+    opener = e?.currentTarget || document.activeElement;
+    const phone = onPhone();
+    stage.classList.toggle('on-phone', phone);
+    $('#handoffTitle').textContent = phone ? 'Continue in the app' : 'Point your phone camera at the code';
+    $('#handoffText').textContent = phone ? opts.phoneText : opts.desktopText;
+    stage.classList.toggle('inline', tallFrame());
+    if (stage.classList.contains('inline')) {
+      const r = opener?.getBoundingClientRect ? opener.getBoundingClientRect() : { top: 0 };
+      stage.style.setProperty('--stage-top', Math.max(16, r.top + scrollY - 320) + 'px');
+    }
+    stage.hidden = false; if (!stage.classList.contains('inline')) document.body.style.overflow = 'hidden';
+    requestAnimationFrame(() => requestAnimationFrame(() => stage.classList.add('in')));
+    playing = true; $('#pauseBtn').textContent = 'Pause walkthrough'; $('#pauseBtn').setAttribute('aria-pressed', 'false');
+    showView(startAt); stage.scrollTop = 0; $('#stageTitle').focus({ preventScroll: true }); schedule();
+  }
+  function close() {
+    if (!stage || stage.hidden) return;
+    clearTimeout(timer); stage.classList.remove('in');
+    setTimeout(() => { stage.hidden = true; document.body.style.overflow = ''; opener?.focus?.(); }, 200);
+  }
+  function init(o) {
+    opts = o || {};
+    drawQR(opts.qr || 'bolt-concept');
+    $$('[data-handoff]').forEach(b => b.addEventListener('click', e => open(e)));
+    $$('[data-close]').forEach(b => b.addEventListener('click', close));
+    // footer: columns open on desktop, accordions on phones
+    const fq = matchMedia('(min-width:861px)'), fset = () => $$('.fcol').forEach(d => { d.open = fq.matches; });
+    fset(); fq.addEventListener('change', fset);
+    $$('svg[data-qr]').forEach(el => drawQR(el.dataset.qr, el));
+    // Explore apps: every Bolt app in one list (Food is a separate app, so it lives here instead of competing with Get Bolt)
+    const apps = $('#apps');
+    if (apps) {
+      $$('.apps-open').forEach(b => b.addEventListener('click', () => apps.showModal()));
+      $('.apps-x', apps).addEventListener('click', () => apps.close());
+      apps.addEventListener('click', e => { if (e.target === apps || e.target.closest('.app')) apps.close(); });
+    }
+    $$('#steps button').forEach(b => b.addEventListener('click', () => { showView(+b.dataset.step); schedule(); }));
+    $('#pauseBtn')?.addEventListener('click', e => {
+      playing = !playing; e.currentTarget.textContent = playing ? 'Pause walkthrough' : 'Play walkthrough';
+      e.currentTarget.setAttribute('aria-pressed', String(!playing)); showView(current); schedule();
+    });
+    $('#sendLink')?.addEventListener('click', () => { $('#sendMsg').textContent = 'In the live product this asks for your phone number and texts you a link that opens this trip. This concept collects nothing.'; });
+    $('#openApp')?.addEventListener('click', e => { e.currentTarget.textContent = 'Concept demo: this would open the app'; });
+  }
+  document.addEventListener('keydown', e => {
+    if (stage && !stage.hidden) {
+      if (e.key === 'Escape') { close(); return; }
+      if (e.key === 'Tab') {
+        const f = $$('button, input, [href]', stage).filter(x => x.offsetParent !== null);
+        const first = f[0], last = f[f.length - 1];
+        if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+        else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+      }
+    } else if (e.key === 'Escape') closeMegas();
+  });
+  return { $, $$, reduced, init, open, close, showView, drawQR };
+})();
+
+</script>
+<script src="assets/trip.js"></script>
+<script>
+(async () => {
+  const { $, $$, reduced } = Concept;
+  Concept.init({ qr: 'bolt-concept://scooters',
+    desktopText: 'Opens Bolt on the scooter map. No app yet? It goes to the store first.',
+    phoneText: 'Opens Bolt on the scooter map, or the store if you do not have it yet.' });
+  const D = await CityMap.load('@assets/tallinn.bin');
+  $('#loading').remove();
+  const P = D.places, eur = v => `€${v.toFixed(2)}`, narrow = () => matchMedia('(max-width:860px)').matches;
+  const setText = (el, t) => { if (el && el.textContent !== t) el.textContent = t; };
+  const RATE = { scooter: { unlock: 1, min: .15, name: 'Scooter' }, ebike: { unlock: 1, min: .18, name: 'E-bike' } };
+  const st = { from: { ...P.freedom, label: P.freedom.name }, to: null, focus: 'to', veh: 'scooter', sel: null, trip: null };
+
+  /* ---------- zones (examples drawn on real streets) ---------- */
+  const poly = pts => pts.map(([la, lo]) => CityMap.proj(la, lo));
+  const SLOW = poly([[59.4425, 24.7475], [59.4418, 24.7520], [59.4385, 24.7545], [59.4360, 24.7525], [59.4345, 24.7470], [59.4350, 24.7390], [59.4365, 24.7345], [59.4395, 24.7355], [59.4415, 24.7420]]);
+  const NOPARK = [poly([[59.4380, 24.7441], [59.4380, 24.7464], [59.4367, 24.7464], [59.4367, 24.7441]]), poly([[59.4378, 24.7352], [59.4381, 24.7395], [59.4356, 24.7400], [59.4352, 24.7360]])];
+  const inside = (x, y, pg) => { let c = false; for (let i = 0, j = pg.length - 1; i < pg.length; j = i++) { const [xi, yi] = pg[i], [xj, yj] = pg[j]; if ((yi > y) !== (yj > y) && x < (xj - xi) * (y - yi) / (yj - yi) + xi) c = !c; } return c; };
+  const noPark = (x, y) => NOPARK.some(p => inside(x, y, p));
+
+  // deterministic "random" so the same fleet appears on every visit
+  let seed = 7; const rnd = () => ((seed = (seed * 16807) % 2147483647) - 1) / 2147483646;
+  const centre = CityMap.proj(59.4395, 24.7420);
+  const bikeNodes = []; for (let i = 0; i < D.N; i++) if ((D.nf[i] & 2) && Math.hypot(D.nx[i] - centre[0], D.ny[i] - centre[1]) < 2600) bikeNodes.push(i);
+  const fleet = [], spots = [];
+  for (let n = 0; n < 2000 && fleet.length < 110; n++) { const i = bikeNodes[rnd() * bikeNodes.length | 0], x = D.nx[i] + (rnd() - .5) * 12, y = D.ny[i] + (rnd() - .5) * 12;
+    if (noPark(x, y) || fleet.some(f => Math.hypot(f.x - x, f.y - y) < 35)) continue;
+    fleet.push({ id: fleet.length, x, y, kind: rnd() < .28 ? 'ebike' : 'scooter', batt: Math.round(22 + rnd() * 76) }); }
+  for (const p of Object.values(P)) { const i = CityMap.nearestNode(p.x, p.y, 'bike'); if (i >= 0 && !noPark(D.nx[i], D.ny[i])) spots.push({ x: D.nx[i], y: D.ny[i] }); }
+  for (let n = 0; n < 900 && spots.length < 70; n++) { const i = bikeNodes[rnd() * bikeNodes.length | 0], x = D.nx[i], y = D.ny[i]; if (noPark(x, y) || spots.some(s => Math.hypot(s.x - x, s.y - y) < 160)) continue; spots.push({ x, y }); }
+  const rangeKm = b => Math.round(b * .4);   // ~2.5% battery per km (example)
+
+  /* ---------- map ---------- */
+  const mapEl = $('#map');
+  const map = CityMap.create(mapEl, { theme: 'day', x: centre[0], y: centre[1], s: .6, minZoom: .08, maxZoom: 2.6, onTap: onTap });
+  const panelOffset = () => narrow() ? 0 : ($('#panel').getBoundingClientRect().right - mapEl.getBoundingClientRect().left) / 2;
+  const syncPanel = () => $('.mapstage').style.setProperty('--panel-w', `${panelOffset() * 2}px`);
+  new ResizeObserver(syncPanel).observe($('#panel')); syncPanel();
+  if (narrow()) map.setView(st.from.x + 60, st.from.y - 90, .7); else map.setView(st.from.x + 120 - panelOffset() / .62, st.from.y - 150, .62);
+  $('#zin').onclick = () => map.zoomBy(1.6); $('#zout').onclick = () => map.zoomBy(1 / 1.6); $('#refit').onclick = () => frame();
+  const mkA = document.createElement('div'); mkA.className = 'mk a'; mkA.innerHTML = '<span class="bub">You</span><span class="pin-a"></span>';
+  const mkB = document.createElement('div'); mkB.className = 'mk'; mkB.innerHTML = '<span class="bub"><span class="t"></span></span><span class="pin-b"></span>';
+  const mkS = document.createElement('div'); mkS.className = 'mk sc'; mkS.innerHTML = '<span class="bub" style="background:var(--green)"></span>';
+  const mA = map.marker(mkA, st.from.x, st.from.y, { clamp: '.bub' }); let mB = null; const mS = map.marker(mkS, 0, 0, { clamp: '.bub', events: false });
+
+  function onTap(x, y, e) {
+    if (ride) return;
+    // a scooter under the finger wins over setting a destination
+    let best = null, bd = 1e9; for (const f of fleet) { if (f.kind !== st.veh) continue; const [sx, sy] = map.w2s(f.x, f.y), r = mapEl.getBoundingClientRect(); const d = Math.hypot(sx - (e.clientX - r.left), sy - (e.clientY - r.top)); if (d < bd) { bd = d; best = f; } }
+    if (best && bd < 20) { choose(best); plan(); return; }
+    search.tap(x, y);
+  }
+  function choose(f) { st.sel = f; mS.x = f.x; mS.y = f.y; }
+  function nearest() { let best = null, bd = 1e9; for (const f of fleet) { if (f.kind !== st.veh) continue; const d = Math.hypot(f.x - st.from.x, f.y - st.from.y); if (d < bd) { bd = d; best = f; } } return best; }
+  $$('.seg button').forEach(b => b.addEventListener('click', () => { st.veh = b.dataset.v; $$('.seg button').forEach(x => x.setAttribute('aria-pressed', String(x === b))); choose(nearest()); plan(); }));
+
+  /* ---------- drawing: zones, parking, the fleet, the trip ---------- */
+  map.onFrame((ctx, now, v) => {
+    const s = v.cam.s, path = pg => { ctx.beginPath(); pg.forEach(([x, y], i) => { const [sx, sy] = v.w2s(x, y); i ? ctx.lineTo(sx, sy) : ctx.moveTo(sx, sy); }); ctx.closePath(); };
+    // slow zone
+    path(SLOW); ctx.fillStyle = 'rgba(245,165,36,.12)'; ctx.fill(); ctx.setLineDash([8, 6]); ctx.lineWidth = 2; ctx.strokeStyle = '#F5A524'; ctx.stroke(); ctx.setLineDash([]);
+    if (s > .25) { const [lx, ly] = v.w2s(...CityMap.proj(59.4418, 24.7445)); ctx.font = '700 12px Inter, system-ui, sans-serif'; ctx.textAlign = 'center'; ctx.lineWidth = 4; ctx.strokeStyle = '#fff'; ctx.strokeText('SLOW ZONE · 10 km/h', lx, ly); ctx.fillStyle = '#94560A'; ctx.fillText('SLOW ZONE · 10 km/h', lx, ly); }
+    for (const pg of NOPARK) { path(pg); ctx.fillStyle = 'rgba(229,72,77,.13)'; ctx.fill(); ctx.lineWidth = 2; ctx.strokeStyle = '#E5484D'; ctx.stroke(); }
+    // parking spots
+    if (s > .18) for (const p of spots) { const [sx, sy] = v.w2s(p.x, p.y); if (sx < -20 || sy < -20 || sx > v.W + 20 || sy > v.H + 20) continue; const z = Math.max(9, Math.min(16, s * 18));
+      ctx.fillStyle = 'rgba(43,134,89,.16)'; ctx.beginPath(); ctx.roundRect(sx - z, sy - z, 2 * z, 2 * z, 5); ctx.fill(); ctx.strokeStyle = '#2B8659'; ctx.lineWidth = 1.5; ctx.stroke();
+      if (z > 11) { ctx.fillStyle = '#2B8659'; ctx.font = '800 11px Inter, system-ui, sans-serif'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText('P', sx, sy + .5); } }
+    // trip lines
+    if (st.trip) { const T = st.trip;
+      line(ctx, v, T.walk ? T.walk.pts : [], 3, '#6E7873', [1, 7]);
+      line(ctx, v, T.ride.pts, 9, '#fff'); line(ctx, v, T.ride.pts, 5, '#2B8659');
+      if (T.walk2) line(ctx, v, T.walk2.pts, 3, '#6E7873', [1, 7]);
+      if (ride && ride.d > 0) { const pts = []; for (let i = 0; i < T.ride.pts.length && T.ride.cum[i] <= ride.d; i++) pts.push(T.ride.pts[i]); const p = CityMap.along(T.ride.pts, T.ride.cum, ride.d); pts.push([p[0], p[1]]); line(ctx, v, pts, 5, '#0E1010'); } }
+    // the fleet (zoomed out: dots; zoomed in: little badges with battery)
+    for (const f of fleet) {
+      if (f.kind !== st.veh) continue; const [sx, sy] = v.w2s(f.x, f.y); if (sx < -20 || sy < -20 || sx > v.W + 20 || sy > v.H + 20) continue;
+      const sel = st.sel === f, z = sel ? 15 : Math.max(5, Math.min(12, s * 15));
+      if (ride && sel) continue;
+      ctx.beginPath(); ctx.arc(sx, sy, z, 0, 7); ctx.fillStyle = sel ? '#0E1010' : (f.kind === 'ebike' ? '#1D6B8F' : '#2B8659'); ctx.fill(); ctx.lineWidth = 2; ctx.strokeStyle = '#fff'; ctx.stroke();
+      if (z >= 9) { ctx.beginPath(); ctx.arc(sx, sy, z + 3.5, -Math.PI / 2, -Math.PI / 2 + Math.PI * 2 * f.batt / 100); ctx.strokeStyle = f.batt < 35 ? '#E5484D' : '#3DDC84'; ctx.lineWidth = 3; ctx.stroke();
+        ctx.fillStyle = '#fff'; ctx.font = `700 ${Math.round(z * .8)}px Inter, system-ui, sans-serif`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText(f.kind === 'ebike' ? 'B' : 'S', sx, sy + .5); }
+    }
+    if (st.sel && !ride) { const [sx, sy] = v.w2s(st.sel.x, st.sel.y); ctx.beginPath(); ctx.arc(sx, sy, 22 + 4 * Math.sin(now / 280), 0, 7); ctx.strokeStyle = 'rgba(14,16,16,.25)'; ctx.lineWidth = 2; ctx.stroke(); }
+    if (ride) tick(ctx, now, v);
+  });
+  function line(ctx, v, pts, w, c, dash) { if (pts.length < 2) return; ctx.beginPath(); pts.forEach((p, i) => { const [sx, sy] = v.w2s(p[0], p[1]); i ? ctx.lineTo(sx, sy) : ctx.moveTo(sx, sy); }); ctx.setLineDash(dash || []); ctx.lineCap = 'round'; ctx.lineJoin = 'round'; ctx.lineWidth = w; ctx.strokeStyle = c; ctx.stroke(); ctx.setLineDash([]); }
+
+  /* ---------- search + planning ---------- */
+  const search = TripSearch({ state: st, panel: $('#panel'), locked: () => !!ride, popularKeys: ['telliskivi', 'seaplane', 'noblessner', 'balti', 'kadriorg', 'viru'],
+    onSet: (w) => { if (w === 'from') { mA.x = st.from.x; mA.y = st.from.y; choose(nearest()); } plan(true); }, onClear: () => plan(true),
+    onSwap: () => { mA.x = st.from.x; mA.y = st.from.y; choose(nearest()); plan(true); } });
+  function plan(fly) {
+    if (!st.sel) choose(nearest());
+    const f = st.sel, R = RATE[st.veh], walkTo = CityMap.route(st.from.x, st.from.y, f.x, f.y, 'walk');
+    const wmin = walkTo && walkTo.pts.length > 1 ? Math.max(1, Math.round(walkTo.time / 60)) : 1;
+    setText($('#pickName'), `${R.name} · ${wmin} min walk`);
+    setText($('#pickSub'), `Range about ${rangeKm(f.batt)} km · ${eur(R.unlock)} unlock + ${eur(R.min)}/min`);
+    const pb = $('#pickBatt'); pb.lastChild.textContent = `${f.batt}%`; pb.querySelector('i').style.setProperty('--b', f.batt / 100);
+    setText(mkS.querySelector('.bub'), `${f.batt}% · ${wmin} min walk`);
+    setText($('#h1'), st.to ? `To ${st.to.label}, on two wheels.` : `The nearest ${R.name.toLowerCase()} is ${wmin} min away.`);
+    $('#phBatt') && setText($('#phBatt'), `${f.batt}%`);
+    if (!st.to) { st.trip = null; if (mB) { map.removeMarker(mB); mB = null; } $('#trip').hidden = true; $('#noTrip').hidden = false; if (fly) frame(); return; }
+    // ride to the parking spot closest to the destination, then walk the last metres
+    const spot = spots.reduce((a, b) => Math.hypot(a.x - st.to.x, a.y - st.to.y) <= Math.hypot(b.x - st.to.x, b.y - st.to.y) ? a : b);
+    const ride0 = CityMap.route(f.x, f.y, spot.x, spot.y, 'bike');
+    if (!ride0 || ride0.pts.length < 2) { $('#trip').hidden = true; $('#noTrip').hidden = false; return; }
+    // slow zone: the scooter limits itself to 10 km/h inside it
+    let tt = 0; const steps = ride0.steps.map(s0 => { const m = CityMap.along(ride0.pts, ride0.cum, (s0.d0 + s0.d1) / 2), slow = inside(m[0], m[1], SLOW), kmh = slow ? 10 : Math.min(20, s0.kmh), t = s0.len / (kmh / 3.6); const o = { ...s0, slow, kmh, t, t0: tt }; tt += t; return o; });
+    const rideR = { ...ride0, steps, time: tt };
+    const walk2 = CityMap.route(spot.x, spot.y, st.to.x, st.to.y, 'walk');
+    st.trip = { walk: walkTo && walkTo.pts.length > 1 ? walkTo : null, ride: rideR, walk2: walk2 && walk2.pts.length > 1 && walk2.len > 25 ? walk2 : null, spot, wmin,
+      rmin: Math.max(1, Math.round(tt / 60)), slowM: steps.filter(s0 => s0.slow).reduce((n, s0) => n + s0.len, 0) };
+    const T = st.trip, cost = R.unlock + R.min * T.rmin, km = rideR.len / 1000, need = Math.ceil(km * 2.5 + 3);
+    setText($('#sWalk'), `${wmin} min`); setText($('#sRide'), `${T.rmin} min`); setText($('#sCost'), eur(cost));
+    const cb = $('#chkBatt'); cb.classList.toggle('warn', f.batt < need);
+    setText(cb.querySelector('span'), f.batt < need ? `Battery ${f.batt}% may not last ${km.toFixed(1)} km. Tap another one with more charge.` : `Battery ${f.batt}% is enough for ${km.toFixed(1)} km (about ${need}% needed).`);
+    setText($('#chkZone').querySelector('span'), (T.slowM > 30 ? `${Math.round(T.slowM)} m in the Old Town slow zone at 10 km/h. ` : '') + `Parking ${Math.round(Math.hypot(spot.x - st.to.x, spot.y - st.to.y))} m from ${st.to.label}.`);
+    if (!mB) mB = map.marker(mkB, st.to.x, st.to.y, { clamp: '.bub' }); mB.x = st.to.x; mB.y = st.to.y; setText(mkB.querySelector('.t'), st.to.label);
+    $('#trip').hidden = false; $('#noTrip').hidden = true;
+    setText($('#sr'), `${R.name} ${wmin} minutes walk, battery ${f.batt} percent. Ride to ${st.to.label} about ${T.rmin} minutes, ${eur(cost)}.`);
+    if (fly !== false) frame();
+    if (narrow() && fly) $('.mapstage').scrollIntoView({ behavior: reduced() ? 'auto' : 'smooth', block: 'start' });
+  }
+  function frame() {
+    const xs = [st.from.x, st.sel ? st.sel.x : st.from.x], ys = [st.from.y, st.sel ? st.sel.y : st.from.y];
+    if (st.trip) { for (const p of st.trip.ride.pts) { xs.push(p[0]); ys.push(p[1]); } xs.push(st.to.x); ys.push(st.to.y); }
+    else { xs.push(st.from.x + 350, st.from.x - 350); ys.push(st.from.y + 250, st.from.y - 250); }
+    const f = map.fit(Math.min(...xs), Math.min(...ys), Math.max(...xs), Math.max(...ys), narrow() ? { l: 50, r: 60, t: 80, b: ride ? 190 : 60 } : { l: panelOffset() * 2 + 60, r: 110, t: 90, b: ride ? 230 : 80 });
+    map.flyTo(f, reduced() ? 300 : 1100, .15);
+  }
+
+  /* ---------- the handlebar display, as a short explainer of the rules (riding itself happens in the app) ---------- */
+  let ride = null;
+  $('#previewBtn').addEventListener('click', () => startRide());
+  $('#back').addEventListener('click', () => stopRide());
+  const playUI = t => { const b = $('#play'); b.classList.toggle('paused', t !== 'Pause'); setText(b.querySelector('span'), t); b.setAttribute('aria-label', t === 'Pause' ? 'Pause' : t === 'Play' ? 'Play' : 'Play again'); };
+  $('#play').addEventListener('click', () => { if (!ride) return; if (ride.P >= 1) return startRide(); ride.paused = !ride.paused; if (!ride.paused) ride.tBase = performance.now() - ride.P * ride.dur; playUI(ride.paused ? 'Play' : 'Pause'); });
+  function startRide() {
+    if (!st.trip) return;
+    const T = st.trip;
+    ride = { P: 0, d: 0, tBase: performance.now() + 700, dur: Math.min(11000, Math.max(7000, T.ride.time * 14)), paused: false, spd: 0, lastLimit: 0, arrived: false, seen: {} };
+    $('.legend-z').hidden = true;
+    $('#browse').hidden = true; $('#riding').hidden = false; $('#barWrap').hidden = false; playUI('Pause');
+    setText($('#rEyebrow'), `On the way to ${st.to.label}`);
+    const slowOn = T.slowM > 30; $('#rules li[data-r="slow"]').classList.toggle('off', !slowOn);
+    setText($('#ruleSlow'), slowOn ? `${Math.round(T.slowM)} m of this route is in the Old Town zone: the limit drops to 10 km/h as you enter.` : 'This route avoids the Old Town zone, where the limit drops to 10 km/h.');
+    setText($('#rulePark'), `The display points you to a green zone ${fmtM(Math.hypot(T.spot.x - st.to.x, T.spot.y - st.to.y))} from ${st.to.label}.`);
+    $$('#rules li').forEach(li => li.classList.remove('on', 'seen'));
+    mS.el.style.visibility = 'hidden';
+    frame();
+    if (narrow()) $('.mapstage').scrollIntoView({ behavior: reduced() ? 'auto' : 'smooth', block: 'start' });
+  }
+  function stopRide() { $('.legend-z').hidden = false; ride = null; $('#browse').hidden = false; $('#riding').hidden = true; $('#barWrap').hidden = true; $('#chipTop').hidden = true; mS.el.style.visibility = ''; $('#screen').classList.remove('park', 'slow'); frame(); }
+  const ARROWS = { straight: 0, right: 90, left: -90, sright: 40, sleft: -40, uturn: 180 };
+  function turnAt(r, d0) {   // which way the street bends at a step boundary
+    const a = CityMap.along(r.pts, r.cum, Math.max(0, d0 - 18)), b = CityMap.along(r.pts, r.cum, Math.min(r.len, d0 + 18));
+    let dh = (b[2] - a[2]) * 180 / Math.PI; while (dh > 180) dh -= 360; while (dh < -180) dh += 360;
+    return Math.abs(dh) < 25 ? 'straight' : dh > 0 ? (dh > 60 ? 'right' : 'sright') : (dh < -60 ? 'left' : 'sleft');
+  }
+  const fmtM = m => m >= 950 ? `${(m / 1000).toFixed(1)} km` : `${Math.max(10, Math.round(m / 10) * 10)} m`;
+  function tick(ctx, now, v) {
+    const R = ride, T = st.trip, r = T.ride, Rate = RATE[st.veh];
+    if (!R.paused) R.P = Math.max(0, Math.min(1, (now - R.tBase) / R.dur));
+    const f = R.P, d = CityMap.distAtTime(r, f); R.d = d;
+    const p = CityMap.along(r.pts, r.cum, d), i = CityMap.stepAt(r, d), stp = r.steps[i];
+    // the scooter + rider
+    const [sx, sy] = v.w2s(p[0], p[1]);
+    ctx.beginPath(); ctx.arc(sx, sy, 24 + 3 * Math.sin(now / 240), 0, 7); ctx.fillStyle = 'rgba(43,134,89,.18)'; ctx.fill();
+    ctx.beginPath(); ctx.arc(sx, sy, 12, 0, 7); ctx.fillStyle = '#fff'; ctx.fill(); ctx.lineWidth = 3; ctx.strokeStyle = '#2B8659'; ctx.stroke();
+    ctx.save(); ctx.translate(sx, sy); ctx.rotate(p[2] + Math.PI / 2); ctx.fillStyle = '#0E1010'; ctx.beginPath(); ctx.roundRect(-2.5, -7, 5, 14, 2); ctx.fill(); ctx.fillStyle = '#2B8659'; ctx.beginPath(); ctx.roundRect(-6, -6, 12, 2.4, 1.2); ctx.fill(); ctx.restore();
+    // speed: the street's speed, capped by the zone, easing in and out at the ends
+    const limit = stp.slow ? 10 : 25, ends = Math.min(1, d / 40, (r.len - d) / 40);
+    const target = R.P >= 1 ? 0 : Math.min(limit, stp.kmh + Math.sin(now / 700) * 1.2) * Math.max(.15, ends);
+    R.spd += (target - R.spd) * (R.paused ? 1 : .08);
+    setText($('#scrSpd'), String(Math.max(0, Math.round(R.spd))));
+    const L = $('#scrLimit'); if (R.lastLimit !== limit) { setText(L, String(limit)); if (R.lastLimit) { L.classList.add('pulse'); setTimeout(() => L.classList.remove('pulse'), 320); } R.lastLimit = limit; }
+    $('#screen').classList.toggle('slow', !!stp.slow);
+    const mins = r.time * f / 60, batt = Math.max(1, Math.round(st.sel.batt - d / 1000 * 2.5)), cost = Rate.unlock + Rate.min * Math.ceil(Math.max(mins, .01));
+    setText($('#scrBatt'), `${batt}%`); $('#scrBattI').style.setProperty('--b', batt / 100);
+    setText($('#scrClock'), `${Math.floor(mins)}:${String(Math.floor(mins % 1 * 60)).padStart(2, '0')} · ${eur(cost)}`);
+    // next turn from the real street names
+    let cur = ''; for (let k = i; k >= 0 && !cur; k--) cur = r.steps[k].name;
+    let nx = null; for (let k = i + 1; k < r.steps.length; k++) if (r.steps[k].name && r.steps[k].name !== cur) { nx = r.steps[k]; break; }
+    const toEnd = r.len - d, arrow = $('#scrArrow');
+    if (R.P >= 1) { setText($('#scrTurn'), 'Parked in a green zone'); setText($('#scrDist'), 'Take a photo to end the ride'); arrow.style.transform = 'rotate(0deg)'; $('#screen').classList.add('park'); }
+    else if (toEnd < 160 || !nx) { setText($('#scrTurn'), 'Parking ahead'); setText($('#scrDist'), `Green zone in ${fmtM(toEnd)}`); arrow.style.transform = 'rotate(0deg)'; }
+    else { const dir = turnAt(r, nx.d0); setText($('#scrTurn'), `${dir === 'straight' ? 'Continue onto' : dir.includes('left') ? 'Turn left onto' : 'Turn right onto'} ${nx.name}`); setText($('#scrDist'), `in ${fmtM(nx.d0 - d)}`); arrow.style.transform = `rotate(${ARROWS[dir]}deg)`; }
+    // panel: the rule the display is showing right now lights up
+    const now3 = R.P >= 1 || toEnd < 160 ? 'park' : stp.slow ? 'slow' : 'limit';
+    if (now3 !== R.rule) { R.rule = now3; setText($('#sr'), $(`#rules li[data-r="${now3}"] b`).textContent); }
+    if (R.P > 0) { R.seen[now3] = true; $$('#rules li').forEach(li => { li.classList.toggle('on', li.dataset.r === now3); li.classList.toggle('seen', !!R.seen[li.dataset.r] && li.dataset.r !== now3); }); }
+    setText($('#rideSum'), `${(d / 1000).toFixed(1)} of ${(r.len / 1000).toFixed(1)} km · ${Math.floor(mins)}:${String(Math.floor(mins % 1 * 60)).padStart(2, '0')} · ${eur(cost)} · battery ${batt}%`);
+    if (R.P >= 1 && !R.arrived) { R.arrived = true; playUI('Replay'); }
+    if (R.P < 1 && R.arrived) { R.arrived = false; $('#screen').classList.remove('park'); playUI(R.paused ? 'Play' : 'Pause'); }
+  }
+
+  choose(nearest()); plan(false);
+  if (st.to) frame();
+  Object.defineProperty(window, '__sc', { get: () => ({ st, ride, map, fleet }) });
+
+  /* v3 page bits: your trip priced on the pricing cards, safety rail arrows, Bolt 7 video (pausable), "See it on a ride" */
+  const yt = $('#yourTrip');
+  new MutationObserver(() => { const c = $('#sCost').textContent, r = $('#sRide').textContent; if (c && c !== '–') { yt.hidden = false; yt.textContent = `Your trip on the map: ${r} ride, about ${c} pay as you go.`; } }).observe($('#sCost'), { childList: true, characterData: true, subtree: true });
+  $$('.rbtn').forEach(b => b.addEventListener('click', () => { const r = $('.safe-rail'); r.scrollBy({ left: +b.dataset.d * Math.min(336, r.clientWidth * .8), behavior: reduced() ? 'auto' : 'smooth' }); }));
+  const vid = $('#b7vid'), vbtn = $('#vidBtn'); let vUser = reduced();
+  const vSet = play => { if (play) vid.play().catch(() => {}); else vid.pause(); vbtn.textContent = play ? 'Pause video' : 'Play video'; vbtn.setAttribute('aria-pressed', String(!play)); };
+  vbtn.addEventListener('click', () => { vUser = !vid.paused; vSet(vid.paused); });
+  new IntersectionObserver(([e]) => { if (e.isIntersecting && !vUser) { vid.preload = 'auto'; vSet(true); } else if (!e.isIntersecting) vid.pause(); }).observe(vid);
+  if (reduced()) vSet(false);
+  $('#seeRide').addEventListener('click', () => {
+    $('#find').scrollIntoView({ behavior: reduced() ? 'auto' : 'smooth', block: 'start' });
+    const go = () => { if (!$('#previewBtn').offsetParent) { const chip = $('#popular button'); if (chip) chip.click(); setTimeout(() => $('#previewBtn').click(), 1600); } else $('#previewBtn').click(); };
+    setTimeout(go, reduced() ? 0 : 700);
+  });
+})();
+</script>
+</body>
+</html>

@@ -1,2 +1,3 @@
 User-agent: *
 Disallow: /prototype/
+Disallow: /v1/
