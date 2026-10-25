@@ -42,11 +42,14 @@ p{margin:0}
 .visually-hidden{position:absolute!important;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 .night{background:var(--ink);color:var(--night-ink)}
 
-.concept{background:#000;color:#cfd5d2;font:500 12px/1.4 var(--mono);letter-spacing:.04em}
-.concept .wrap{display:flex;gap:16px;justify-content:space-between;align-items:center;padding-block:8px;flex-wrap:wrap}
-.concept-actions{display:flex;gap:8px;flex-wrap:wrap}
-.notes-toggle{display:inline-flex;gap:8px;align-items:center;background:none;border:1px solid currentColor;border-radius:999px;padding:4px 12px;cursor:pointer;font:inherit;color:inherit}
-.notes-toggle[aria-pressed="true"]{background:var(--note);border-color:var(--note);color:#fff}
+.concept{background:#0E1010;color:#9AA39E;font:500 13px/1.4 var(--font)}
+.concept .wrap{display:flex;gap:16px;justify-content:space-between;align-items:center;padding-block:9px}
+.concept .wrap>span{min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+@media (max-width:640px){.concept .cx{display:none}}
+.concept-actions{display:flex;gap:18px;flex-shrink:0}
+.notes-toggle{display:inline-flex;gap:8px;align-items:center;min-height:28px;background:none;border:0;padding:2px 0;cursor:pointer;font:inherit;color:#E1E7E3}
+.notes-toggle:hover{color:#fff;text-decoration:underline;text-underline-offset:3px}
+.notes-toggle[aria-pressed="true"]{color:#B9A9FF}
 
 .site-head{position:sticky;top:env(safe-area-inset-top,0px);z-index:30;background:rgba(247,249,248,.96);border-bottom:1px solid var(--line)}
 @supports (backdrop-filter:blur(1px)){.site-head{background:rgba(247,249,248,.86);backdrop-filter:saturate(1.4) blur(12px)}}
@@ -147,14 +150,18 @@ footer .legal{margin-top:24px}
   padding:calc(24px + env(safe-area-inset-top,0px)) max(24px,env(safe-area-inset-right,0px)) calc(24px + env(safe-area-inset-bottom,0px)) max(24px,env(safe-area-inset-left,0px))}
 .stage[hidden]{display:none}
 .stage-phone{position:relative;justify-self:end;display:grid;place-items:center}
-.stage .phone{opacity:0;transform:translateY(40px) scale(.94);transition:opacity 500ms ease,transform var(--t-scene) var(--glide)}
-.stage.in .phone{opacity:1;transform:none}
+.stage-visual{opacity:0;transform:translateY(40px) scale(.96);transition:opacity 500ms ease,transform var(--t-scene) var(--glide);width:min(560px,42vw)}
+.stage.in .stage-visual{opacity:1;transform:none}
+.stage-visual .view{position:static;inset:auto;transform:none;opacity:1;display:none;width:100%;height:auto;max-height:76vh;object-fit:contain}
+.stage-visual .view.on{display:block;animation:vin 420ms ease both}
+.stage-visual .view.photo{border-radius:28px;object-fit:cover;aspect-ratio:4/3}
+@keyframes vin{from{opacity:0}to{opacity:1}}
 .stage-panel{position:relative;max-width:30rem;display:grid;gap:24px;opacity:0;transform:translateX(24px);transition:opacity 420ms ease 220ms,transform var(--t-scene) var(--glide) 160ms}
 .stage.in .stage-panel{opacity:1;transform:none}
 .stage-close{position:absolute;top:calc(20px + env(safe-area-inset-top,0px));right:max(20px,env(safe-area-inset-right,0px));z-index:2;width:44px;height:44px;border-radius:50%;border:1px solid var(--line);background:var(--surface);cursor:pointer;display:grid;place-items:center}
 .steps{list-style:none;margin:0;padding:0;display:grid;gap:4px;counter-reset:s}
 .steps li button{width:100%;text-align:left;background:none;border:0;border-radius:14px;padding:14px 16px;display:grid;grid-template-columns:32px 1fr;gap:4px 14px;cursor:pointer;position:relative;overflow:hidden}
-.steps li button::before{counter-increment:s;content:counter(s);grid-row:span 2;width:32px;height:32px;border-radius:50%;display:grid;place-items:center;font:600 14px/1 var(--mono);border:1.5px solid var(--line)}
+.steps li button::before{counter-increment:s;content:counter(s);grid-row:span 2;width:32px;height:32px;border-radius:50%;display:grid;place-items:center;font:600 14px/1 var(--font);border:1.5px solid var(--line)}
 .steps li button b{font-weight:650;font-size:17px}
 .steps li button span{color:var(--muted);font-size:14px}
 .steps li button[aria-current="step"]{background:var(--surface)}
@@ -172,7 +179,7 @@ footer .legal{margin-top:24px}
 .send{display:flex;gap:8px;flex-wrap:wrap}
 .send input{flex:1 1 140px;min-width:0;font:500 15px/1 var(--font);color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:var(--pill);padding:12px 16px}
 .send-msg{font-size:13px;color:var(--green-text);min-height:1.3em}
-.pause{background:none;border:0;padding:0;color:var(--muted);font:500 13px/1 var(--mono);cursor:pointer;text-decoration:underline;text-underline-offset:3px;justify-self:start}
+.pause{background:none;border:0;padding:0;color:var(--muted);font:500 14px/1 var(--font);cursor:pointer;text-decoration:underline;text-underline-offset:3px;justify-self:start}
 .open-app{display:none}
 .stage.on-phone .qr,.stage.on-phone .send,.stage.on-phone .send-msg,.stage.on-phone .send-or{display:none}
 .stage.on-phone .open-app{display:inline-flex;justify-self:start}
@@ -197,8 +204,8 @@ body.notes .pin{display:block}
   .foot{grid-template-columns:repeat(2,minmax(0,1fr))}
   .stage{grid-template-columns:minmax(0,1fr);align-content:start;gap:20px;overflow-y:auto}
   .stage-phone{justify-self:center}
-  .stage .phone{--w:230px}
-  .stage.on-phone .phone{--w:180px}
+  .stage-visual{width:min(340px,80vw)}
+  .stage.on-phone .stage-visual{display:none}
   .stage-panel{max-width:none}
 }
 .site-head.menu-open .intent{display:flex;position:absolute;top:64px;left:0;right:0;flex-direction:column;background:var(--surface);border-bottom:1px solid var(--line);padding:12px max(20px,env(safe-area-inset-right,0px)) 16px max(20px,env(safe-area-inset-left,0px))}
@@ -212,8 +219,12 @@ body.notes .pin{display:block}
 @media (prefers-reduced-motion:reduce){
   /* movement off; fades, glows and counters stay */
   .view:not(.on),.view.left:not(.on){transform:none}
-  .stage .phone,.stage.in .phone,.stage-panel,.stage.in .stage-panel,.mega{transform:none}
+  .stage-visual,.stage.in .stage-visual,.stage-panel,.stage.in .stage-panel,.mega{transform:none}
 }
+
+/* one real visual, no walkthrough: steps read as a plain list */
+.stage.single .steps li button{cursor:default;background:none;box-shadow:none}
+.stage.single .steps li button::before{background:none;color:var(--ink);border-color:var(--line)}
 
 
 /* shared: external-link mark, help link */
@@ -332,6 +343,11 @@ h3{font-family:var(--display);font-weight:700;letter-spacing:-.02em;font-size:22
 .btn-primary:hover{background:#257A50;box-shadow:none}
 .btn-quiet{background:#E9ECEB;border:0;color:var(--ink)}
 .btn-quiet:hover{background:#DEE3E0}
+.vid-ico{position:absolute;z-index:3;right:max(20px,calc((100vw - 1240px) / 2));bottom:24px;width:44px;height:44px;border-radius:50%;border:1px solid rgba(255,255,255,.28);background:rgba(0,0,0,.35);color:#fff;display:grid;place-items:center;cursor:pointer;opacity:.75;transition:opacity 200ms ease,background 200ms ease}
+.vid-ico:hover,.vid-ico:focus-visible{opacity:1;background:rgba(0,0,0,.55)}
+.vid-ico svg{width:16px;height:16px;fill:currentColor}
+.vid-ico .i-play,.vid-ico[aria-pressed="true"] .i-pause{display:none}
+.vid-ico[aria-pressed="true"] .i-play{display:block}
 .btn-ghost-dark{background:rgba(255,255,255,.1);color:#fff}
 .btn-ghost-dark:hover{background:rgba(255,255,255,.18)}
 .night .btn-quiet{background:rgba(255,255,255,.12);color:#fff;border:0}
@@ -693,7 +709,7 @@ section.block{padding-block:clamp(112px,11vw,160px)}
 
 <div class="concept">
   <div class="wrap">
-    <span>Portfolio concept by Andrii · not affiliated with Bolt · cars and prices are examples · map © OpenStreetMap contributors</span>
+    <span>Portfolio concept by Andrii<span class="cx"> · not affiliated with Bolt · prices and vehicles are examples</span></span>
     <span class="concept-actions"><a class="notes-toggle" href="../index.html" style="text-decoration:none">← Case study</a> <button class="notes-toggle" type="button" id="notesToggle" aria-pressed="false">Design notes</button></span>
   </div>
 </div>
@@ -848,7 +864,6 @@ Kept: no live driver or user positions; cars are examples on real streets.
 Test: Reserve clicks; guardrail map load time.</button>
       </div>
     </div>
-    <p class="live-note">Example cars on real Tallinn streets. Reserving and unlocking happen in the app.</p>
     </div>
   </section>
 
@@ -874,7 +889,7 @@ Kept: his words, unedited.</button>
         <cite><b>Nikhil, Berlin</b>Bolt Drive user, quoted on bolt.eu</cite>
       </blockquote>
       <div class="meter-side">
-        <small>The counter he means, running live:</small>
+        
       <div class="meter" aria-hidden="true">
         <div class="meter-row">
           <div><b id="mTime">18:42</b><span>time</span></div>
@@ -883,7 +898,7 @@ Kept: his words, unedited.</button>
         </div>
         <div class="bar"><i id="mBar"></i></div>
         <div class="total"><small>Trip so far</small><b id="mCost">€5.33</b></div>
-        <small>Everyday car · pay as you go · example rates</small>
+        <small>Everyday car, pay as you go</small>
       </div>
       </div>
     </div>
@@ -906,7 +921,7 @@ Data: example rates, labelled; production reads the rate card per city.</button>
       <p class="label" id="clsLabel" style="margin-bottom:10px">Which car?</p>
       <ul class="classes" role="group" aria-labelledby="clsLabel" id="classes">
         <li><button class="cls" type="button" data-c="everyday" aria-pressed="true"><img src="assets/img/dc-every.webp" alt="" loading="lazy" width="700" height="394"><b>Everyday</b><span>When you just need wheels</span></button></li>
-        <li><button class="cls" type="button" data-c="electric" aria-pressed="false"><img src="assets/img/car-electric.webp" alt="" loading="lazy" width="700" height="394"><b>Electric</b><span>Quiet and zero-emission</span></button></li>
+        <li><button class="cls" type="button" data-c="electric" aria-pressed="false"><img src="assets/img/dc-third.webp" alt="" loading="lazy" width="700" height="394"><b>Electric</b><span>From partner fleets</span></button></li>
         <li><button class="cls" type="button" data-c="suv" aria-pressed="false"><img src="assets/img/dc-suv.webp" alt="" loading="lazy" width="700" height="394"><b>SUV</b><span>Extra seats and boot</span></button></li>
         <li><button class="cls" type="button" data-c="van" aria-pressed="false"><img src="assets/img/dc-van.webp" alt="" loading="lazy" width="700" height="394"><b>Van</b><span>For cargo and moves</span></button></li>
         <li><button class="cls" type="button" data-c="premium" aria-pressed="false"><img src="assets/img/dc-lux.webp" alt="" loading="lazy" width="700" height="394"><b>Premium</b><span>When the trip matters</span></button></li>
@@ -927,7 +942,7 @@ Data: example rates, labelled; production reads the rate card per city.</button>
         </article>
       </div>
       <p class="verdict" id="verdict">For a quick errand in an everyday car, <b>pay as you go</b> saves €2.66.</p>
-      <p class="fine">Concept: rates are illustrative, not Bolt's prices. Daily rentals are a fixed fee; fuel and parking not included.</p>
+      <p class="fine">Example rates. Fuel and parking are not included in daily rentals.</p>
       </div>
     </div>
   </section>
@@ -994,47 +1009,12 @@ Data: example rates, labelled; production reads the rate card per city.</button>
 <div class="stage" id="stage" role="dialog" aria-modal="true" aria-labelledby="stageTitle" hidden>
   <button class="stage-close" type="button" data-close aria-label="Close">
     <svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M1 1l12 12M13 1L1 13" stroke="currentColor" stroke-width="1.8"/></svg></button>
-  <div class="stage-phone">
-    <div class="phone" aria-hidden="true">
-      <div class="bezel"><div class="screen">
-        <div class="island"></div>
-        <div class="status"><span>9:41</span><span>●●● 5G</span></div>
-        
-        <div class="view v-map on">
-          <svg viewBox="0 0 270 580" preserveAspectRatio="xMidYMid slice">
-            <rect width="270" height="580" fill="#EEF2EF"/>
-            <g stroke="#fff" stroke-width="12" fill="none"><path d="M-10 100 L280 70"/><path d="M-10 250 L280 220"/><path d="M70 -10 L90 420"/><path d="M190 -10 L205 420"/></g>
-            <path d="M110 150 L175 145 L178 205 L113 210Z" fill="#B9DCC6" stroke="#2B8659" stroke-dasharray="4 3"/>
-            <g fill="#0E1010"><rect x="128" y="160" width="14" height="24" rx="4"/><rect x="40" y="290" width="14" height="24" rx="4"/><rect x="215" y="120" width="14" height="24" rx="4"/></g>
-            <circle cx="150" cy="300" r="34" fill="#2B8659" opacity=".1"/><circle cx="150" cy="300" r="7" fill="#3B6FF5" stroke="#fff" stroke-width="3"/>
-          </svg>
-          <div class="card">
-            <img loading="lazy" decoding="async" src="assets/img/car-everyday.webp" alt="">
-            <div class="row"><div><b id="phCar">Everyday car</b><br><span>Fuel 78% · 3 min walk</span></div><span class="pill" id="phPrice">€0.21/min</span></div>
-            <div class="app-btn">Reserve for free</div>
-          </div>
-        </div>
-        <div class="view v-key">
-          <div class="keyring"><svg width="48" height="52" viewBox="0 0 20 22" aria-hidden="true"><path d="M5 10V6.5a5 5 0 019.6-2" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"/><rect x="2" y="10" width="16" height="11" rx="3" fill="#fff"/></svg></div>
-          <div class="key-copy"><b>Unlocked</b><span>The key is inside the car. Fuel 78%, ~410 km.</span></div>
-        </div>
-        <div class="view v-drive">
-          <svg class="road" viewBox="0 0 270 320" preserveAspectRatio="xMidYMid slice">
-            <rect width="270" height="320" fill="#0E1010"/>
-            <path d="M40 330 L120 0 M230 330 L150 0" stroke="#262B29" stroke-width="2"/>
-            <path d="M135 330 L135 0" stroke="#3a403e" stroke-width="3" stroke-dasharray="14 14"/>
-            <path d="M120 330 C125 220 160 150 180 60" stroke="#2B8659" stroke-width="6" fill="none" stroke-linecap="round"/>
-            <circle cx="180" cy="60" r="7" fill="#6FD39C"/>
-          </svg>
-          <div class="dash">
-            <div class="cost"><span style="font-size:4.4cqi;color:#9AA39E">Trip so far</span><b id="phCost">€5.33</b></div>
-            <div class="stats"><div><b id="phTime">18:42</b><span>time</span></div><div><b id="phKm">7.4</b><span>km</span></div><div><b>32</b><span>km/h</span></div></div>
-            <div class="hint">Green zone 300 m ahead · parking free</div>
-          </div>
-        </div>
+  <div class="stage-phone stage-visual" aria-hidden="true">
+    
+        <img loading="lazy" decoding="async" class="view on" src="assets/img/d-ph-park.webp" alt="" width="600" height="1067">
+        <img loading="lazy" decoding="async" class="view" src="assets/img/d-ph-min.webp" alt="" width="600" height="1067">
+        <img loading="lazy" decoding="async" class="view" src="assets/img/d-ph-day.webp" alt="" width="432" height="768">
 
-      </div></div>
-    </div>
   </div>
   <div class="stage-panel">
     <div style="display:grid;gap:10px">
@@ -1043,9 +1023,9 @@ Data: example rates, labelled; production reads the rate card per city.</button>
     </div>
     <ol class="steps" id="steps">
       
-      <li><button type="button" data-step="0"><b>Reserve it on the map</b><span>Free for a few minutes while you walk over</span><i class="prog"></i></button></li>
-      <li><button type="button" data-step="1"><b>Unlock with your phone</b><span>The key waits inside the car</span><i class="prog"></i></button></li>
-      <li><button type="button" data-step="2"><b>Drive, then park in green</b><span>Cost counter on screen the whole trip</span><i class="prog"></i></button></li>
+      <li><button type="button" data-step="0"><b>Find it on the map</b><span>Every car with its price per minute</span><i class="prog"></i></button></li>
+      <li><button type="button" data-step="1"><b>Reserve it</b><span>Free for a few minutes while you walk over</span><i class="prog"></i></button></li>
+      <li><button type="button" data-step="2"><b>Minutes or days</b><span>Pick the plan before you drive</span><i class="prog"></i></button></li>
 
     </ol>
     <button class="pause" type="button" id="pauseBtn" aria-pressed="false">Pause walkthrough</button>
@@ -1133,11 +1113,11 @@ window.Concept = (() => {
     $$('#steps button').forEach((b, k) => {
       if (k === i) b.setAttribute('aria-current', 'step'); else b.removeAttribute('aria-current');
       const p = b.querySelector('.prog'); p.classList.remove('run'); void p.offsetWidth;
-      if (k === i && playing) p.classList.add('run');
+      if (k === i && playing && views().length > 1) p.classList.add('run');
     });
     opts.onView?.(i);
   }
-  function schedule() { clearTimeout(timer); if (!playing) return; timer = setTimeout(() => { showView((current + 1) % views().length); schedule(); }, 2800); }
+  function schedule() { clearTimeout(timer); if (!playing || views().length < 2) return; timer = setTimeout(() => { showView((current + 1) % views().length); schedule(); }, 2800); }
   function open(e, startAt = 0) {
     if (!stage || !stage.hidden) return;
     opener = e?.currentTarget || document.activeElement;
@@ -1153,6 +1133,7 @@ window.Concept = (() => {
     stage.hidden = false; if (!stage.classList.contains('inline')) document.body.style.overflow = 'hidden';
     requestAnimationFrame(() => requestAnimationFrame(() => stage.classList.add('in')));
     playing = true; $('#pauseBtn').textContent = 'Pause walkthrough'; $('#pauseBtn').setAttribute('aria-pressed', 'false');
+    $('#pauseBtn').hidden = views().length < 2; stage.classList.toggle('single', views().length < 2);
     showView(startAt); stage.scrollTop = 0; $('#stageTitle').focus({ preventScroll: true }); schedule();
   }
   function close() {
@@ -1246,10 +1227,10 @@ window.Concept = (() => {
     const b = document.createElement('b'); b.textContent = minBest ? 'pay as you go' : (hours <= 6 ? 'the hourly rate' : 'the daily rate');
     $('#verdict').append(b, ` saves ${eur(save)}.`);
     // phone + stage copy follow the chosen car
-    $('#phCar').textContent = c.name;
-    $('#phPrice').textContent = `${eur(c.min)}/min`;
+    if ($('#phCar')) $('#phCar').textContent = c.name;
+    if ($('#phPrice')) $('#phPrice').textContent = `${eur(c.min)}/min`;
     $('#stageEyebrow').textContent = `Bolt Drive · ${c.name}`;
-    $('.card img').src = $(`.cls[data-c="${st.car}"] img`).src;
+    { const ci = $('.view .card img, .stage .card img'); if (ci) ci.src = $(`.cls[data-c="${st.car}"] img`).src; }
   }
   $$('#scen button').forEach(b => b.addEventListener('click', () => {
     st.trip = b.dataset.s; $$('#scen button').forEach(x => x.setAttribute('aria-pressed', x === b)); plan();
@@ -1266,7 +1247,7 @@ window.Concept = (() => {
     const cost = .21 * secs / 60 + .19 * km;
     for (const [a, b] of [['#mTime', '#phTime'], ['#mKm', '#phKm'], ['#mCost', '#phCost']]) {
       const v = a === '#mTime' ? `${mm}:${ss}` : a === '#mKm' ? km.toFixed(1) : eur(cost);
-      $(a).textContent = v; $(b).textContent = v;
+      $(a).textContent = v; if ($(b)) $(b).textContent = v;
     }
     $('#mBar').style.setProperty('--p', `${Math.min(100, (secs % 1800) / 18)}%`);
   };
@@ -1392,11 +1373,11 @@ window.Concept = (() => {
   /* ---------- map ---------- */
   const st = { from: { ...P.freedom, label: P.freedom.name }, focus: 'from', kind: 'all', sel: null, walk: null, res: null };
   const mapEl = $('#map');
-  const map = CityMap.create(mapEl, { theme: 'day', x: st.from.x, y: st.from.y, s: .7, minZoom: .1, maxZoom: 2.6, wheel: false, onTap });
+  const map = CityMap.create(mapEl, { theme: 'day', x: (st.from || P.freedom).x, y: (st.from || P.freedom).y, s: .7, minZoom: .1, maxZoom: 2.6, wheel: false, onTap });
   const panelW = () => narrow() ? 0 : $('#panel').getBoundingClientRect().right - mapEl.getBoundingClientRect().left;
   $('#zin').onclick = () => map.zoomBy(1.6); $('#zout').onclick = () => map.zoomBy(1 / 1.6); $('#refit').onclick = () => frame();
   const mkA = document.createElement('div'); mkA.className = 'mk a'; mkA.innerHTML = '<span class="bub">You</span><span class="pin-a"></span>';
-  const mA = map.marker(mkA, st.from.x, st.from.y, { clamp: '.bub', events: false });
+  const mA = map.marker(mkA, (st.from || P.freedom).x, (st.from || P.freedom).y, { clamp: '.bub', events: false });
   const mkC = document.createElement('div'); mkC.className = 'mk car'; mkC.innerHTML = '<span class="bub"></span>';
   const mC = map.marker(mkC, 0, 0, { clamp: '.bub', events: false }); mkC.style.visibility = 'hidden';
   const visible = c => st.kind === 'all' || c.kind === st.kind;
@@ -1423,7 +1404,7 @@ window.Concept = (() => {
 
   /* ---------- location + filters ---------- */
   const search = TripSearch({ state: st, panel: $('#panel'), popular: '#noPopular',
-    onSet: () => { mA.x = st.from.x; mA.y = st.from.y; st.sel = null; st.walk = null; mkC.style.visibility = 'hidden'; $('#pick').hidden = false; $('#car').hidden = true; list(); frame(); }, onClear: () => {} });
+    onSet: () => { mA.x = (st.from || P.freedom).x; mA.y = (st.from || P.freedom).y; st.sel = null; st.walk = null; mkC.style.visibility = 'hidden'; $('#pick').hidden = false; $('#car').hidden = true; list(); frame(); }, onClear: () => {} });
   const KINDS = [['all', 'All'], ...Object.entries(KIND).map(([k, v]) => [k, v.name])];
   $('#kinds').innerHTML = KINDS.map(([k, n]) => `<button type="button" data-k="${k}" aria-pressed="${k === st.kind}">${n}</button>`).join('');
   $$('#kinds button').forEach(b => b.addEventListener('click', () => setKind(b.dataset.k, true)));
@@ -1434,13 +1415,13 @@ window.Concept = (() => {
   }
   $$('.cls').forEach(b => b.addEventListener('click', e => { if (e.isTrusted && st.kind !== b.dataset.c) setKind(b.dataset.c, false); }));
 
-  const walkTo = c => { const r = CityMap.route(st.from.x, st.from.y, c.x, c.y, 'walk'); if (!r || r.pts.length < 2) return null;
+  const walkTo = c => { const r = CityMap.route((st.from || P.freedom).x, (st.from || P.freedom).y, c.x, c.y, 'walk'); if (!r || r.pts.length < 2) return null;
     // end the walk at the car, not at the street corner past it
     let bi = 0, bd = 1e9; r.pts.forEach((q, i) => { const d = Math.hypot(q[0] - c.x, q[1] - c.y); if (d < bd) { bd = d; bi = i; } });
     r.pts = r.pts.slice(0, bi + 1).concat([[c.x, c.y]]); r.cum = CityMap.measure(r.pts); r.len = r.cum[r.cum.length - 1]; return r; };
   const walkMin = r => r ? Math.max(1, Math.round(r.time / 60)) : 1;
   function list() {
-    const vis = cars.filter(visible).map(c => ({ c, d: Math.hypot(c.x - st.from.x, c.y - st.from.y) })).sort((a, b) => a.d - b.d);
+    const vis = cars.filter(visible).map(c => ({ c, d: Math.hypot(c.x - (st.from || P.freedom).x, c.y - (st.from || P.freedom).y) })).sort((a, b) => a.d - b.d);
     const within = vis.filter(o => o.d * 1.3 / 1.35 / 60 <= 10).length;
     const noun = { all: ['car', 'cars'], everyday: ['everyday car', 'everyday cars'], electric: ['electric car', 'electric cars'], suv: ['SUV', 'SUVs'], van: ['van', 'vans'], premium: ['premium car', 'premium cars'] }[st.kind];
     setText($('#nearTitle'), within ? `${within} ${noun[within === 1 ? 0 : 1]} within a 10-minute walk` : `No ${noun[1]} this close. The nearest are below.`);
@@ -1449,9 +1430,9 @@ window.Concept = (() => {
     $$('#nearList button').forEach(b => b.addEventListener('click', () => select(cars[+b.dataset.id])));
   }
   function frame() {
-    const xs = [st.from.x], ys = [st.from.y];
+    const xs = [(st.from || P.freedom).x], ys = [(st.from || P.freedom).y];
     if (st.sel) { xs.push(st.sel.x); ys.push(st.sel.y); if (st.walk) for (const p of st.walk.pts) { xs.push(p[0]); ys.push(p[1]); } }
-    else { xs.push(st.from.x - 420, st.from.x + 420); ys.push(st.from.y - 300, st.from.y + 300); }
+    else { xs.push((st.from || P.freedom).x - 420, (st.from || P.freedom).x + 420); ys.push((st.from || P.freedom).y - 300, (st.from || P.freedom).y + 300); }
     const f = map.fit(Math.min(...xs), Math.min(...ys), Math.max(...xs), Math.max(...ys), narrow() ? { l: 50, r: 70, t: 70, b: 60 } : { l: panelW() + 70, r: 110, t: 90, b: 80 });
     f.s = Math.min(f.s, 1.6); map.flyTo(f, reduced() ? 300 : 1000, .1);
   }
@@ -1476,17 +1457,17 @@ window.Concept = (() => {
     const noun = { everyday: 'everyday car', electric: 'electric car', suv: 'SUV', van: 'van', premium: 'premium car' }[c.kind];
     setText($('#stageEyebrow'), `Bolt Drive · ${K.name} · ${c.plate}`);
     setText($('#stageTitle'), `Your ${noun} is a ${wm}\u2011minute walk away.`);
-    setText($('#phCar'), noun[0].toUpperCase() + noun.slice(1)); const sub = $('#phCar').parentElement.querySelector('span'); if (sub) setText(sub, `${c.kind === 'electric' ? 'Charge' : 'Fuel'} ${c.fuel}% · ${wm} min walk`);
+    setText($('#phCar'), noun[0].toUpperCase() + noun.slice(1)); const sub = $('#phCar')?.parentElement.querySelector('span'); if (sub) setText(sub, `${c.kind === 'electric' ? 'Charge' : 'Fuel'} ${c.fuel}% · ${wm} min walk`);
     setText($('#phPrice'), `${eur(K.min)}/min`);
   });
 
   list();
   // the banner car is a real car on this map: the nearest everyday car to the visitor
-  { const hc = cars.filter(c => c.kind === 'everyday').map(c => ({ c, d: Math.hypot(c.x - st.from.x, c.y - st.from.y) })).sort((a, b) => a.d - b.d)[0]?.c;
+  { const hc = cars.filter(c => c.kind === 'everyday').map(c => ({ c, d: Math.hypot(c.x - (st.from || P.freedom).x, c.y - (st.from || P.freedom).y) })).sort((a, b) => a.d - b.d)[0]?.c;
     if (hc) { hc.fuel = Math.max(hc.fuel, 64); hc.range = Math.round(hc.fuel * KIND.everyday.rng); const w = walkTo(hc), street = CityMap.streetAt(hc.x, hc.y);
       dispatchEvent(new CustomEvent('drive:herocar', { detail: { plate: hc.plate, where: `${street ? 'On ' + street + ', ' : ''}${walkMin(w)} min from ${st.from.label}`, fuel: hc.fuel, range: hc.range, rate: KIND.everyday.min } }));
       addEventListener('drive:showhero', () => { $('#find').scrollIntoView({ behavior: reduced() ? 'auto' : 'smooth', block: 'start' }); setTimeout(() => select(hc), reduced() ? 0 : 600); }); } }
-  map.setView(st.from.x - (narrow() ? 0 : panelW() / 2 / .62), st.from.y, .62);
+  map.setView((st.from || P.freedom).x - (narrow() ? 0 : panelW() / 2 / .62), (st.from || P.freedom).y, .62);
   Object.defineProperty(window, '__drive', { get: () => ({ st, map, cars }) });
 })();
 </script>

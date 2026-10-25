@@ -42,11 +42,14 @@ p{margin:0}
 .visually-hidden{position:absolute!important;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 .night{background:var(--ink);color:var(--night-ink)}
 
-.concept{background:#000;color:#cfd5d2;font:500 12px/1.4 var(--mono);letter-spacing:.04em}
-.concept .wrap{display:flex;gap:16px;justify-content:space-between;align-items:center;padding-block:8px;flex-wrap:wrap}
-.concept-actions{display:flex;gap:8px;flex-wrap:wrap}
-.notes-toggle{display:inline-flex;gap:8px;align-items:center;background:none;border:1px solid currentColor;border-radius:999px;padding:4px 12px;cursor:pointer;font:inherit;color:inherit}
-.notes-toggle[aria-pressed="true"]{background:var(--note);border-color:var(--note);color:#fff}
+.concept{background:#0E1010;color:#9AA39E;font:500 13px/1.4 var(--font)}
+.concept .wrap{display:flex;gap:16px;justify-content:space-between;align-items:center;padding-block:9px}
+.concept .wrap>span{min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+@media (max-width:640px){.concept .cx{display:none}}
+.concept-actions{display:flex;gap:18px;flex-shrink:0}
+.notes-toggle{display:inline-flex;gap:8px;align-items:center;min-height:28px;background:none;border:0;padding:2px 0;cursor:pointer;font:inherit;color:#E1E7E3}
+.notes-toggle:hover{color:#fff;text-decoration:underline;text-underline-offset:3px}
+.notes-toggle[aria-pressed="true"]{color:#B9A9FF}
 
 .site-head{position:sticky;top:env(safe-area-inset-top,0px);z-index:30;background:rgba(247,249,248,.96);border-bottom:1px solid var(--line)}
 @supports (backdrop-filter:blur(1px)){.site-head{background:rgba(247,249,248,.86);backdrop-filter:saturate(1.4) blur(12px)}}
@@ -147,14 +150,18 @@ footer .legal{margin-top:24px}
   padding:calc(24px + env(safe-area-inset-top,0px)) max(24px,env(safe-area-inset-right,0px)) calc(24px + env(safe-area-inset-bottom,0px)) max(24px,env(safe-area-inset-left,0px))}
 .stage[hidden]{display:none}
 .stage-phone{position:relative;justify-self:end;display:grid;place-items:center}
-.stage .phone{opacity:0;transform:translateY(40px) scale(.94);transition:opacity 500ms ease,transform var(--t-scene) var(--glide)}
-.stage.in .phone{opacity:1;transform:none}
+.stage-visual{opacity:0;transform:translateY(40px) scale(.96);transition:opacity 500ms ease,transform var(--t-scene) var(--glide);width:min(560px,42vw)}
+.stage.in .stage-visual{opacity:1;transform:none}
+.stage-visual .view{position:static;inset:auto;transform:none;opacity:1;display:none;width:100%;height:auto;max-height:76vh;object-fit:contain}
+.stage-visual .view.on{display:block;animation:vin 420ms ease both}
+.stage-visual .view.photo{border-radius:28px;object-fit:cover;aspect-ratio:4/3}
+@keyframes vin{from{opacity:0}to{opacity:1}}
 .stage-panel{position:relative;max-width:30rem;display:grid;gap:24px;opacity:0;transform:translateX(24px);transition:opacity 420ms ease 220ms,transform var(--t-scene) var(--glide) 160ms}
 .stage.in .stage-panel{opacity:1;transform:none}
 .stage-close{position:absolute;top:calc(20px + env(safe-area-inset-top,0px));right:max(20px,env(safe-area-inset-right,0px));z-index:2;width:44px;height:44px;border-radius:50%;border:1px solid var(--line);background:var(--surface);cursor:pointer;display:grid;place-items:center}
 .steps{list-style:none;margin:0;padding:0;display:grid;gap:4px;counter-reset:s}
 .steps li button{width:100%;text-align:left;background:none;border:0;border-radius:14px;padding:14px 16px;display:grid;grid-template-columns:32px 1fr;gap:4px 14px;cursor:pointer;position:relative;overflow:hidden}
-.steps li button::before{counter-increment:s;content:counter(s);grid-row:span 2;width:32px;height:32px;border-radius:50%;display:grid;place-items:center;font:600 14px/1 var(--mono);border:1.5px solid var(--line)}
+.steps li button::before{counter-increment:s;content:counter(s);grid-row:span 2;width:32px;height:32px;border-radius:50%;display:grid;place-items:center;font:600 14px/1 var(--font);border:1.5px solid var(--line)}
 .steps li button b{font-weight:650;font-size:17px}
 .steps li button span{color:var(--muted);font-size:14px}
 .steps li button[aria-current="step"]{background:var(--surface)}
@@ -172,7 +179,7 @@ footer .legal{margin-top:24px}
 .send{display:flex;gap:8px;flex-wrap:wrap}
 .send input{flex:1 1 140px;min-width:0;font:500 15px/1 var(--font);color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:var(--pill);padding:12px 16px}
 .send-msg{font-size:13px;color:var(--green-text);min-height:1.3em}
-.pause{background:none;border:0;padding:0;color:var(--muted);font:500 13px/1 var(--mono);cursor:pointer;text-decoration:underline;text-underline-offset:3px;justify-self:start}
+.pause{background:none;border:0;padding:0;color:var(--muted);font:500 14px/1 var(--font);cursor:pointer;text-decoration:underline;text-underline-offset:3px;justify-self:start}
 .open-app{display:none}
 .stage.on-phone .qr,.stage.on-phone .send,.stage.on-phone .send-msg,.stage.on-phone .send-or{display:none}
 .stage.on-phone .open-app{display:inline-flex;justify-self:start}
@@ -197,8 +204,8 @@ body.notes .pin{display:block}
   .foot{grid-template-columns:repeat(2,minmax(0,1fr))}
   .stage{grid-template-columns:minmax(0,1fr);align-content:start;gap:20px;overflow-y:auto}
   .stage-phone{justify-self:center}
-  .stage .phone{--w:230px}
-  .stage.on-phone .phone{--w:180px}
+  .stage-visual{width:min(340px,80vw)}
+  .stage.on-phone .stage-visual{display:none}
   .stage-panel{max-width:none}
 }
 .site-head.menu-open .intent{display:flex;position:absolute;top:64px;left:0;right:0;flex-direction:column;background:var(--surface);border-bottom:1px solid var(--line);padding:12px max(20px,env(safe-area-inset-right,0px)) 16px max(20px,env(safe-area-inset-left,0px))}
@@ -212,8 +219,12 @@ body.notes .pin{display:block}
 @media (prefers-reduced-motion:reduce){
   /* movement off; fades, glows and counters stay */
   .view:not(.on),.view.left:not(.on){transform:none}
-  .stage .phone,.stage.in .phone,.stage-panel,.stage.in .stage-panel,.mega{transform:none}
+  .stage-visual,.stage.in .stage-visual,.stage-panel,.stage.in .stage-panel,.mega{transform:none}
 }
+
+/* one real visual, no walkthrough: steps read as a plain list */
+.stage.single .steps li button{cursor:default;background:none;box-shadow:none}
+.stage.single .steps li button::before{background:none;color:var(--ink);border-color:var(--line)}
 
 
 /* shared: external-link mark, help link */
@@ -258,6 +269,11 @@ h3{font-family:var(--display);font-weight:700;letter-spacing:-.02em;font-size:22
 .btn-primary:hover{background:#257A50;box-shadow:none}
 .btn-quiet{background:#E9ECEB;border:0;color:var(--ink)}
 .btn-quiet:hover{background:#DEE3E0}
+.vid-ico{position:absolute;z-index:3;right:max(20px,calc((100vw - 1240px) / 2));bottom:24px;width:44px;height:44px;border-radius:50%;border:1px solid rgba(255,255,255,.28);background:rgba(0,0,0,.35);color:#fff;display:grid;place-items:center;cursor:pointer;opacity:.75;transition:opacity 200ms ease,background 200ms ease}
+.vid-ico:hover,.vid-ico:focus-visible{opacity:1;background:rgba(0,0,0,.55)}
+.vid-ico svg{width:16px;height:16px;fill:currentColor}
+.vid-ico .i-play,.vid-ico[aria-pressed="true"] .i-pause{display:none}
+.vid-ico[aria-pressed="true"] .i-play{display:block}
 .btn-ghost-dark{background:rgba(255,255,255,.1);color:#fff}
 .btn-ghost-dark:hover{background:rgba(255,255,255,.18)}
 .night .btn-quiet{background:rgba(255,255,255,.12);color:#fff;border:0}
@@ -389,11 +405,9 @@ section.block{padding-block:clamp(112px,11vw,160px)}
 .l-hero .sub{font-size:clamp(18px,1.6vw,21px);line-height:1.5;color:#E1E7E3;max-width:30rem}
 .l-hero .ctas{justify-content:flex-start;margin-top:6px}
 .l-hero .meta{display:flex;gap:16px;align-items:center;flex-wrap:wrap;font-size:14px;color:#B9C1BD}
-.vid-btn{display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:0 16px;border-radius:999px;border:1px solid rgba(255,255,255,.35);background:rgba(0,0,0,.25);color:#fff;font:600 14px/1 var(--font);cursor:pointer}
-.vid-btn:hover{background:rgba(0,0,0,.45)}
 
 /* scroll story */
-.story{background:#0B0D0D;color:#F2F5F3}
+.story{background:#0E1010;color:#F2F5F3}
 .story .sec-head p{color:#B9C1BD}
 .story-grid{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);gap:64px;align-items:start}
 .story-sticky{position:sticky;top:calc(50vh - 190px);height:380px;display:grid;place-items:center}
@@ -448,12 +462,11 @@ section.block{padding-block:clamp(112px,11vw,160px)}
     @keyframes rise{from{opacity:0;transform:translateY(40px)}to{opacity:1;transform:none}}
   }
 }
-.photo-band{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:48px;align-items:center}
-.photo-band img{width:100%;height:auto;border-radius:var(--r-card)}
-.photo-band blockquote{margin:0;display:grid;gap:18px}
-.photo-band blockquote p{font:700 clamp(26px,2.8vw,38px)/1.18 var(--display);letter-spacing:-.02em}
-.photo-band cite{font-style:normal;color:var(--muted);font-size:15px}
-.photo-band cite a{color:var(--green-text)}
+.b7-photo{background:#0E1010;color:#fff;padding:0 0 clamp(96px,9vw,140px)}
+.b7-photo img{display:block;width:100%;max-width:1920px;height:auto;margin:0 auto}
+.b7-photo blockquote{margin:24px auto 0;max-width:46rem;text-align:center;display:grid;gap:18px}
+.b7-photo blockquote p{font:800 clamp(30px,3.6vw,52px)/1.1 var(--display);letter-spacing:-.02em}
+.b7-photo cite{font-style:normal;color:#9AA39E;font-size:16px}
 
 /* where */
 .where{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px}
@@ -467,13 +480,12 @@ section.block{padding-block:clamp(112px,11vw,160px)}
 
 @media (max-width:860px){
   .story-grid{grid-template-columns:minmax(0,1fr);gap:0}
-  .story-sticky{top:76px;height:auto;padding:16px 0 24px;background:linear-gradient(#0B0D0D 80%,rgba(11,13,13,0));z-index:2}
+  .story-sticky{top:76px;height:auto;padding:16px 0 24px;background:linear-gradient(#0E1010 80%,rgba(14,16,16,0));z-index:2}
   .handle{height:170px}.hb-screen{width:78%;height:160px;padding:12px 14px;border-radius:22px}.spd b{font-size:44px}.limit{width:48px;height:48px;font-size:18px;border-width:5px}
   .handle .stem{top:56px}.handle .grip{top:48px}.handle .lever{top:82px}
   .story-steps li,.story-steps li:first-child{min-height:58vh}
   .facts,.where{grid-template-columns:minmax(0,1fr)}
   .fact{min-height:0}
-  .photo-band{grid-template-columns:minmax(0,1fr);gap:28px}
   .here{grid-template-columns:minmax(0,1fr)}
   .l-hero{display:block;min-height:0}
   .l-hero video{position:relative;display:block;left:auto;width:100%;height:auto;aspect-ratio:16/10}
@@ -487,7 +499,7 @@ section.block{padding-block:clamp(112px,11vw,160px)}
 
 <div class="concept">
   <div class="wrap">
-    <span>Portfolio concept by Andrii · not affiliated with Bolt · a launch page built from Bolt's public Bolt 7 announcement</span>
+    <span>Portfolio concept by Andrii<span class="cx"> · not affiliated with Bolt · prices and vehicles are examples</span></span>
     <span class="concept-actions"><a class="notes-toggle" href="../index.html" style="text-decoration:none">← Case study</a> <button class="notes-toggle" type="button" id="notesToggle" aria-pressed="false">Design notes</button></span>
   </div>
 </div>
@@ -534,13 +546,14 @@ section.block{padding-block:clamp(112px,11vw,160px)}
 Kept: Bolt's video, Bolt's facts, the black product band, the site header and footer.
 Build: no new components: hero (dark variant), video block with pause, fact cards, final CTA. The only new piece is the scroll story, which reuses the handlebar display from Scooters.
 Test: Rent a scooter clicks from the launch page vs. the Scooters page; scroll depth through the story.</button>
-    <video id="heroVid" src="assets/img/sc-video.mp4" poster="assets/img/b7-poster.webp" muted loop playsinline preload="metadata" aria-hidden="true"></video>
+    <video id="heroVid" src="assets/img/sc-video.mp4" poster="assets/img/b7-poster.webp" muted loop playsinline autoplay preload="auto" aria-hidden="true"></video>
+    <button class="vid-ico" type="button" id="vidBtn" aria-label="Pause video" aria-pressed="false"><svg class="i-pause" viewBox="0 0 20 20" aria-hidden="true"><rect x="5" y="4" width="3.4" height="12" rx="1"/><rect x="11.6" y="4" width="3.4" height="12" rx="1"/></svg><svg class="i-play" viewBox="0 0 20 20" aria-hidden="true"><path d="M6 4.2v11.6a.8.8 0 0 0 1.2.7l9.4-5.8a.8.8 0 0 0 0-1.4L7.2 3.5A.8.8 0 0 0 6 4.2z"/></svg></button>
     <div class="wrap">
       <p class="eyebrow">New on the streets</p>
       <h1 id="h1">Meet Bolt&nbsp;7</h1>
       <p class="sub">The scooter that knows the rules. A colour display on the handlebar shows the way, the slow zones and where to park, and on-board AI helps keep riders off the pavement.</p>
       <div class="ctas"><button class="btn btn-primary" type="button" data-handoff>Rent a scooter</button><a class="btn btn-ghost-dark" href="#story">See one ride <span aria-hidden="true">↓</span></a></div>
-      <div class="meta"><button class="vid-btn" type="button" id="vidBtn" aria-pressed="false">Pause video</button><span>Rolling out first in Germany, Belgium and Switzerland.</span></div>
+      <div class="meta"><span>Rolling out first in Germany, Belgium and Switzerland.</span></div>
     </div>
   </section>
 
@@ -571,6 +584,16 @@ A11y: with reduced motion all steps are fully visible and nothing animates.</but
     </div>
   </section>
 
+  <section class="b7-photo" aria-label="From the people who built it">
+    <img src="assets/img/b7.webp" alt="The Bolt 7 handlebar: a colour display shows the map with a parking icon and the message Can park here" width="1600" height="900" loading="lazy">
+    <div class="wrap">
+      <blockquote>
+        <p>“This approach moves compliance to real-time guidance.”</p>
+        <cite>Ardo Reinsalu, Director of Vehicles at Bolt</cite>
+      </blockquote>
+    </div>
+  </section>
+
   <section class="block" aria-labelledby="factsT">
     <div class="wrap">
       <div class="sec-head"><h2 id="factsT">Built for the street, not the showroom.</h2><p>What changed from the scooters you may have ridden before.</p></div>
@@ -585,15 +608,7 @@ A11y: with reduced motion all steps are fully visible and nothing animates.</but
     </div>
   </section>
 
-  <section class="block" style="padding-top:0" aria-label="From the people who built it">
-    <div class="wrap photo-band">
-      <img src="assets/img/b7.webp" alt="The Bolt 7 handlebar: a colour display shows the map with a parking icon and the message Can park here" width="1600" height="900" loading="lazy">
-      <blockquote>
-        <p>“This approach moves compliance to real-time guidance.”</p>
-        <cite>Ardo Reinsalu, Director of Vehicles at Bolt, in <a href="https://micromobility.io/news/bolt-rolls-out-new-scooter-with-built-in-display-and-onboard-ai" target="_blank" rel="noopener">Micromobility.io <span aria-hidden="true">↗</span></a>. Image: Bolt, from bolt.eu.</cite>
-      </blockquote>
-    </div>
-  </section>
+
 
   <section class="block" style="padding-top:0" aria-labelledby="whereT">
     <div class="wrap">
@@ -647,22 +662,10 @@ A11y: with reduced motion all steps are fully visible and nothing animates.</but
 <div class="stage" id="stage" role="dialog" aria-modal="true" aria-labelledby="stageTitle" hidden>
   <button class="stage-close" type="button" data-close aria-label="Close">
     <svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M1 1l12 12M13 1L1 13" stroke="currentColor" stroke-width="1.8"/></svg></button>
-  <div class="stage-phone">
-    <div class="phone" aria-hidden="true">
-      <div class="bezel"><div class="screen">
-        <div class="island"></div>
-        <div class="status"><span>9:41</span><span>●●● 5G</span></div>
-        
-        <div class="view on">
-          <svg class="full" viewBox="0 0 270 580" preserveAspectRatio="xMidYMid slice"><rect width="270" height="580" fill="#EEF2EF"/><g stroke="#fff" stroke-width="12" fill="none"><path d="M-10 120 L280 90"/><path d="M-10 260 L280 230"/><path d="M70 -10 L90 420"/><path d="M190 -10 L205 420"/></g><g fill="#2B8659"><rect x="120" y="150" width="18" height="18" rx="5"/><rect x="60" y="300" width="18" height="18" rx="5"/><rect x="200" y="210" width="18" height="18" rx="5"/></g><circle cx="140" cy="260" r="8" fill="#2F6BFF" stroke="#fff" stroke-width="3"/></svg>
-          <div class="ph-card"><div class="ph-row"><b>Bolt 7 · 3 min walk</b><span class="ph-pill">72%</span></div><div class="ph-row"><span>Display, navigation, parking guidance</span></div><div class="ph-btn">Scan to unlock</div></div>
-        </div>
-        <div class="view v-dark">
-          <div style="position:absolute;inset:0;display:grid;place-items:center;background:#0B0E0D;color:#fff;text-align:center"><div><div style="width:46cqi;height:46cqi;border:1.2cqi solid #3DDC84;border-radius:6cqi;margin:0 auto 6cqi"></div><b style="font-size:5.4cqi">Point at the handlebar code</b></div></div>
-        </div>
+  <div class="stage-phone stage-visual" aria-hidden="true">
+    
+        <img loading="lazy" decoding="async" class="view on photo" src="assets/img/sc-phone.webp" alt="" width="1280" height="818">
 
-      </div></div>
-    </div>
   </div>
   <div class="stage-panel">
     <div style="display:grid;gap:10px">
@@ -759,11 +762,11 @@ window.Concept = (() => {
     $$('#steps button').forEach((b, k) => {
       if (k === i) b.setAttribute('aria-current', 'step'); else b.removeAttribute('aria-current');
       const p = b.querySelector('.prog'); p.classList.remove('run'); void p.offsetWidth;
-      if (k === i && playing) p.classList.add('run');
+      if (k === i && playing && views().length > 1) p.classList.add('run');
     });
     opts.onView?.(i);
   }
-  function schedule() { clearTimeout(timer); if (!playing) return; timer = setTimeout(() => { showView((current + 1) % views().length); schedule(); }, 2800); }
+  function schedule() { clearTimeout(timer); if (!playing || views().length < 2) return; timer = setTimeout(() => { showView((current + 1) % views().length); schedule(); }, 2800); }
   function open(e, startAt = 0) {
     if (!stage || !stage.hidden) return;
     opener = e?.currentTarget || document.activeElement;
@@ -779,6 +782,7 @@ window.Concept = (() => {
     stage.hidden = false; if (!stage.classList.contains('inline')) document.body.style.overflow = 'hidden';
     requestAnimationFrame(() => requestAnimationFrame(() => stage.classList.add('in')));
     playing = true; $('#pauseBtn').textContent = 'Pause walkthrough'; $('#pauseBtn').setAttribute('aria-pressed', 'false');
+    $('#pauseBtn').hidden = views().length < 2; stage.classList.toggle('single', views().length < 2);
     showView(startAt); stage.scrollTop = 0; $('#stageTitle').focus({ preventScroll: true }); schedule();
   }
   function close() {
@@ -831,12 +835,13 @@ window.Concept = (() => {
     desktopText: 'Opens Bolt on the scooter map. No app yet? It goes to the store first.',
     phoneText: 'Opens Bolt on the scooter map, or the store if you do not have it yet.' });
 
-  /* hero video: visible pause control (WCAG 2.2.2), stops off screen, never autoplays with reduced motion */
+  /* hero video: plays by default like on bolt.eu; small corner control pauses it (WCAG 2.2.2); stops off screen */
   const v = $('#heroVid'), vb = $('#vidBtn');
-  let userPaused = reduced;
-  const setBtn = () => { vb.textContent = v.paused ? 'Play video' : 'Pause video'; vb.setAttribute('aria-pressed', String(v.paused)); };
+  let userPaused = false;
+  const setBtn = () => { vb.setAttribute('aria-label', v.paused ? 'Play video' : 'Pause video'); vb.setAttribute('aria-pressed', String(v.paused)); };
   vb.addEventListener('click', () => { if (v.paused) { userPaused = false; v.play().catch(() => {}); } else { userPaused = true; v.pause(); } setBtn(); });
-  new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting && !userPaused) v.play().catch(() => {}); else v.pause(); setBtn(); }), { threshold: .2 }).observe(v);
+  v.addEventListener('play', setBtn); v.addEventListener('pause', setBtn);
+  new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting && !userPaused) v.play().catch(() => {}); else v.pause(); }), { threshold: .2 }).observe(v);
   setBtn();
 
   /* scroll story: the display follows the step in view */

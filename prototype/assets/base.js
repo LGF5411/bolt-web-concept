@@ -65,11 +65,11 @@ window.Concept = (() => {
     $$('#steps button').forEach((b, k) => {
       if (k === i) b.setAttribute('aria-current', 'step'); else b.removeAttribute('aria-current');
       const p = b.querySelector('.prog'); p.classList.remove('run'); void p.offsetWidth;
-      if (k === i && playing) p.classList.add('run');
+      if (k === i && playing && views().length > 1) p.classList.add('run');
     });
     opts.onView?.(i);
   }
-  function schedule() { clearTimeout(timer); if (!playing) return; timer = setTimeout(() => { showView((current + 1) % views().length); schedule(); }, 2800); }
+  function schedule() { clearTimeout(timer); if (!playing || views().length < 2) return; timer = setTimeout(() => { showView((current + 1) % views().length); schedule(); }, 2800); }
   function open(e, startAt = 0) {
     if (!stage || !stage.hidden) return;
     opener = e?.currentTarget || document.activeElement;
@@ -85,6 +85,7 @@ window.Concept = (() => {
     stage.hidden = false; if (!stage.classList.contains('inline')) document.body.style.overflow = 'hidden';
     requestAnimationFrame(() => requestAnimationFrame(() => stage.classList.add('in')));
     playing = true; $('#pauseBtn').textContent = 'Pause walkthrough'; $('#pauseBtn').setAttribute('aria-pressed', 'false');
+    $('#pauseBtn').hidden = views().length < 2; stage.classList.toggle('single', views().length < 2);
     showView(startAt); stage.scrollTop = 0; $('#stageTitle').focus({ preventScroll: true }); schedule();
   }
   function close() {

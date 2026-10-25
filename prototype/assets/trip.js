@@ -47,7 +47,7 @@ window.TripSearch = function (o) {
   combo('from'); combo('to');
   const pop = $(o.popular || '#popular');
   if (pop) { pop.innerHTML = (o.popularKeys || ['airport', 'telliskivi', 'kadriorg', 'pirita', 'seaplane', 'ulemiste']).map(k => `<button type="button" data-k="${k}">${P[k].name}</button>`).join('');
-    $$('button', pop).forEach(b => b.addEventListener('click', () => { const p = P[b.dataset.k]; api.set('to', { ...p, label: p.name }); })); }
+    $$('button', pop).forEach(b => b.addEventListener('click', () => { const p = P[b.dataset.k]; api.set(st.from ? 'to' : 'from', { ...p, label: p.name }); })); }
   $('#swap')?.addEventListener('click', e => { if (!st.to || !st.from || o.locked?.()) return; [st.from, st.to] = [st.to, st.from]; api.fill(); e.currentTarget.classList.toggle('spin'); o.onSwap ? o.onSwap() : o.onSet('to', st.to); });
   // deep links: ?from=oldtown&to=airport
   const q = new URLSearchParams(location.search);

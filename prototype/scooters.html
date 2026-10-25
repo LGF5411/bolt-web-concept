@@ -42,11 +42,14 @@ p{margin:0}
 .visually-hidden{position:absolute!important;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 .night{background:var(--ink);color:var(--night-ink)}
 
-.concept{background:#000;color:#cfd5d2;font:500 12px/1.4 var(--mono);letter-spacing:.04em}
-.concept .wrap{display:flex;gap:16px;justify-content:space-between;align-items:center;padding-block:8px;flex-wrap:wrap}
-.concept-actions{display:flex;gap:8px;flex-wrap:wrap}
-.notes-toggle{display:inline-flex;gap:8px;align-items:center;background:none;border:1px solid currentColor;border-radius:999px;padding:4px 12px;cursor:pointer;font:inherit;color:inherit}
-.notes-toggle[aria-pressed="true"]{background:var(--note);border-color:var(--note);color:#fff}
+.concept{background:#0E1010;color:#9AA39E;font:500 13px/1.4 var(--font)}
+.concept .wrap{display:flex;gap:16px;justify-content:space-between;align-items:center;padding-block:9px}
+.concept .wrap>span{min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+@media (max-width:640px){.concept .cx{display:none}}
+.concept-actions{display:flex;gap:18px;flex-shrink:0}
+.notes-toggle{display:inline-flex;gap:8px;align-items:center;min-height:28px;background:none;border:0;padding:2px 0;cursor:pointer;font:inherit;color:#E1E7E3}
+.notes-toggle:hover{color:#fff;text-decoration:underline;text-underline-offset:3px}
+.notes-toggle[aria-pressed="true"]{color:#B9A9FF}
 
 .site-head{position:sticky;top:env(safe-area-inset-top,0px);z-index:30;background:rgba(247,249,248,.96);border-bottom:1px solid var(--line)}
 @supports (backdrop-filter:blur(1px)){.site-head{background:rgba(247,249,248,.86);backdrop-filter:saturate(1.4) blur(12px)}}
@@ -147,14 +150,18 @@ footer .legal{margin-top:24px}
   padding:calc(24px + env(safe-area-inset-top,0px)) max(24px,env(safe-area-inset-right,0px)) calc(24px + env(safe-area-inset-bottom,0px)) max(24px,env(safe-area-inset-left,0px))}
 .stage[hidden]{display:none}
 .stage-phone{position:relative;justify-self:end;display:grid;place-items:center}
-.stage .phone{opacity:0;transform:translateY(40px) scale(.94);transition:opacity 500ms ease,transform var(--t-scene) var(--glide)}
-.stage.in .phone{opacity:1;transform:none}
+.stage-visual{opacity:0;transform:translateY(40px) scale(.96);transition:opacity 500ms ease,transform var(--t-scene) var(--glide);width:min(560px,42vw)}
+.stage.in .stage-visual{opacity:1;transform:none}
+.stage-visual .view{position:static;inset:auto;transform:none;opacity:1;display:none;width:100%;height:auto;max-height:76vh;object-fit:contain}
+.stage-visual .view.on{display:block;animation:vin 420ms ease both}
+.stage-visual .view.photo{border-radius:28px;object-fit:cover;aspect-ratio:4/3}
+@keyframes vin{from{opacity:0}to{opacity:1}}
 .stage-panel{position:relative;max-width:30rem;display:grid;gap:24px;opacity:0;transform:translateX(24px);transition:opacity 420ms ease 220ms,transform var(--t-scene) var(--glide) 160ms}
 .stage.in .stage-panel{opacity:1;transform:none}
 .stage-close{position:absolute;top:calc(20px + env(safe-area-inset-top,0px));right:max(20px,env(safe-area-inset-right,0px));z-index:2;width:44px;height:44px;border-radius:50%;border:1px solid var(--line);background:var(--surface);cursor:pointer;display:grid;place-items:center}
 .steps{list-style:none;margin:0;padding:0;display:grid;gap:4px;counter-reset:s}
 .steps li button{width:100%;text-align:left;background:none;border:0;border-radius:14px;padding:14px 16px;display:grid;grid-template-columns:32px 1fr;gap:4px 14px;cursor:pointer;position:relative;overflow:hidden}
-.steps li button::before{counter-increment:s;content:counter(s);grid-row:span 2;width:32px;height:32px;border-radius:50%;display:grid;place-items:center;font:600 14px/1 var(--mono);border:1.5px solid var(--line)}
+.steps li button::before{counter-increment:s;content:counter(s);grid-row:span 2;width:32px;height:32px;border-radius:50%;display:grid;place-items:center;font:600 14px/1 var(--font);border:1.5px solid var(--line)}
 .steps li button b{font-weight:650;font-size:17px}
 .steps li button span{color:var(--muted);font-size:14px}
 .steps li button[aria-current="step"]{background:var(--surface)}
@@ -172,7 +179,7 @@ footer .legal{margin-top:24px}
 .send{display:flex;gap:8px;flex-wrap:wrap}
 .send input{flex:1 1 140px;min-width:0;font:500 15px/1 var(--font);color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:var(--pill);padding:12px 16px}
 .send-msg{font-size:13px;color:var(--green-text);min-height:1.3em}
-.pause{background:none;border:0;padding:0;color:var(--muted);font:500 13px/1 var(--mono);cursor:pointer;text-decoration:underline;text-underline-offset:3px;justify-self:start}
+.pause{background:none;border:0;padding:0;color:var(--muted);font:500 14px/1 var(--font);cursor:pointer;text-decoration:underline;text-underline-offset:3px;justify-self:start}
 .open-app{display:none}
 .stage.on-phone .qr,.stage.on-phone .send,.stage.on-phone .send-msg,.stage.on-phone .send-or{display:none}
 .stage.on-phone .open-app{display:inline-flex;justify-self:start}
@@ -197,8 +204,8 @@ body.notes .pin{display:block}
   .foot{grid-template-columns:repeat(2,minmax(0,1fr))}
   .stage{grid-template-columns:minmax(0,1fr);align-content:start;gap:20px;overflow-y:auto}
   .stage-phone{justify-self:center}
-  .stage .phone{--w:230px}
-  .stage.on-phone .phone{--w:180px}
+  .stage-visual{width:min(340px,80vw)}
+  .stage.on-phone .stage-visual{display:none}
   .stage-panel{max-width:none}
 }
 .site-head.menu-open .intent{display:flex;position:absolute;top:64px;left:0;right:0;flex-direction:column;background:var(--surface);border-bottom:1px solid var(--line);padding:12px max(20px,env(safe-area-inset-right,0px)) 16px max(20px,env(safe-area-inset-left,0px))}
@@ -212,8 +219,12 @@ body.notes .pin{display:block}
 @media (prefers-reduced-motion:reduce){
   /* movement off; fades, glows and counters stay */
   .view:not(.on),.view.left:not(.on){transform:none}
-  .stage .phone,.stage.in .phone,.stage-panel,.stage.in .stage-panel,.mega{transform:none}
+  .stage-visual,.stage.in .stage-visual,.stage-panel,.stage.in .stage-panel,.mega{transform:none}
 }
+
+/* one real visual, no walkthrough: steps read as a plain list */
+.stage.single .steps li button{cursor:default;background:none;box-shadow:none}
+.stage.single .steps li button::before{background:none;color:var(--ink);border-color:var(--line)}
 
 
 /* shared: external-link mark, help link */
@@ -332,6 +343,11 @@ h3{font-family:var(--display);font-weight:700;letter-spacing:-.02em;font-size:22
 .btn-primary:hover{background:#257A50;box-shadow:none}
 .btn-quiet{background:#E9ECEB;border:0;color:var(--ink)}
 .btn-quiet:hover{background:#DEE3E0}
+.vid-ico{position:absolute;z-index:3;right:max(20px,calc((100vw - 1240px) / 2));bottom:24px;width:44px;height:44px;border-radius:50%;border:1px solid rgba(255,255,255,.28);background:rgba(0,0,0,.35);color:#fff;display:grid;place-items:center;cursor:pointer;opacity:.75;transition:opacity 200ms ease,background 200ms ease}
+.vid-ico:hover,.vid-ico:focus-visible{opacity:1;background:rgba(0,0,0,.55)}
+.vid-ico svg{width:16px;height:16px;fill:currentColor}
+.vid-ico .i-play,.vid-ico[aria-pressed="true"] .i-pause{display:none}
+.vid-ico[aria-pressed="true"] .i-play{display:block}
 .btn-ghost-dark{background:rgba(255,255,255,.1);color:#fff}
 .btn-ghost-dark:hover{background:rgba(255,255,255,.18)}
 .night .btn-quiet{background:rgba(255,255,255,.12);color:#fff;border:0}
@@ -581,9 +597,9 @@ section.block{padding-block:clamp(112px,11vw,160px)}
 .report h3{font-size:26px}
 .report p{color:var(--muted);margin-top:6px;max-width:44rem}
 .b7s{position:relative;background:#000;color:#fff;min-height:min(760px,90vh);display:grid;align-items:center;overflow:hidden}
-.b7s-vid{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.9}
+.b7s-vid{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.95;transform:translateX(18%) scale(1.3);transform-origin:50% 40%}
 .b7s::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(0,0,0,.85) 0%,rgba(0,0,0,.35) 60%,rgba(0,0,0,0) 100%)}
-.b7s-in{position:relative;z-index:1;display:grid;gap:22px;padding-block:96px}
+.b7s-in{position:relative;z-index:1;width:100%;display:grid;gap:22px;padding-block:96px}
 .b7s h2{font-size:clamp(44px,6vw,84px);max-width:13ch}
 .b7s-in>p{max-width:36rem;color:#C9D1CD;font-size:18px}
 .b7s .ctas{justify-content:flex-start;margin-top:4px}
@@ -615,6 +631,7 @@ section.block{padding-block:clamp(112px,11vw,160px)}
   .report{grid-template-columns:minmax(0,1fr);padding:26px;gap:16px}
   .b7s{min-height:0}.b7s-in{padding-block:72px}
   .b7s::after{background:linear-gradient(180deg,rgba(0,0,0,.8),rgba(0,0,0,.5))}
+  .b7s-vid{transform:scale(1.3)}
   .pc-grid{grid-template-columns:minmax(0,1fr);gap:24px}
 }
 
@@ -624,7 +641,7 @@ section.block{padding-block:clamp(112px,11vw,160px)}
 
 <div class="concept">
   <div class="wrap">
-    <span>Portfolio concept by Andrii · not affiliated with Bolt · scooters, zones and prices are examples · map © OpenStreetMap contributors</span>
+    <span>Portfolio concept by Andrii<span class="cx"> · not affiliated with Bolt · prices and vehicles are examples</span></span>
     <span class="concept-actions"><a class="notes-toggle" href="../index.html" style="text-decoration:none">← Case study</a> <button class="notes-toggle" type="button" id="notesToggle" aria-pressed="false">Design notes</button></span>
   </div>
 </div>
@@ -772,7 +789,6 @@ A11y: the nearest scooter is chosen for keyboard users; the map is never the onl
 Test: Rent a scooter clicks after the map was used vs. not.</button>
     </div>
     </div>
-    <p class="live-note">Real Tallinn streets. Scooters, zones and prices are examples.</p>
    </div>
   </section>
 
@@ -797,7 +813,7 @@ Test: CTA click-through on Scooters; guardrail price-related support contacts.</
         <article class="plan featured"><span class="tag">For 3+ rides a week</span><h3>Unlimited unlocks</h3><div class="amt">€0.99<small> / month</small></div><dl><dt>Unlock</dt><dd>€0.00</dd><dt>10-min trip</dt><dd>€1.50</dd></dl></article>
         <article class="plan"><span class="tag">Lowest price per minute</span><h3>Minute passes</h3><div class="amt">€9.90<small> / 100 min</small></div><dl><dt>Per minute</dt><dd>€0.099</dd><dt>Valid</dt><dd>30 days</dd></dl></article>
       </div>
-      <p class="fine2">Concept: rates are illustrative, not Bolt's prices. E-bikes in this concept cost €0.18 per minute.</p>
+      <p class="fine2">Example rates. E-bikes from €0.18 per minute.</p>
     </div>
   </section>
 
@@ -834,14 +850,14 @@ Test: CTA click-through on Scooters; guardrail price-related support contacts.</
   </section>
 
   <section class="has-pin b7s" aria-labelledby="b7sT"><button class="pin" type="button" style="left:14px;top:14px" data-note="Bolt 7 video: pause, then play a ride">Kept: Bolt&#x27;s own video and the line ‘the scooter that knows the rules’.
-Changed: a visible Pause control (WCAG 2.2.2), and See it on a ride plays a real trip on the handlebar display.
+Changed: the video plays by default, as on bolt.eu, with a small pause control in the corner (WCAG 2.2.2); See it on a ride plays a real trip on the handlebar display.
 Build: Video block, props: src, poster, cta. Video is 0.15 MB and stops off screen.</button>
-    <video class="b7s-vid" id="b7vid" src="assets/img/sc-video.mp4" poster="assets/img/sc-video-poster.webp" muted loop playsinline preload="none" aria-hidden="true"></video>
+    <video class="b7s-vid" id="b7vid" src="assets/img/sc-video.mp4" poster="assets/img/sc-video-poster.webp" muted loop playsinline autoplay preload="auto" aria-hidden="true"></video>
+    <button class="vid-ico" type="button" id="vidBtn" aria-label="Pause video" aria-pressed="false"><svg class="i-pause" viewBox="0 0 20 20" aria-hidden="true"><rect x="5" y="4" width="3.4" height="12" rx="1"/><rect x="11.6" y="4" width="3.4" height="12" rx="1"/></svg><svg class="i-play" viewBox="0 0 20 20" aria-hidden="true"><path d="M6 4.2v11.6a.8.8 0 0 0 1.2.7l9.4-5.8a.8.8 0 0 0 0-1.4L7.2 3.5A.8.8 0 0 0 6 4.2z"/></svg></button>
     <div class="wrap b7s-in">
       <h2 id="b7sT">The scooter that knows the rules</h2>
       <p>Bolt 7 is the first shared scooter with a full-colour display on the handlebar: maps, zone guidance and where you may park.</p>
-      <div class="ctas"><button class="btn btn-primary" type="button" id="seeRide">See it on a ride</button><button class="btn btn-ghost-dark" type="button" id="vidBtn" aria-pressed="false">Pause video</button><a class="btn btn-ghost-dark" href="bolt7.html">About Bolt 7 <span aria-hidden="true">→</span></a></div>
-      <p class="b7s-note">This page goes one step further: start a ride on the map and the handlebar display plays the trip, zone by zone.</p>
+      <div class="ctas"><button class="btn btn-primary" type="button" id="seeRide">See it on a ride</button><a class="btn btn-ghost-dark" href="bolt7.html">About Bolt 7 <span aria-hidden="true">→</span></a></div>
     </div>
   </section>
 
@@ -909,26 +925,10 @@ Build: Video block, props: src, poster, cta. Video is 0.15 MB and stops off scre
 <div class="stage" id="stage" role="dialog" aria-modal="true" aria-labelledby="stageTitle" hidden>
   <button class="stage-close" type="button" data-close aria-label="Close">
     <svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M1 1l12 12M13 1L1 13" stroke="currentColor" stroke-width="1.8"/></svg></button>
-  <div class="stage-phone">
-    <div class="phone" aria-hidden="true">
-      <div class="bezel"><div class="screen">
-        <div class="island"></div>
-        <div class="status"><span>9:41</span><span>●●● 5G</span></div>
-        
-        <div class="view on">
-          <svg class="full" viewBox="0 0 270 580" preserveAspectRatio="xMidYMid slice"><rect width="270" height="580" fill="#EEF2EF"/><g stroke="#fff" stroke-width="12" fill="none"><path d="M-10 120 L280 90"/><path d="M-10 260 L280 230"/><path d="M70 -10 L90 420"/><path d="M190 -10 L205 420"/></g><g fill="#2B8659"><rect x="120" y="150" width="18" height="18" rx="5"/><rect x="60" y="300" width="18" height="18" rx="5"/><rect x="200" y="210" width="18" height="18" rx="5"/></g><circle cx="140" cy="260" r="8" fill="#2F6BFF" stroke="#fff" stroke-width="3"/></svg>
-          <div class="ph-card"><div class="ph-row"><b>Scooter · 2 min walk</b><span class="ph-pill" id="phBatt">64%</span></div><div class="ph-row"><span>€1.00 unlock · €0.15/min</span></div><div class="ph-btn">Scan to unlock</div></div>
-        </div>
-        <div class="view v-dark">
-          <div style="position:absolute;inset:0;display:grid;place-items:center;background:#0B0E0D;color:#fff;text-align:center"><div><div style="width:46cqi;height:46cqi;border:1.2cqi solid #3DDC84;border-radius:6cqi;margin:0 auto 6cqi"></div><b style="font-size:5.4cqi">Point at the handlebar code</b></div></div>
-        </div>
-        <div class="view">
-          <svg class="full" viewBox="0 0 270 580" preserveAspectRatio="xMidYMid slice"><rect width="270" height="580" fill="#EEF2EF"/><rect x="90" y="200" width="90" height="70" rx="12" fill="rgba(43,134,89,.25)" stroke="#2B8659" stroke-width="3"/></svg>
-          <div class="ph-card"><div class="ph-row"><b>Parked in a green zone</b><span class="ph-pill">✓</span></div><div class="ph-row"><span>Take a photo to end the ride</span></div><div class="ph-btn">End ride</div></div>
-        </div>
+  <div class="stage-phone stage-visual" aria-hidden="true">
+    
+        <img loading="lazy" decoding="async" class="view on photo" src="assets/img/sc-phone.webp" alt="" width="1280" height="818">
 
-      </div></div>
-    </div>
   </div>
   <div class="stage-panel">
     <div style="display:grid;gap:10px">
@@ -1027,11 +1027,11 @@ window.Concept = (() => {
     $$('#steps button').forEach((b, k) => {
       if (k === i) b.setAttribute('aria-current', 'step'); else b.removeAttribute('aria-current');
       const p = b.querySelector('.prog'); p.classList.remove('run'); void p.offsetWidth;
-      if (k === i && playing) p.classList.add('run');
+      if (k === i && playing && views().length > 1) p.classList.add('run');
     });
     opts.onView?.(i);
   }
-  function schedule() { clearTimeout(timer); if (!playing) return; timer = setTimeout(() => { showView((current + 1) % views().length); schedule(); }, 2800); }
+  function schedule() { clearTimeout(timer); if (!playing || views().length < 2) return; timer = setTimeout(() => { showView((current + 1) % views().length); schedule(); }, 2800); }
   function open(e, startAt = 0) {
     if (!stage || !stage.hidden) return;
     opener = e?.currentTarget || document.activeElement;
@@ -1047,6 +1047,7 @@ window.Concept = (() => {
     stage.hidden = false; if (!stage.classList.contains('inline')) document.body.style.overflow = 'hidden';
     requestAnimationFrame(() => requestAnimationFrame(() => stage.classList.add('in')));
     playing = true; $('#pauseBtn').textContent = 'Pause walkthrough'; $('#pauseBtn').setAttribute('aria-pressed', 'false');
+    $('#pauseBtn').hidden = views().length < 2; stage.classList.toggle('single', views().length < 2);
     showView(startAt); stage.scrollTop = 0; $('#stageTitle').focus({ preventScroll: true }); schedule();
   }
   function close() {
@@ -1186,6 +1187,7 @@ window.Concept = (() => {
     onSet: (w) => { if (w === 'from') { mA.x = st.from.x; mA.y = st.from.y; choose(nearest()); } plan(true); }, onClear: () => plan(true),
     onSwap: () => { mA.x = st.from.x; mA.y = st.from.y; choose(nearest()); plan(true); } });
   function plan(fly) {
+    if (!st.from) return;
     if (!st.sel) choose(nearest());
     const f = st.sel, R = RATE[st.veh], walkTo = CityMap.route(st.from.x, st.from.y, f.x, f.y, 'walk');
     const wmin = walkTo && walkTo.pts.length > 1 ? Math.max(1, Math.round(walkTo.time / 60)) : 1;
@@ -1298,11 +1300,11 @@ window.Concept = (() => {
   const yt = $('#yourTrip');
   new MutationObserver(() => { const c = $('#sCost').textContent, r = $('#sRide').textContent; if (c && c !== '–') { yt.hidden = false; yt.textContent = `Your trip on the map: ${r} ride, about ${c} pay as you go.`; } }).observe($('#sCost'), { childList: true, characterData: true, subtree: true });
   $$('.rbtn').forEach(b => b.addEventListener('click', () => { const r = $('.safe-rail'); r.scrollBy({ left: +b.dataset.d * Math.min(336, r.clientWidth * .8), behavior: reduced() ? 'auto' : 'smooth' }); }));
-  const vid = $('#b7vid'), vbtn = $('#vidBtn'); let vUser = reduced();
-  const vSet = play => { if (play) vid.play().catch(() => {}); else vid.pause(); vbtn.textContent = play ? 'Pause video' : 'Play video'; vbtn.setAttribute('aria-pressed', String(!play)); };
+  // Bolt 7 video plays by default, like on bolt.eu; a small corner control pauses it (WCAG 2.2.2), and it stops off screen
+  const vid = $('#b7vid'), vbtn = $('#vidBtn'); let vUser = false;
+  const vSet = play => { if (play) vid.play().catch(() => {}); else vid.pause(); vbtn.setAttribute('aria-label', play ? 'Pause video' : 'Play video'); vbtn.setAttribute('aria-pressed', String(!play)); };
   vbtn.addEventListener('click', () => { vUser = !vid.paused; vSet(vid.paused); });
-  new IntersectionObserver(([e]) => { if (e.isIntersecting && !vUser) { vid.preload = 'auto'; vSet(true); } else if (!e.isIntersecting) vid.pause(); }).observe(vid);
-  if (reduced()) vSet(false);
+  new IntersectionObserver(([e]) => { if (e.isIntersecting && !vUser) vSet(true); else if (!e.isIntersecting) vid.pause(); }).observe(vid);
   $('#seeRide').addEventListener('click', () => {
     $('#find').scrollIntoView({ behavior: reduced() ? 'auto' : 'smooth', block: 'start' });
     const go = () => { if (!$('#previewBtn').offsetParent) { const chip = $('#popular button'); if (chip) chip.click(); setTimeout(() => $('#previewBtn').click(), 1600); } else $('#previewBtn').click(); };
