@@ -5,6 +5,7 @@ Product design case study by Andrii (October 2026).
 - **Case study:** `index.html`
 - **Prototype:** `prototype/index.html` (Home), `prototype/rides.html`, `prototype/scooters.html`, `prototype/drive.html` (Car-sharing), `prototype/bolt7.html` (Bolt 7 launch page)
 - **First version, kept for comparison:** `v1/`
+- **Figma (tokens, components, Drive handoff):** https://www.figma.com/design/fLN2qOjjAF8B5WLSsILCOb/Bolt-web-concept-%C2%B7-components---handoff
 
 Turn on **Design notes** in the top bar of any prototype page to see why each part is built the way it is, how to build it and how to test it.
 
