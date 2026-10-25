@@ -4,7 +4,8 @@
 <meta charset="utf-8">
 <meta name="robots" content="noindex">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Bolt Scooters Concept</title>
+<title>Scooter rentals in Tallinn | Rent an electric scooter near you · Concept</title>
+<meta name="description" content="Find the nearest Bolt scooter in Tallinn, see the full price with the unlock fee, and learn the slow zones and parking rules before your first ride. Portfolio concept.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@700..900&family=Inter:wght@400..800&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <style>
@@ -185,7 +186,8 @@ footer .legal{margin-top:24px}
 .pin{display:none;position:absolute;z-index:20;width:26px;height:26px;border-radius:50%;background:var(--note);color:#fff;font:600 12px/26px var(--mono);text-align:center;border:2px solid var(--bg);cursor:pointer;box-shadow:0 4px 12px rgba(60,40,180,.35);padding:0}
 body.notes .pin{display:block}
 .has-pin{position:relative}
-.pin-pop{position:absolute;z-index:40;width:290px;max-width:calc(100vw - 32px);background:var(--surface);color:var(--ink);border:1px solid var(--note);border-radius:14px;padding:14px;font-size:14px;line-height:1.45;box-shadow:0 20px 40px -20px rgba(40,20,120,.4)}
+.pin-pop{position:absolute;z-index:40;width:340px;max-height:min(70vh,520px);overflow:auto;max-width:calc(100vw - 32px);background:var(--surface);color:var(--ink);border:1px solid var(--note);border-radius:14px;padding:14px;font-size:14px;line-height:1.45;box-shadow:0 20px 40px -20px rgba(40,20,120,.4)}
+.pin-pop p{margin:8px 0 0}.pin-pop p i{display:block;font:600 10.5px/1.2 var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-style:normal;margin-bottom:2px}
 .pin-pop b{display:block;font:600 11px/1.2 var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--note);margin-bottom:6px}
 
 @media (max-width:980px){
@@ -245,7 +247,7 @@ body.notes .pin{display:block}
 .swap{width:40px;height:40px;border-radius:50%;border:1px solid var(--line);background:var(--surface);cursor:pointer;display:grid;place-items:center;transition:transform var(--t-scene) var(--glide),border-color var(--t-norm)}
 .swap:hover{border-color:var(--ink)}
 .swap.spin{transform:rotate(180deg)}
-.list{position:absolute;z-index:10;left:0;right:0;top:calc(100% + 6px);background:#fff;border-radius:16px;box-shadow:0 20px 40px -18px rgba(10,30,20,.35),0 0 0 1px rgba(14,16,16,.08);padding:6px;margin:0;list-style:none;max-height:300px;overflow:auto}
+.list{position:relative;z-index:10;margin-top:6px;background:#fff;border-radius:16px;box-shadow:0 20px 40px -18px rgba(10,30,20,.35),0 0 0 1px rgba(14,16,16,.08);padding:6px;margin:6px 0 0;list-style:none;max-height:min(300px,46vh);overflow:auto}
 .list[hidden]{display:none}
 .list li{display:grid;grid-template-columns:28px minmax(0,1fr);gap:10px;align-items:center;padding:10px;border-radius:10px;cursor:pointer}
 .list li[aria-selected="true"],.list li:hover{background:var(--bg)}
@@ -330,6 +332,8 @@ h3{font-family:var(--display);font-weight:700;letter-spacing:-.02em;font-size:22
 .btn-primary:hover{background:#257A50;box-shadow:none}
 .btn-quiet{background:#E9ECEB;border:0;color:var(--ink)}
 .btn-quiet:hover{background:#DEE3E0}
+.btn-ghost-dark{background:rgba(255,255,255,.1);color:#fff}
+.btn-ghost-dark:hover{background:rgba(255,255,255,.18)}
 .night .btn-quiet{background:rgba(255,255,255,.12);color:#fff;border:0}
 
 .btn-light{background:#E7F8EE;color:#0E1010}
@@ -761,7 +765,11 @@ section.block{padding-block:clamp(112px,11vw,160px)}
         <div class="cta"><button class="btn btn-primary" type="button" data-handoff>Unlock a scooter in the app</button></div>
         <div class="row"><button class="btn btn-quiet" type="button" id="back">Change trip</button></div>
       </div>
-      <button class="pin" type="button" style="right:14px;top:14px" data-note="Rules before the first ride">The current page shows a stock photo and a download button. Here the visitor sees the scooters around them, the zones that change how they ride and park, and the three rules a first-timer worries about, explained by the display they will actually look at. Unlocking stays in the app. v2 puts this inside the bolt.eu product-page frame, so it reads as Bolt first and as a tool second.</button>
+      <button class="pin" type="button" style="right:14px;top:14px" data-note="How to rent, on the real map">Why: bolt.eu shows step 1 (‘find a scooter near you’) as a stock photo.
+Changed: step 1 is the map: the nearest scooter, its battery and the walk. Then the trip with the full price and the zones it crosses.
+Kept: unlocking stays in the app.
+A11y: the nearest scooter is chosen for keyboard users; the map is never the only way to an answer.
+Test: Rent a scooter clicks after the map was used vs. not.</button>
     </div>
     </div>
     <p class="live-note">Real Tallinn streets. Scooters, zones and prices are examples.</p>
@@ -778,8 +786,11 @@ section.block{padding-block:clamp(112px,11vw,160px)}
     </div>
   </section>
 
-  <section class="block" id="pricing">
-    <div class="wrap">
+  <section class="has-pin block" id="pricing">
+    <div class="wrap"><button class="pin" type="button" style="left:8px;top:-12px" data-note="Price with the unlock fee">Why: bolt.eu leads with ‘from €0.15 per minute’, the most attractive number.
+Changed: every plan shows the unlock fee and a 10-minute example, so the first bill matches the page (audit F6).
+Kept: the three plans and their tags.
+Test: CTA click-through on Scooters; guardrail price-related support contacts.</button>
       <div class="sec-head"><h2>Ride more, spend less</h2><p>Three ways to pay. Your own trip from the map above is priced the same way.</p><p class="your-trip" id="yourTrip" hidden></p></div>
       <div class="plans">
         <article class="plan"><span class="tag">Most flexible</span><h3>Pay as you go</h3><div class="amt">€0.15<small> / min</small></div><dl><dt>Unlock</dt><dd>€1.00</dd><dt>10-min trip</dt><dd>€2.50</dd></dl></article>
@@ -822,12 +833,14 @@ section.block{padding-block:clamp(112px,11vw,160px)}
     </div>
   </section>
 
-  <section class="b7s" aria-labelledby="b7sT">
+  <section class="has-pin b7s" aria-labelledby="b7sT"><button class="pin" type="button" style="left:14px;top:14px" data-note="Bolt 7 video: pause, then play a ride">Kept: Bolt&#x27;s own video and the line ‘the scooter that knows the rules’.
+Changed: a visible Pause control (WCAG 2.2.2), and See it on a ride plays a real trip on the handlebar display.
+Build: Video block, props: src, poster, cta. Video is 0.15 MB and stops off screen.</button>
     <video class="b7s-vid" id="b7vid" src="assets/img/sc-video.mp4" poster="assets/img/sc-video-poster.webp" muted loop playsinline preload="none" aria-hidden="true"></video>
     <div class="wrap b7s-in">
       <h2 id="b7sT">The scooter that knows the rules</h2>
       <p>Bolt 7 is the first shared scooter with a full-colour display on the handlebar: maps, zone guidance and where you may park.</p>
-      <div class="ctas"><button class="btn btn-primary" type="button" id="seeRide">See it on a ride</button><button class="btn btn-ghost-dark" type="button" id="vidBtn" aria-pressed="false">Pause video</button></div>
+      <div class="ctas"><button class="btn btn-primary" type="button" id="seeRide">See it on a ride</button><button class="btn btn-ghost-dark" type="button" id="vidBtn" aria-pressed="false">Pause video</button><a class="btn btn-ghost-dark" href="bolt7.html">About Bolt 7 <span aria-hidden="true">→</span></a></div>
       <p class="b7s-note">This page goes one step further: start a ride on the map and the handlebar display plays the trip, zone by zone.</p>
     </div>
   </section>
@@ -855,7 +868,7 @@ section.block{padding-block:clamp(112px,11vw,160px)}
 
   <section class="block" aria-labelledby="newsT">
     <div class="wrap">
-      <div class="news-head"><h2 id="newsT">Recent stories</h2><a class="btn btn-primary" href="https://bolt.eu/en/blog/" target="_blank" rel="noopener">View all <span class="ext" aria-hidden="true">↗</span></a></div>
+      <div class="news-head"><h2 id="newsT">Recent stories</h2><a class="btn btn-primary" href="https://bolt.eu/en/blog/" target="_blank" rel="noopener" aria-label="View all stories on the Bolt blog (opens bolt.eu)">View all <span class="ext" aria-hidden="true">↗</span></a></div>
       <div class="news2">
         <a class="feat photo" href="https://bolt.eu/en/blog/bolt-send-package-delivery/" target="_blank" rel="noopener">
           <span class="feat-img"><img src="assets/img/news-send.webp" alt="" loading="lazy" width="768" height="384"></span>
@@ -888,7 +901,7 @@ section.block{padding-block:clamp(112px,11vw,160px)}
       <div class="foot-id"><span class="wordmark foot-mark">Bolt</span><span class="region"><svg width="14" height="14" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 15s5-4.6 5-8.5A5 5 0 0 0 3 6.5C3 10.4 8 15 8 15z" fill="none" stroke="currentColor" stroke-width="1.6"/><circle cx="8" cy="6.5" r="1.8" fill="currentColor"/></svg>Tallinn, Estonia · English</span></div>
       <div class="foot-cta"><button class="btn btn-small foot-btn" type="button" data-handoff>Get Bolt</button><a class="btn btn-small foot-btn" href="https://bolt.eu/en/food/" target="_blank" rel="noopener">Get Bolt Food<span class="ext" aria-hidden="true">↗</span><span class="visually-hidden"> (opens bolt.eu)</span></a></div>
     </div>
-    <div class="legal"><span>Unofficial redesign concept for a portfolio by Andrii. Not affiliated with or endorsed by Bolt Technology OÜ. Illustrations are AI-generated; Bolt 7 and app images are Bolt’s own, from bolt.eu. Links marked ↗ open the real bolt.eu.</span><span class="mono">2026</span></div>
+    <div class="legal"><span>Unofficial redesign concept for a portfolio by Andrii. Not affiliated with or endorsed by Bolt Technology OÜ. Photos are Bolt’s own, from bolt.eu, used for a non-commercial portfolio. Illustrations, the ride-type car images and the Drive studio frames are AI-generated. Links marked ↗ open the real bolt.eu.</span><span class="mono">2026</span></div>
     
   </div>
 </footer>
@@ -969,15 +982,17 @@ window.Concept = (() => {
   /* design notes */
   let pop = null;
   const closePop = () => { pop?.remove(); pop = null; };
+  { const t = $('#notesToggle'), n = $$('.pin').length; if (t && n) t.textContent = `Design notes · ${n}`; }
   $('#notesToggle')?.addEventListener('click', e => { const on = document.body.classList.toggle('notes'); e.currentTarget.setAttribute('aria-pressed', String(on)); if (!on) closePop(); });
   $$('.pin').forEach((p, i) => {
-    const text = p.textContent.trim(); p.textContent = i + 1; p.setAttribute('aria-label', `Design note ${i + 1}: ${p.dataset.note}`);
+    const text = p.textContent.trim(); p.textContent = i + 1; p.setAttribute('aria-label', `Design note ${i + 1}: ${p.dataset.note}`); p.setAttribute('aria-expanded', 'false');
     p.addEventListener('click', e => {
       e.stopPropagation();
       if (pop && pop.dataset.for === String(i)) return closePop();
       closePop();
       pop = document.createElement('div'); pop.className = 'pin-pop'; pop.dataset.for = i; pop.setAttribute('role', 'note');
-      pop.innerHTML = '<b></b><span></span>'; pop.querySelector('b').textContent = p.dataset.note; pop.querySelector('span').textContent = text;
+      pop.innerHTML = '<b></b>'; pop.querySelector('b').textContent = p.dataset.note;
+      text.split(/\n+/).map(l => l.trim()).filter(Boolean).forEach(l => { const m = l.match(/^(Why|Kept|Changed|Build|Test|A11y|Data):\s*(.*)$/); const row = document.createElement('p'); if (m) { const k = document.createElement('i'); k.textContent = m[1]; row.append(k, document.createTextNode(m[2])); } else row.textContent = l; pop.appendChild(row); });
       p.parentElement.appendChild(pop);
       const pr = p.getBoundingClientRect(), par = p.parentElement.getBoundingClientRect();
       let left = pr.left - par.left + 34;

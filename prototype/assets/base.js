@@ -20,15 +20,17 @@ window.Concept = (() => {
   /* design notes */
   let pop = null;
   const closePop = () => { pop?.remove(); pop = null; };
+  { const t = $('#notesToggle'), n = $$('.pin').length; if (t && n) t.textContent = `Design notes · ${n}`; }
   $('#notesToggle')?.addEventListener('click', e => { const on = document.body.classList.toggle('notes'); e.currentTarget.setAttribute('aria-pressed', String(on)); if (!on) closePop(); });
   $$('.pin').forEach((p, i) => {
-    const text = p.textContent.trim(); p.textContent = i + 1; p.setAttribute('aria-label', `Design note ${i + 1}: ${p.dataset.note}`);
+    const text = p.textContent.trim(); p.textContent = i + 1; p.setAttribute('aria-label', `Design note ${i + 1}: ${p.dataset.note}`); p.setAttribute('aria-expanded', 'false');
     p.addEventListener('click', e => {
       e.stopPropagation();
       if (pop && pop.dataset.for === String(i)) return closePop();
       closePop();
       pop = document.createElement('div'); pop.className = 'pin-pop'; pop.dataset.for = i; pop.setAttribute('role', 'note');
-      pop.innerHTML = '<b></b><span></span>'; pop.querySelector('b').textContent = p.dataset.note; pop.querySelector('span').textContent = text;
+      pop.innerHTML = '<b></b>'; pop.querySelector('b').textContent = p.dataset.note;
+      text.split(/\n+/).map(l => l.trim()).filter(Boolean).forEach(l => { const m = l.match(/^(Why|Kept|Changed|Build|Test|A11y|Data):\s*(.*)$/); const row = document.createElement('p'); if (m) { const k = document.createElement('i'); k.textContent = m[1]; row.append(k, document.createTextNode(m[2])); } else row.textContent = l; pop.appendChild(row); });
       p.parentElement.appendChild(pop);
       const pr = p.getBoundingClientRect(), par = p.parentElement.getBoundingClientRect();
       let left = pr.left - par.left + 34;

@@ -1,0 +1,862 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Meet Bolt 7 | The scooter that knows the rules · Concept</title>
+<meta name="description" content="Bolt 7 is a shared scooter with a colour display on the handlebar and on-board AI: turn-by-turn directions, slow zones, pavement warnings and parking guidance. Portfolio concept of a launch page.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@700..900&family=Inter:wght@400..800&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* ===== shared base for Home and Rides (same system as Scooters and Drive) ===== */
+:root{
+  --bg:#F7F9F8; --surface:#FFFFFF; --ink:#0E1010; --muted:#5C6660; --line:#DCE3DE;
+  --night-ink:#ECEEED; --night-muted:#9AA39E; --night-line:#262B29; --night-surface:#171B1A;
+  --green:#2B8659; --green-text:#23744C; --green-ink:#FFFFFF; --green-soft:#E3F1E8; --green-bright:#6FD39C;
+  --warn:#B4541B; --note:#5B3FD6;
+  --font:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,"SF Mono",Menlo,monospace;
+  --r-m:16px; --r-l:28px; --pill:40px;
+  --glide:cubic-bezier(.16,1,.3,1); --press:cubic-bezier(.3,0,.5,1);
+  --t-fast:140ms; --t-norm:280ms; --t-scene:760ms;
+  color-scheme:light;
+}
+/* Single light look by design: bolt.eu has no dark theme; black bands are part of Bolt's own pattern. */
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.55 var(--font);overflow-x:hidden}
+img,svg{max-width:100%}
+a{color:inherit}
+button{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--green);outline-offset:3px;border-radius:8px}
+.wrap{max-width:1240px;margin:0 auto;padding-left:max(20px,env(safe-area-inset-left,0px));padding-right:max(20px,env(safe-area-inset-right,0px))}
+h1,h2,h3{font-family:var(--font);text-wrap:balance;margin:0}
+h1{font-weight:750;font-size:clamp(40px,5.6vw,72px);line-height:1.02;letter-spacing:-.03em}
+h2{font-weight:750;font-size:clamp(30px,3.6vw,46px);line-height:1.06;letter-spacing:-.03em}
+h3{font-weight:650;font-size:20px;line-height:1.25;letter-spacing:-.01em}
+p{margin:0}
+.eyebrow{font-weight:600;font-size:16px;color:var(--muted)}
+.night .eyebrow{color:var(--night-muted)}
+.mono{font-family:var(--mono);font-variant-numeric:tabular-nums}
+.muted{color:var(--muted)}
+.visually-hidden{position:absolute!important;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.night{background:var(--ink);color:var(--night-ink)}
+
+.concept{background:#000;color:#cfd5d2;font:500 12px/1.4 var(--mono);letter-spacing:.04em}
+.concept .wrap{display:flex;gap:16px;justify-content:space-between;align-items:center;padding-block:8px;flex-wrap:wrap}
+.concept-actions{display:flex;gap:8px;flex-wrap:wrap}
+.notes-toggle{display:inline-flex;gap:8px;align-items:center;background:none;border:1px solid currentColor;border-radius:999px;padding:4px 12px;cursor:pointer;font:inherit;color:inherit}
+.notes-toggle[aria-pressed="true"]{background:var(--note);border-color:var(--note);color:#fff}
+
+.site-head{position:sticky;top:env(safe-area-inset-top,0px);z-index:30;background:rgba(247,249,248,.96);border-bottom:1px solid var(--line)}
+@supports (backdrop-filter:blur(1px)){.site-head{background:rgba(247,249,248,.86);backdrop-filter:saturate(1.4) blur(12px)}}
+.site-head .wrap{display:flex;align-items:center;gap:28px;height:64px}
+.wordmark{font:800 24px/1 var(--font);letter-spacing:-.04em;text-decoration:none;display:flex;align-items:baseline;gap:8px}
+.wordmark small{font:500 10px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.intent{display:flex;gap:4px;margin:0;padding:0;list-style:none}
+.intent > li{position:relative}
+.intent-btn{background:none;border:0;padding:10px 14px;border-radius:var(--pill);font-weight:600;font-size:15px;cursor:pointer;display:flex;gap:6px;align-items:center;text-decoration:none;color:inherit}
+.intent-btn:hover,.intent-btn[aria-expanded="true"]{background:var(--green-soft)}
+.intent-btn[aria-current="true"]{color:var(--green-text)}
+.chev{width:10px;height:10px;transition:transform var(--t-norm) var(--glide)}
+.intent-btn[aria-expanded="true"] .chev{transform:rotate(180deg)}
+.mega{position:absolute;top:calc(100% + 8px);left:0;width:min(560px,90vw);background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:var(--r-m);box-shadow:0 24px 48px -24px rgba(10,30,20,.25);padding:10px;display:grid;grid-template-columns:repeat(3,1fr);gap:6px;
+  opacity:0;transform:translateY(-6px);pointer-events:none;transition:opacity var(--t-norm) var(--glide),transform var(--t-norm) var(--glide)}
+.mega.open{opacity:1;transform:none;pointer-events:auto}
+.mega a{display:grid;gap:4px;padding:14px;border-radius:12px;text-decoration:none}
+.mega a:hover{background:var(--bg)}
+.mega a b{font-weight:650}
+.mega a span{font-size:13px;color:var(--muted);line-height:1.35}
+.mega a[aria-current="page"]{background:var(--green-soft)}
+.mega a[aria-current="page"] b{color:var(--green-text)}
+.head-right{margin-left:auto;display:flex;gap:12px;align-items:center}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;border:0;border-radius:var(--pill);min-height:52px;padding:0 24px;font-weight:650;font-size:16px;cursor:pointer;text-decoration:none;
+  transition:transform var(--t-fast) var(--press),background-color var(--t-norm),box-shadow var(--t-norm)}
+.btn:active{transform:scale(.97)}
+.btn-primary{background:var(--green);color:var(--green-ink)}
+.btn-primary:hover{box-shadow:0 10px 24px -12px var(--green)}
+.btn-quiet{background:var(--surface);border:1px solid var(--line);color:var(--ink)}
+.night .btn-quiet{background:transparent;border-color:var(--night-line);color:var(--night-ink)}
+.btn-small{min-height:40px;padding:0 18px;font-size:14px}
+.menu-btn{display:none;background:none;border:1px solid var(--line);border-radius:var(--pill);width:44px;height:44px;cursor:pointer}
+
+section.block{padding-block:96px}
+.sec-head{display:grid;gap:14px;max-width:44rem;margin-bottom:40px}
+.sec-head p{font-size:18px;color:var(--muted)}
+.night .sec-head p{color:var(--night-muted)}
+.chip{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;border-radius:var(--pill);padding:4px 10px;background:var(--green-soft);color:#1F6B43;white-space:nowrap}
+.chip.out{background:var(--bg);color:var(--muted);border:1px solid var(--line)}
+
+.faq{max-width:52rem;display:grid}
+.faq details{border-bottom:1px solid var(--night-line)}
+.faq summary{cursor:pointer;list-style:none;padding:22px 0;font-weight:650;font-size:19px;display:flex;justify-content:space-between;gap:16px}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{content:"+";font:400 26px/1 var(--font);color:var(--night-muted);transition:transform var(--t-norm) var(--glide)}
+.faq details[open] summary::after{transform:rotate(45deg)}
+.faq details p{padding:0 0 22px;color:var(--night-muted);max-width:44rem}
+
+.final{background:var(--green-soft);border-radius:var(--r-l);padding:48px;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:32px;align-items:center}
+.final p{color:var(--muted)}
+footer{padding-block:64px 48px;background:var(--ink);color:var(--night-ink)}
+.foot{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:24px}
+.fcol summary{list-style:none;font:700 15px/1.2 var(--font);color:#fff;margin-bottom:18px;pointer-events:none}
+.fcol summary::-webkit-details-marker{display:none}
+.foot ul{gap:14px!important}
+.foot li{font-size:15px;color:var(--night-ink)}
+.foot-bar{display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap;margin-top:56px;padding-top:28px;border-top:1px solid var(--night-line)}
+.foot-id{display:flex;align-items:center;gap:20px;flex-wrap:wrap}
+.foot-mark{color:#fff;font-size:30px}
+.region{display:inline-flex;align-items:center;gap:6px;font-size:14px;color:var(--night-muted)}
+.foot-cta{display:flex;gap:10px;flex-wrap:wrap}
+.foot-btn{background:#16352A;color:#fff;border:0}
+.foot-btn:hover{background:#1D4636}
+footer .legal{margin-top:24px}
+@media (max-width:860px){
+  .foot{grid-template-columns:minmax(0,1fr);gap:0}
+  .fcol{border-bottom:1px solid var(--night-line)}
+  .fcol summary{pointer-events:auto;cursor:pointer;margin:0;padding:18px 0;display:flex;justify-content:space-between}
+  .fcol summary::after{content:"+";font-weight:400;color:var(--night-muted)}
+  .fcol[open] summary::after{content:"−"}
+  .fcol ul{padding-bottom:18px!important}
+  .foot-bar{margin-top:32px}
+}
+.foot ul{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.foot a{text-decoration:none}
+.foot a:hover{text-decoration:underline}
+.legal{margin-top:40px;padding-top:20px;border-top:1px solid var(--night-line);font-size:13px;color:var(--night-muted);display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+
+/* phone + handoff stage */
+.phone{--w:300px;width:var(--w);aspect-ratio:9/19.3;position:relative}
+.phone .bezel{position:absolute;inset:0;border-radius:calc(var(--w) * .16);background:#0B0F0D;padding:calc(var(--w) * .035);box-shadow:inset 0 0 0 2px #2b332e,inset 0 0 0 5px #0B0F0D,0 50px 80px -40px rgba(0,0,0,.45)}
+.screen{position:relative;width:100%;height:100%;border-radius:calc(var(--w) * .125);overflow:hidden;background:#F2F5F3;color:#121714;font-size:4.4cqi;container-type:inline-size}
+.island{position:absolute;top:3.6cqi;left:50%;width:30%;height:8cqi;border-radius:5cqi;background:#000;transform:translateX(-50%);z-index:5}
+.status{position:absolute;top:0;left:0;right:0;height:15cqi;display:flex;justify-content:space-between;align-items:center;padding:0 9.6cqi;font:600 4.4cqi/1 -apple-system,system-ui,sans-serif;z-index:4}
+.screen.dark .status,.screen:has(.view.on.v-dark) .status{color:#fff}
+.view{position:absolute;inset:0;transition:opacity 420ms var(--glide),transform 620ms var(--glide)}
+.view:not(.on){opacity:0;transform:translateX(18%) scale(.98);pointer-events:none}
+.view.left:not(.on){transform:translateX(-18%) scale(.98)}
+.view > svg.full{position:absolute;inset:0;width:100%;height:100%}
+.ph-card{position:absolute;left:3cqi;right:3cqi;bottom:3cqi;background:#fff;border-radius:8cqi;padding:5.2cqi;display:grid;grid-template-columns:minmax(0,1fr);gap:3.6cqi;box-shadow:0 -6px 24px rgba(0,0,0,.08)}
+.ph-row{display:flex;justify-content:space-between;align-items:center;gap:3cqi;min-width:0}
+.ph-row b{font-size:5.4cqi;white-space:nowrap}
+.ph-row span{font-size:4cqi;color:#5C6660}
+.ph-pill{font:600 4.2cqi/1 -apple-system,system-ui,sans-serif;background:#F2F5F3;border-radius:999px;padding:2.6cqi 3.7cqi;white-space:nowrap;flex-shrink:0}
+.ph-btn{background:#2B8659;color:#fff;border-radius:999px;padding:4.4cqi;text-align:center;font-weight:650;font-size:5cqi}
+
+.stage{position:fixed;inset:0;z-index:60;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);align-items:center;gap:56px;background:#F7F9F8;isolation:isolate;color:var(--ink);
+  padding:calc(24px + env(safe-area-inset-top,0px)) max(24px,env(safe-area-inset-right,0px)) calc(24px + env(safe-area-inset-bottom,0px)) max(24px,env(safe-area-inset-left,0px))}
+.stage[hidden]{display:none}
+.stage-phone{position:relative;justify-self:end;display:grid;place-items:center}
+.stage .phone{opacity:0;transform:translateY(40px) scale(.94);transition:opacity 500ms ease,transform var(--t-scene) var(--glide)}
+.stage.in .phone{opacity:1;transform:none}
+.stage-panel{position:relative;max-width:30rem;display:grid;gap:24px;opacity:0;transform:translateX(24px);transition:opacity 420ms ease 220ms,transform var(--t-scene) var(--glide) 160ms}
+.stage.in .stage-panel{opacity:1;transform:none}
+.stage-close{position:absolute;top:calc(20px + env(safe-area-inset-top,0px));right:max(20px,env(safe-area-inset-right,0px));z-index:2;width:44px;height:44px;border-radius:50%;border:1px solid var(--line);background:var(--surface);cursor:pointer;display:grid;place-items:center}
+.steps{list-style:none;margin:0;padding:0;display:grid;gap:4px;counter-reset:s}
+.steps li button{width:100%;text-align:left;background:none;border:0;border-radius:14px;padding:14px 16px;display:grid;grid-template-columns:32px 1fr;gap:4px 14px;cursor:pointer;position:relative;overflow:hidden}
+.steps li button::before{counter-increment:s;content:counter(s);grid-row:span 2;width:32px;height:32px;border-radius:50%;display:grid;place-items:center;font:600 14px/1 var(--mono);border:1.5px solid var(--line)}
+.steps li button b{font-weight:650;font-size:17px}
+.steps li button span{color:var(--muted);font-size:14px}
+.steps li button[aria-current="step"]{background:var(--surface)}
+.steps li button[aria-current="step"]::before{background:var(--green);border-color:var(--green);color:#fff}
+.steps li button .prog{position:absolute;left:0;bottom:0;height:2px;width:100%;background:var(--green);transform-origin:left;transform:scaleX(0)}
+.steps li button[aria-current="step"] .prog.run{animation:prog 2800ms linear forwards}
+@keyframes prog{to{transform:scaleX(1)}}
+.handoff{display:grid;grid-template-columns:auto minmax(0,1fr);gap:18px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:var(--r-m);padding:16px}
+.qr{width:112px;height:112px;border-radius:10px;background:#fff;padding:8px;border:1px solid var(--line)}
+.qr svg{width:100%;height:100%;display:block}
+.handoff-copy{display:grid;gap:10px;min-width:0}
+.send-or{font-size:14px;font-weight:600;margin:0}
+.send-link{justify-self:start}
+.stage.on-phone .send-link{display:none}
+.send{display:flex;gap:8px;flex-wrap:wrap}
+.send input{flex:1 1 140px;min-width:0;font:500 15px/1 var(--font);color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:var(--pill);padding:12px 16px}
+.send-msg{font-size:13px;color:var(--green-text);min-height:1.3em}
+.pause{background:none;border:0;padding:0;color:var(--muted);font:500 13px/1 var(--mono);cursor:pointer;text-decoration:underline;text-underline-offset:3px;justify-self:start}
+.open-app{display:none}
+.stage.on-phone .qr,.stage.on-phone .send,.stage.on-phone .send-msg,.stage.on-phone .send-or{display:none}
+.stage.on-phone .open-app{display:inline-flex;justify-self:start}
+.stage.on-phone .handoff{grid-template-columns:minmax(0,1fr);order:1}
+.stage.on-phone .steps{order:2}
+.stage.on-phone .pause{order:3}
+.stage.on-phone{padding-top:20px}
+.stage.inline{position:absolute;inset:0;min-height:100%;height:auto;align-items:start;align-content:start;overflow:visible;padding-top:var(--stage-top,24px)}
+.stage.inline .stage-close{position:absolute;top:calc(var(--stage-top,24px) - 8px)}
+
+.pin{display:none;position:absolute;z-index:20;width:26px;height:26px;border-radius:50%;background:var(--note);color:#fff;font:600 12px/26px var(--mono);text-align:center;border:2px solid var(--bg);cursor:pointer;box-shadow:0 4px 12px rgba(60,40,180,.35);padding:0}
+body.notes .pin{display:block}
+.has-pin{position:relative}
+.pin-pop{position:absolute;z-index:40;width:340px;max-height:min(70vh,520px);overflow:auto;max-width:calc(100vw - 32px);background:var(--surface);color:var(--ink);border:1px solid var(--note);border-radius:14px;padding:14px;font-size:14px;line-height:1.45;box-shadow:0 20px 40px -20px rgba(40,20,120,.4)}
+.pin-pop p{margin:8px 0 0}.pin-pop p i{display:block;font:600 10.5px/1.2 var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-style:normal;margin-bottom:2px}
+.pin-pop b{display:block;font:600 11px/1.2 var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--note);margin-bottom:6px}
+
+@media (max-width:980px){
+  .intent,.head-right .btn{display:none}
+  .menu-btn{display:grid;place-items:center}
+  .final{grid-template-columns:minmax(0,1fr);padding:32px}
+  .foot{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .stage{grid-template-columns:minmax(0,1fr);align-content:start;gap:20px;overflow-y:auto}
+  .stage-phone{justify-self:center}
+  .stage .phone{--w:230px}
+  .stage.on-phone .phone{--w:180px}
+  .stage-panel{max-width:none}
+}
+.site-head.menu-open .intent{display:flex;position:absolute;top:64px;left:0;right:0;flex-direction:column;background:var(--surface);border-bottom:1px solid var(--line);padding:12px max(20px,env(safe-area-inset-right,0px)) 16px max(20px,env(safe-area-inset-left,0px))}
+.site-head.menu-open .mega{position:static;width:auto;grid-template-columns:minmax(0,1fr);box-shadow:none;margin-top:6px}
+@media (max-width:560px){
+  section.block{padding-block:64px}
+  .foot{grid-template-columns:minmax(0,1fr)}
+  .handoff{grid-template-columns:minmax(0,1fr)}
+  .qr{display:none}
+}
+@media (prefers-reduced-motion:reduce){
+  /* movement off; fades, glows and counters stay */
+  .view:not(.on),.view.left:not(.on){transform:none}
+  .stage .phone,.stage.in .phone,.stage-panel,.stage.in .stage-panel,.mega{transform:none}
+}
+
+
+/* shared: external-link mark, help link */
+.ext{font-size:.8em;margin-left:3px;opacity:.6}
+.help-link{font-weight:600;font-size:15px;text-decoration:none;padding:10px 12px;border-radius:40px}
+.help-link:hover{text-decoration:underline}
+@media (max-width:980px){.help-link{display:none}}
+
+/* ===== v2 brand layer: look like bolt.eu first, improve second =====
+   bolt.eu signatures kept: very heavy tight headlines, centred home hero, rounded-rectangle buttons (green + grey),
+   white rounded cards on a light grey page, plain header with one dark pill, black product bands, 3D characters in green.
+   Bolt's own typeface and illustrations are not used: Inter Tight and original illustrations stand in for them. */
+:root{
+  --bg:#F5F7F6; --line:#E1E6E3;
+  --display:"Inter Tight","Inter Display","Inter",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --r-btn:14px; --r-card:24px; --dark:#24282C;
+  --card-shadow:0 1px 2px rgba(14,16,16,.04),0 12px 32px -18px rgba(14,16,16,.16);
+}
+body{background:var(--bg)}
+h1,h2{font-family:var(--display);font-weight:800;letter-spacing:-.015em}
+h1{font-size:clamp(44px,7.2vw,104px);line-height:1.02}
+h2{font-size:clamp(34px,4.8vw,64px);line-height:1.05}
+h3{font-family:var(--display);font-weight:700;letter-spacing:-.02em;font-size:22px}
+.eyebrow{font-size:15px}
+
+/* header: plain, like bolt.eu */
+.site-head{background:rgba(245,247,246,.92);border-bottom:0}
+@supports (backdrop-filter:blur(1px)){.site-head{background:rgba(245,247,246,.82)}}
+.site-head .wrap{height:76px}
+.wordmark{font:900 32px/1 var(--display);letter-spacing:-.02em}
+.intent-btn{font-size:16px;font-weight:600;padding:10px 12px;border-radius:12px}
+.intent-btn:hover,.intent-btn[aria-expanded="true"]{background:#E8ECEA}
+.mega{border-radius:20px;border:0;box-shadow:0 2px 6px rgba(14,16,16,.05),0 24px 48px -20px rgba(14,16,16,.22)}
+.head-right .help-link{font-weight:600}
+.btn-dark{background:var(--dark);color:#fff}
+.btn-dark:hover{background:#000}
+.head-right .btn{border-radius:999px}
+
+/* buttons: rounded rectangles, green or grey */
+.btn{border-radius:var(--r-btn);min-height:56px;padding:0 28px;font-weight:700;font-size:17px}
+.btn-small{min-height:44px;padding:0 18px;font-size:15px;border-radius:12px}
+.btn-primary:hover{background:#257A50;box-shadow:none}
+.btn-quiet{background:#E9ECEB;border:0;color:var(--ink)}
+.btn-quiet:hover{background:#DEE3E0}
+.btn-ghost-dark{background:rgba(255,255,255,.1);color:#fff}
+.btn-ghost-dark:hover{background:rgba(255,255,255,.18)}
+.night .btn-quiet{background:rgba(255,255,255,.12);color:#fff;border:0}
+
+.btn-light{background:#E7F8EE;color:#0E1010}
+.btn-light:hover{background:#fff}
+
+/* cards */
+.bcard{background:var(--surface);border-radius:var(--r-card);box-shadow:var(--card-shadow);overflow:hidden}
+
+/* sections */
+section.block{padding-block:clamp(112px,11vw,160px)}
+.sec-head{gap:20px;margin-bottom:72px}
+.sec-head p{max-width:38rem}
+.sec-head p{font-size:19px}
+.final{border-radius:var(--r-card);background:var(--surface);box-shadow:var(--card-shadow)}
+
+/* Explore apps: Food is a separate app, so it sits in a list of all Bolt apps instead of being the hero's second CTA */
+.apps{border:0;border-radius:28px;padding:28px;width:min(520px,calc(100vw - 32px));box-shadow:0 30px 80px -20px rgba(0,0,0,.35);background:var(--surface);color:var(--ink)}
+.apps::backdrop{background:rgba(14,16,16,.45)}
+.apps-head{display:flex;justify-content:space-between;align-items:center}
+.apps h2{font-size:36px}
+.apps-x{width:44px;height:44px;border-radius:50%;border:0;background:#E9ECEB;font-size:16px;cursor:pointer;color:var(--ink)}
+.apps-sub{color:var(--muted);margin:6px 0 18px}
+.apps-list{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.app{display:grid;grid-template-columns:64px minmax(0,1fr) auto;gap:14px;align-items:center;width:100%;padding:10px 14px 10px 10px;border:0;border-radius:18px;background:var(--bg);text-align:left;font:inherit;color:inherit;text-decoration:none;cursor:pointer;transition:background-color var(--t-norm)}
+.app:hover{background:#E9EEEB}
+.app img{width:64px;height:64px;border-radius:14px;object-fit:cover;object-position:center 30%;background:#fff}
+.app>span{display:grid;gap:3px;min-width:0}
+.app b{font-size:17px}
+.app>span>span{font-size:14px;color:var(--muted)}
+.app i{font-style:normal;font-weight:700;font-size:14px;color:var(--green-text);white-space:nowrap}
+.app[data-handoff] i{background:var(--green);color:#fff;padding:9px 16px;border-radius:12px}
+
+
+/* v2: bolt.eu product-page frame — headline left, character right, then the planner as one white card */
+.hero-s{padding:48px 0 32px}
+.hero-s .wrap{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);grid-template-areas:"head img" "body img";grid-template-rows:auto 1fr;column-gap:32px;align-items:center}
+.hs-head{grid-area:head;align-self:end}.hs-body{grid-area:body;align-self:start}.hs-img{grid-area:img}
+.hero-s h1{font-size:clamp(48px,6.4vw,92px)}
+.hero-s .sub{font-size:20px;line-height:1.45;color:var(--muted);max-width:30rem;margin-top:24px}
+.hs-head h1{max-width:11ch}
+.hero-s .ctas{justify-content:flex-start}
+.hero-s img{width:100%;max-width:600px;height:auto;justify-self:end;background:#fff;border-radius:32px;box-shadow:var(--card-shadow);padding:12px 8px 0}
+.facts{display:flex;gap:28px;flex-wrap:wrap;margin-top:34px;padding:0;list-style:none}
+.facts li{display:grid;gap:2px}
+.facts b{font:800 28px/1 var(--display);letter-spacing:-.015em}
+.facts span{font-size:14px;color:var(--muted)}
+.tag{justify-self:start;font-size:12px;font-weight:700;color:var(--green-text);background:#E6F4EC;padding:5px 9px;border-radius:999px}
+
+.qa{background:var(--surface);border-radius:var(--r-card);box-shadow:var(--card-shadow);padding:40px}
+.qa h2{font-size:clamp(32px,3.4vw,46px);margin:8px 0 12px}
+.faq.light details{border-color:var(--line)}
+.faq.light summary::after{color:var(--muted)}
+.faq.light details p{color:var(--muted)}
+
+/* news and stories (home, scooters) */
+.news-head{display:flex;justify-content:space-between;align-items:end;gap:20px;margin-bottom:40px;flex-wrap:wrap}
+.news2{display:grid;grid-template-columns:minmax(0,1.45fr) minmax(0,1fr);gap:28px}
+.feat{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);background:var(--surface);border-radius:var(--r-card);box-shadow:var(--card-shadow);overflow:hidden;color:inherit;text-decoration:none}
+.feat-img{background:#fff;display:flex;align-items:flex-end;justify-content:center;overflow:hidden;padding:16px 16px 0}
+.feat-img img{width:100%;height:auto;transition:transform 900ms var(--glide)}
+.feat:hover .feat-img img{transform:scale(1.04)}
+.feat-t{padding:32px;display:grid;gap:14px;align-content:center}
+.feat-meta{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.feat b{font:800 28px/1.12 var(--display);letter-spacing:-.025em}
+.feat-x{color:var(--muted)}
+.nlist{list-style:none;margin:0;padding:8px 24px;background:var(--surface);border-radius:var(--r-card);box-shadow:var(--card-shadow)}
+.nlist li+li{border-top:1px solid var(--line)}
+.nlist a{display:grid;gap:6px;padding:18px 0;color:inherit;text-decoration:none}
+.nlist a:hover b{text-decoration:underline}
+.nlist b{font-size:17px;line-height:1.3}
+.pt{justify-self:start;font-size:12px;font-weight:700;padding:5px 9px;border-radius:999px}
+.pt.c1{background:#E6F4EC;color:var(--green-text)}.pt.c2{background:#E8EEFF;color:#2747B8}.pt.c3{background:#FFF0E0;color:#9A4A0C}.pt.c4{background:#EEF0EF;color:#3B4440}
+
+.feat.photo .feat-img{padding:0;background:none}
+.feat.photo .feat-img img{height:100%;object-fit:cover}
+.nlist.thumbs a{grid-template-columns:72px minmax(0,1fr);align-items:center;gap:16px}
+.nlist.thumbs img{width:72px;height:72px;border-radius:14px;object-fit:cover}
+.nlist.thumbs a>span{display:grid;gap:4px}
+
+/* map module as a Bolt card, not a full-bleed app */
+.mapcard{position:relative;border-radius:28px;overflow:hidden;background:#EEF1EE;box-shadow:var(--card-shadow)}
+.ctas{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:34px}
+.planner{padding-bottom:8px}
+.mapstage.mapcard{height:clamp(640px,calc(100vh - 120px),780px);scroll-margin-top:92px}
+.mapcard .panel{top:20px;left:20px;bottom:auto;width:384px;max-height:calc(100% - 40px);border-radius:22px}
+.mapcard .panel h2{font-size:44px;letter-spacing:-.015em}
+.live-note{text-align:center;font-size:14px;color:var(--muted);margin-top:16px}
+.final-c{text-align:center;padding:24px 0 32px}
+.final-c p{font-size:20px;color:var(--muted);margin-top:18px}
+.mapcard .attrib{top:auto;bottom:12px;left:auto;right:76px}
+@media (max-width:860px){
+  h1{font-size:clamp(40px,11vw,60px)}
+  .site-head .wrap{height:64px}
+  .wordmark{font-size:28px}
+  section.block{padding-block:96px}
+  .sec-head{margin-bottom:48px}
+  .hero-s{padding:32px 0 20px}
+  .hero-s .wrap{grid-template-columns:minmax(0,1fr);grid-template-areas:"head" "img" "body";grid-template-rows:auto;row-gap:0}
+  .hs-head h1{max-width:none}
+  .hero-s img{justify-self:stretch;max-width:520px;margin:24px auto 0;border-radius:24px}
+  .hero-s .sub{font-size:18px;margin-top:16px}
+  .facts{gap:20px;margin-top:26px}.facts b{font-size:24px}
+  .ctas{margin-top:26px}
+  .news2,.feat{grid-template-columns:minmax(0,1fr)}
+  .planner-wrap{padding-left:12px;padding-right:12px}
+  .mapstage.mapcard{height:auto;background:var(--surface)}
+  .mapcard .panel{margin:0;border-radius:0;box-shadow:none;width:auto;left:auto;top:auto;max-height:none}
+  .mapcard .panel h2{font-size:36px}
+  .mapcard .attrib{bottom:auto;top:calc(clamp(340px,56vh,560px) - 34px);right:auto;left:12px}
+}
+
+/* handoff stage: fit any window height (the phone and the QR were cut off on shorter laptop screens) */
+.stage{overflow-y:auto;align-items:safe center}
+@media (min-width:981px){.stage .phone{--w:clamp(200px,calc((100dvh - 96px) * 9 / 19.3),300px)}}
+.stage-panel h2{font-size:clamp(34px,min(4.2vw,6.4vh),58px);line-height:1}
+.stage-panel{gap:20px}
+@media (max-height:760px) and (min-width:981px){.stage-panel .steps span{display:none}}
+
+/* Bolt 7 launch page: a campaign built only from the site's own components (dark band, video block, fact cards, final CTA),
+   plus one scroll story where the handlebar display walks through a ride. Answers audit F3: "Learn more" finally lands on Bolt 7. */
+.l-hero{position:relative;background:#000;color:#fff;min-height:min(780px,calc(100svh - 76px));display:grid;align-items:center;overflow:hidden;isolation:isolate}
+.l-hero video{position:absolute;top:0;left:42%;width:64%;height:100%;object-fit:cover;z-index:-2}
+.l-hero::after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(90deg,#000 0%,#000 42%,rgba(0,0,0,.55) 52%,rgba(0,0,0,0) 66%),linear-gradient(0deg,rgba(0,0,0,.6) 0%,rgba(0,0,0,0) 30%)}
+.l-hero .wrap{width:100%;padding-block:96px 72px;display:grid;gap:22px}
+.l-hero .eyebrow{color:#9FE3BE}
+.l-hero h1{font-size:clamp(56px,8.4vw,128px);line-height:.95;letter-spacing:-.025em;max-width:9ch}
+.l-hero .sub{font-size:clamp(18px,1.6vw,21px);line-height:1.5;color:#E1E7E3;max-width:30rem}
+.l-hero .ctas{justify-content:flex-start;margin-top:6px}
+.l-hero .meta{display:flex;gap:16px;align-items:center;flex-wrap:wrap;font-size:14px;color:#B9C1BD}
+.vid-btn{display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:0 16px;border-radius:999px;border:1px solid rgba(255,255,255,.35);background:rgba(0,0,0,.25);color:#fff;font:600 14px/1 var(--font);cursor:pointer}
+.vid-btn:hover{background:rgba(0,0,0,.45)}
+
+/* scroll story */
+.story{background:#0B0D0D;color:#F2F5F3}
+.story .sec-head p{color:#B9C1BD}
+.story-grid{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);gap:64px;align-items:start}
+.story-sticky{position:sticky;top:calc(50vh - 190px);height:380px;display:grid;place-items:center}
+.story-steps{list-style:none;margin:0;padding:0}
+.story-steps li{min-height:72vh;display:grid;align-content:center;gap:14px;opacity:.38;transition:opacity 400ms var(--glide)}
+.story-steps li:first-child{min-height:56vh}
+.story-steps li.on{opacity:1}
+.story-steps .k{font:500 13px/1 var(--mono);letter-spacing:.06em;text-transform:uppercase;color:#6FD39C}
+.story-steps h3{font-size:clamp(28px,3vw,40px);line-height:1.08;letter-spacing:-.02em}
+.story-steps p{color:#C9D1CD;font-size:18px;line-height:1.55;max-width:30rem}
+/* the handlebar (shared with Scooters) */
+.handle{position:relative;width:min(560px,100%);height:200px}
+.handle .stem{position:absolute;left:4%;right:4%;top:66px;height:24px;border-radius:12px;background:linear-gradient(#3A4240,#1E2422);box-shadow:0 10px 24px -8px rgba(0,0,0,.5)}
+.handle .grip{position:absolute;top:57px;width:15%;height:42px;border-radius:21px;background:repeating-linear-gradient(90deg,#121615 0 5px,#1B201E 5px 9px)}
+.handle .grip.l{left:0}.handle .grip.r{right:0}
+.handle .lever{position:absolute;top:94px;width:16%;height:8px;border-radius:4px;background:#4A5350}
+.handle .lever.l{left:9%;transform:rotate(-7deg)}.handle .lever.r{right:9%;transform:rotate(7deg)}
+.hb-screen{position:absolute;left:50%;top:0;transform:translateX(-50%);width:64%;height:190px;border-radius:28px;background:#0B0E0D;border:3px solid #2A3230;box-shadow:0 30px 60px -20px rgba(0,0,0,.8),0 0 0 1px rgba(255,255,255,.04),0 0 80px -10px rgba(61,220,132,.18);color:#fff;padding:16px 20px;display:grid;grid-template-rows:auto 1fr auto;gap:6px;overflow:hidden}
+.scr-top{display:flex;justify-content:space-between;align-items:center;font:600 12px/1 var(--font);color:#9AA59F}
+.scr-top .bt{display:inline-flex;gap:6px;align-items:center;color:#fff}
+.scr-top .bt i{width:22px;height:11px;border:1.5px solid #fff;border-radius:3px;position:relative}
+.scr-top .bt i::after{content:"";position:absolute;left:1.5px;top:1.5px;bottom:1.5px;width:calc((100% - 3px) * .72);background:#3DDC84;border-radius:1px}
+.scr-mid{display:grid;grid-template-columns:auto 1fr;gap:16px;align-items:center}
+.limit{width:58px;height:58px;border-radius:50%;background:#fff;border:6px solid #E5484D;color:#0B0E0D;display:grid;place-items:center;font:800 21px/1 var(--font);font-variant-numeric:tabular-nums;transition:transform 300ms var(--glide)}
+.limit.pulse{transform:scale(1.15)}
+.spd{display:flex;align-items:baseline;gap:6px}
+.spd b{font:800 56px/1 var(--font);letter-spacing:-.02em;font-variant-numeric:tabular-nums;transition:color 300ms ease}
+.spd span{font:600 13px/1 var(--font);color:#9AA59F}
+.turn{display:grid;grid-template-columns:30px minmax(0,1fr);gap:10px;align-items:center;font-size:13px}
+.turn svg{width:30px;height:30px;color:#3DDC84;transition:transform 300ms var(--glide),color 300ms ease}
+.turn b{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:650;font-size:14px}
+.turn span{color:#9AA59F}
+.zonepill{display:none;border-radius:999px;padding:4px 8px;font:700 11px/1 var(--font)}
+.hb-screen[data-s="slow"] .zonepill{display:inline-block;background:#F5A524;color:#0B0E0D}
+.hb-screen[data-s="pavement"]{border-color:#E5484D;box-shadow:0 30px 60px -20px rgba(0,0,0,.8),0 0 80px -10px rgba(229,72,77,.35)}
+.hb-screen[data-s="pavement"] .zonepill{display:inline-block;background:#E5484D;color:#fff}
+.hb-screen[data-s="pavement"] .turn svg{color:#E5484D}
+.hb-screen[data-s="pavement"] .spd b{color:#FFB3B5}
+.hb-screen[data-s="park"] .zonepill{display:inline-block;background:#3DDC84;color:#0B0E0D}
+.story-note{margin-top:28px;font-size:14px;color:#8E9993;text-align:center}
+
+/* facts */
+.facts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px}
+.fact{background:var(--surface);border-radius:var(--r-card);box-shadow:var(--card-shadow);padding:32px;display:grid;gap:10px;align-content:start;min-height:240px}
+.fact b{font:800 clamp(48px,5vw,72px)/1 var(--display);letter-spacing:-.03em;color:var(--ink)}
+.fact h3{font-size:22px}
+.fact p{color:var(--muted);font-size:16px;line-height:1.55}
+.fact.green{background:#217E53;color:#fff}.fact.green b,.fact.green h3{color:#fff}.fact.green p{color:#fff}
+@supports (animation-timeline: view()){
+  @media (prefers-reduced-motion:no-preference){
+    .fact{animation:rise linear both;animation-timeline:view();animation-range:entry 0% entry 60%}
+    @keyframes rise{from{opacity:0;transform:translateY(40px)}to{opacity:1;transform:none}}
+  }
+}
+.photo-band{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:48px;align-items:center}
+.photo-band img{width:100%;height:auto;border-radius:var(--r-card)}
+.photo-band blockquote{margin:0;display:grid;gap:18px}
+.photo-band blockquote p{font:700 clamp(26px,2.8vw,38px)/1.18 var(--display);letter-spacing:-.02em}
+.photo-band cite{font-style:normal;color:var(--muted);font-size:15px}
+.photo-band cite a{color:var(--green-text)}
+
+/* where */
+.where{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px}
+.place{background:var(--surface);border-radius:var(--r-card);box-shadow:var(--card-shadow);padding:28px;display:grid;gap:8px;align-content:start}
+.place .flag{font:500 13px/1 var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--green-text)}
+.place p{color:var(--muted)}
+.here{margin-top:20px;background:var(--green-soft);border-radius:var(--r-card);padding:32px;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:24px;align-items:center}
+.here p{color:#2D3532;margin-top:8px;max-width:40rem}
+.src{margin-top:28px;font-size:14px;color:var(--muted);max-width:60rem}
+.src a{color:var(--green-text)}
+
+@media (max-width:860px){
+  .story-grid{grid-template-columns:minmax(0,1fr);gap:0}
+  .story-sticky{top:76px;height:auto;padding:16px 0 24px;background:linear-gradient(#0B0D0D 80%,rgba(11,13,13,0));z-index:2}
+  .handle{height:170px}.hb-screen{width:78%;height:160px;padding:12px 14px;border-radius:22px}.spd b{font-size:44px}.limit{width:48px;height:48px;font-size:18px;border-width:5px}
+  .handle .stem{top:56px}.handle .grip{top:48px}.handle .lever{top:82px}
+  .story-steps li,.story-steps li:first-child{min-height:58vh}
+  .facts,.where{grid-template-columns:minmax(0,1fr)}
+  .fact{min-height:0}
+  .photo-band{grid-template-columns:minmax(0,1fr);gap:28px}
+  .here{grid-template-columns:minmax(0,1fr)}
+  .l-hero{display:block;min-height:0}
+  .l-hero video{position:relative;display:block;left:auto;width:100%;height:auto;aspect-ratio:16/10}
+  .l-hero::after{background:linear-gradient(0deg,#000 0%,rgba(0,0,0,0) 22%);bottom:auto;height:calc(100vw * .625)}
+  .l-hero .wrap{padding-block:8px 56px}
+}
+@media (prefers-reduced-motion:reduce){.story-steps li{opacity:1;transition:none}.limit,.turn svg{transition:none}}
+</style>
+</head>
+<body>
+
+<div class="concept">
+  <div class="wrap">
+    <span>Portfolio concept by Andrii · not affiliated with Bolt · a launch page built from Bolt's public Bolt 7 announcement</span>
+    <span class="concept-actions"><a class="notes-toggle" href="../index.html" style="text-decoration:none">← Case study</a> <button class="notes-toggle" type="button" id="notesToggle" aria-pressed="false">Design notes</button></span>
+  </div>
+</div>
+
+<header class="site-head" id="siteHead">
+  <div class="wrap has-pin">
+    <a class="wordmark" href="index.html" aria-label="Bolt concept home">Bolt <small>concept</small></a>
+    <nav aria-label="Main">
+      <ul class="intent" id="intentNav">
+        <li>
+          <button class="intent-btn" type="button" aria-expanded="false" aria-controls="megaGo">Get around
+            <svg class="chev" viewBox="0 0 10 10" aria-hidden="true"><path d="M1 3l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.6"/></svg></button>
+          <div class="mega" id="megaGo">
+            <a href="rides.html"><b>Rides</b><span>A driver picks you up in minutes</span></a>
+            <a href="scooters.html"><b>Scooters &amp; e-bikes</b><span>Grab one on the next corner</span></a>
+            <a href="drive.html"><b>Car-sharing</b><span>Drive yourself, by the minute or day</span></a>
+          </div>
+        </li>
+        <li>
+          <button class="intent-btn" type="button" aria-expanded="false" aria-controls="megaDel">Get delivered
+            <svg class="chev" viewBox="0 0 10 10" aria-hidden="true"><path d="M1 3l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.6"/></svg></button>
+          <div class="mega" id="megaDel">
+            <a href="https://bolt.eu/en/food/" target="_blank" rel="noopener"><b>Food<span class="ext" aria-hidden="true">↗</span><span class="visually-hidden"> (opens bolt.eu)</span></b><span>Order in your browser or the app</span></a>
+            <a href="https://bolt.eu/en/food/market/" target="_blank" rel="noopener"><b>Groceries<span class="ext" aria-hidden="true">↗</span><span class="visually-hidden"> (opens bolt.eu)</span></b><span>Essentials in minutes</span></a>
+            <a href="https://bolt.eu/en/rides/features/bolt-send/" target="_blank" rel="noopener"><b>Parcels<span class="ext" aria-hidden="true">↗</span><span class="visually-hidden"> (opens bolt.eu)</span></b><span>Send something across town</span></a>
+          </div>
+        </li>
+        <li><a class="intent-btn" href="index.html#earn">Earn</a></li>
+        <li><a class="intent-btn" href="index.html#business">For business</a></li>
+      </ul>
+    </nav>
+    <div class="head-right">
+      <a class="help-link" href="https://bolt.eu/en/support/" target="_blank" rel="noopener">Help<span class="ext" aria-hidden="true">↗</span><span class="visually-hidden"> (opens bolt.eu)</span></a>
+      <button class="btn btn-dark btn-small" type="button" data-handoff>Get the app</button>
+      <button class="menu-btn" type="button" id="menuBtn" aria-expanded="false" aria-controls="intentNav" aria-label="Open menu">
+        <svg width="18" height="14" viewBox="0 0 18 14" aria-hidden="true"><path d="M0 1h18M0 7h18M0 13h18" stroke="currentColor" stroke-width="1.8"/></svg></button>
+    </div>
+    
+  </div>
+</header>
+
+<main id="top">
+  <section class="l-hero has-pin" aria-labelledby="h1"><button class="pin" type="button" style="right:16px;top:16px" data-note="A campaign page from the same parts">Why: on bolt.eu the Bolt 7 promo's “Learn more” opens the Bolt 6 story (audit F3). A launch needs a page of its own.
+Kept: Bolt's video, Bolt's facts, the black product band, the site header and footer.
+Build: no new components: hero (dark variant), video block with pause, fact cards, final CTA. The only new piece is the scroll story, which reuses the handlebar display from Scooters.
+Test: Rent a scooter clicks from the launch page vs. the Scooters page; scroll depth through the story.</button>
+    <video id="heroVid" src="assets/img/sc-video.mp4" poster="assets/img/b7-poster.webp" muted loop playsinline preload="metadata" aria-hidden="true"></video>
+    <div class="wrap">
+      <p class="eyebrow">New on the streets</p>
+      <h1 id="h1">Meet Bolt&nbsp;7</h1>
+      <p class="sub">The scooter that knows the rules. A colour display on the handlebar shows the way, the slow zones and where to park, and on-board AI helps keep riders off the pavement.</p>
+      <div class="ctas"><button class="btn btn-primary" type="button" data-handoff>Rent a scooter</button><a class="btn btn-ghost-dark" href="#story">See one ride <span aria-hidden="true">↓</span></a></div>
+      <div class="meta"><button class="vid-btn" type="button" id="vidBtn" aria-pressed="false">Pause video</button><span>Rolling out first in Germany, Belgium and Switzerland.</span></div>
+    </div>
+  </section>
+
+  <section class="story block" id="story" aria-labelledby="storyT">
+    <div class="wrap">
+      <div class="sec-head"><p class="eyebrow" style="color:#9FE3BE">One ride, four moments</p><h2 id="storyT">The rules, on the handlebar, while you ride.</h2><p>Earlier scooters explained the rules in the app before the ride and fined you after it. Bolt 7 shows them at the moment they matter.</p></div>
+      <div class="story-grid has-pin"><button class="pin" type="button" style="left:8px;top:-12px" data-note="Scroll story">Why: the four AI and display features are hard to picture from a list.
+Changed: the handlebar display stays in view and changes as each moment scrolls past: route, slow zone, pavement, parking.
+Build: IntersectionObserver sets data-s on the display; text stays in the page, the display is decorative (aria-hidden), so screen-reader users get the same story as plain text.
+A11y: with reduced motion all steps are fully visible and nothing animates.</button>
+        <div class="story-sticky" aria-hidden="true">
+          <div class="handle">
+            <span class="lever l"></span><span class="lever r"></span><span class="stem"></span><span class="grip l"></span><span class="grip r"></span>
+            <div class="hb-screen" id="scr" data-s="route">
+              <div class="scr-top"><span id="sClock">4:12 · €1.63</span><span class="zonepill" id="sPill">SLOW ZONE</span><span class="bt"><i></i><span>72%</span></span></div>
+              <div class="scr-mid"><div class="limit" id="sLimit">25</div><div class="spd"><b id="sSpd">18</b><span>km/h</span></div></div>
+              <div class="turn"><svg viewBox="0 0 30 30" id="sArrow"><path d="M15 25V8M15 8l-6 6M15 8l6 6" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg><div><b id="sTurn">Turn right in 120 m</b><span id="sSub">Then 600 m to your destination</span></div></div>
+            </div>
+          </div>
+        </div>
+        <ol class="story-steps" id="storySteps">
+          <li data-s="route"><span class="k">01 · Navigation</span><h3>Eyes up, not on your phone.</h3><p>Turn-by-turn directions on a full-colour screen, with your speed and the limit for the street you are on.</p></li>
+          <li data-s="slow"><span class="k">02 · Slow zones</span><h3>It knows where to slow down.</h3><p>Entering a pedestrian or slow zone? The display says so and the limit drops before you get there, not after a warning email.</p></li>
+          <li data-s="pavement"><span class="k">03 · On-board AI</span><h3>Pavement is for people.</h3><p>If the scooter notices it is on the pavement, it warns you first. Keep going, and it slows down by itself.</p></li>
+          <li data-s="park"><span class="k">04 · Parking</span><h3>Park where it is allowed.</h3><p>The display highlights parking spots and racks near the end of your trip, so the ride ends tidy and without a fine.</p></li>
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" aria-labelledby="factsT">
+    <div class="wrap">
+      <div class="sec-head"><h2 id="factsT">Built for the street, not the showroom.</h2><p>What changed from the scooters you may have ridden before.</p></div>
+      <div class="facts">
+        <article class="fact green"><b>4×</b><h3>Brighter headlight</h3><p>Four times stronger than the previous model, for seeing and being seen.</p></article>
+        <article class="fact"><b>15%+</b><h3>More durable</h3><p>Simpler parts break less often and are faster to repair, so more scooters stay on the street.</p></article>
+        <article class="fact"><b>22k+</b><h3>On the way</h3><p>More than 22,000 Bolt 7 scooters are being deployed across Germany, Belgium and Switzerland.</p></article>
+        <article class="fact"><h3>Smoother brakes</h3><p>Recalibrated braking that feels calmer and more controlled.</p></article>
+        <article class="fact"><h3>A warning on steep hills</h3><p>An audible alert when you go too fast downhill.</p></article>
+        <article class="fact"><h3>Fits more riders</h3><p>A slightly lower handlebar makes it comfortable for more people.</p></article>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" style="padding-top:0" aria-label="From the people who built it">
+    <div class="wrap photo-band">
+      <img src="assets/img/b7.webp" alt="The Bolt 7 handlebar: a colour display shows the map with a parking icon and the message Can park here" width="1600" height="900" loading="lazy">
+      <blockquote>
+        <p>“This approach moves compliance to real-time guidance.”</p>
+        <cite>Ardo Reinsalu, Director of Vehicles at Bolt, in <a href="https://micromobility.io/news/bolt-rolls-out-new-scooter-with-built-in-display-and-onboard-ai" target="_blank" rel="noopener">Micromobility.io <span aria-hidden="true">↗</span></a>. Image: Bolt, from bolt.eu.</cite>
+      </blockquote>
+    </div>
+  </section>
+
+  <section class="block" style="padding-top:0" aria-labelledby="whereT">
+    <div class="wrap">
+      <div class="sec-head"><h2 id="whereT">Where to ride it first</h2><p>Bolt 7 replaces older scooters city by city.</p></div>
+      <div class="where">
+        <article class="place"><span class="flag">Belgium</span><h3>Brussels</h3><p>1,200 Bolt 7 scooters first; all 4,000 Bolt scooters in the city will be replaced over time.</p></article>
+        <article class="place"><span class="flag">Germany</span><h3>German cities</h3><p>Among the first markets to get the new scooter.</p></article>
+        <article class="place"><span class="flag">Switzerland</span><h3>Swiss cities</h3><p>Rolling out alongside Germany and Belgium.</p></article>
+      </div>
+      <div class="here">
+        <div><h3>Not in your city yet?</h3><p>In Tallinn, today's Bolt scooters already show slow zones and green parking in the app. See the nearest one, the full price and the rules for your own trip.</p></div>
+        <a class="btn btn-primary" href="scooters.html#how">Ride in Tallinn today</a>
+      </div>
+      <p class="src">Facts from Bolt's public announcement and press coverage, April 2026: <a href="https://micromobility.io/news/bolt-rolls-out-new-scooter-with-built-in-display-and-onboard-ai" target="_blank" rel="noopener">Micromobility.io <span aria-hidden="true">↗</span></a>, <a href="https://newmobility.news/en/2026/04/23/bolt-is-rolling-out-1200-new-e-scooters-with-built-in-screens-and-navigation-in-brussels/" target="_blank" rel="noopener">New Mobility <span aria-hidden="true">↗</span></a>. Street names, speeds and prices on the display are examples.</p>
+    </div>
+  </section>
+
+  <section class="block" style="padding-top:24px">
+    <div class="wrap">
+      <div class="final-c">
+        <h2>Your next ride knows the way.</h2>
+        <p>Get Bolt, scan the code on the handlebar, and ride.</p>
+        <div class="ctas"><button class="btn btn-primary" type="button" data-handoff>Get Bolt</button><button class="btn btn-quiet apps-open" type="button" aria-haspopup="dialog">Explore apps</button></div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<dialog class="apps" id="apps" aria-labelledby="appsTitle">
+  <div class="apps-head"><h2 id="appsTitle">Bolt apps</h2><button class="apps-x" type="button" aria-label="Close">✕</button></div>
+  <p class="apps-sub">One account works in all of them.</p>
+  <ul class="apps-list">
+    <li><button type="button" class="app" data-handoff><img loading="lazy" decoding="async" src="assets/img/ill-ride.webp" alt=""><span><b>Bolt</b><span>Rides, scooters, car-sharing and parcels</span></span><i>Get</i></button></li>
+    <li><a class="app" href="https://bolt.eu/en/food/" target="_blank" rel="noopener"><img loading="lazy" decoding="async" src="assets/img/ill-food.webp" alt=""><span><b>Bolt Food</b><span>Restaurants and groceries, delivered</span></span><i>bolt.eu <span aria-hidden="true">↗</span></i></a></li>
+    <li><a class="app" href="https://bolt.eu/en/driver/" target="_blank" rel="noopener"><img loading="lazy" decoding="async" src="assets/img/ill-driver.webp" alt=""><span><b>Bolt Driver</b><span>Drive and earn on your own schedule</span></span><i>bolt.eu <span aria-hidden="true">↗</span></i></a></li>
+    <li><a class="app" href="https://bolt.eu/en/business/" target="_blank" rel="noopener"><img loading="lazy" decoding="async" src="assets/img/ill-business.webp" alt=""><span><b>Bolt Business</b><span>Rides and meals for your team, one invoice</span></span><i>bolt.eu <span aria-hidden="true">↗</span></i></a></li>
+  </ul>
+</dialog>
+<footer>
+  <div class="wrap has-pin">
+    <div class="foot"><details class="fcol"><summary>Products</summary><ul><li><a href="rides.html">Rides</a></li><li><a href="scooters.html">Scooters &amp; e-bikes</a></li><li><a href="drive.html">Car-sharing</a></li><li><a href="https://bolt.eu/en/food/" target="_blank" rel="noopener">Bolt Food<span class="ext" aria-hidden="true">↗</span><span class="visually-hidden"> (opens bolt.eu)</span></a></li><li><a href="https://bolt.eu/en/food/market/" target="_blank" rel="noopener">Bolt Market<span class="ext" aria-hidden="true">↗</span><span class="visually-hidden"> (opens bolt.eu)</span></a></li><li><a href="https://bolt.eu/en/rides/features/bolt-send/" target="_blank" rel="noopener">Bolt Send<span class="ext" aria-hidden="true">↗</span><span class="visually-hidden"> (opens bolt.eu)</span></a></li><li><a href="https://bolt.eu/en/business/" target="_blank" rel="noopener">Bolt for Business<span class="ext" aria-hidden="true">↗</span><span class="visually-hidden"> (opens bolt.eu)</span></a></li></ul></details><details class="fcol"><summary>Earn</summary><ul><li><a href="https://bolt.eu/en/driver/" target="_blank" rel="noopener">Drive with Bolt<span class="ext" aria-hidden="true">↗</span><span class="visually-hidden"> (opens bolt.eu)</span></a></li><li><a href="https://bolt.eu/en/food/courier/" target="_blank" rel="noopener">Deliver with Bolt Food<span class="ext" aria-hidden="true">↗</span><span class="visually-hidden"> (opens bolt.eu)</span></a></li><li><a href="https://bolt.eu/en/food/merchant/" target="_blank" rel="noopener">Sell on Bolt Food<span class="ext" aria-hidden="true">↗</span><span class="visually-hidden"> (opens bolt.eu)</span></a></li><li><a href="https://bolt.eu/en/fleet/" target="_blank" rel="noopener">Bolt Fleets<span class="ext" aria-hidden="true">↗</span><span class="visually-hidden"> (opens bolt.eu)</span></a></li></ul></details><details class="fcol"><summary>Company</summary><ul><li><a href="https://bolt.eu/en/about/mission/" target="_blank" rel="noopener">About Bolt<span class="ext" aria-hidden="true">↗</span><span class="visually-hidden"> (opens bolt.eu)</span></a></li><li><a href="https://bolt.eu/en/careers/" target="_blank" rel="noopener">Careers<span class="ext" aria-hidden="true">↗</span><span class="visually-hidden"> (opens bolt.eu)</span></a></li><li><a href="https://bolt.eu/en/blog/" target="_blank" rel="noopener">Blog<span class="ext" aria-hidden="true">↗</span><span class="visually-hidden"> (opens bolt.eu)</span></a></li></ul></details><details class="fcol"><summary>Support</summary><ul><li><a href="https://bolt.eu/en/support/" target="_blank" rel="noopener">Help centre<span class="ext" aria-hidden="true">↗</span><span class="visually-hidden"> (opens bolt.eu)</span></a></li><li><a href="https://bolt.eu/en/business/" target="_blank" rel="noopener">Bolt for Business<span class="ext" aria-hidden="true">↗</span><span class="visually-hidden"> (opens bolt.eu)</span></a></li></ul></details><details class="fcol"><summary>Safety</summary><ul><li><a href="rides.html#safety">Rider safety</a></li><li><a href="scooters.html#safety">Scooter safety</a></li></ul></details><details class="fcol"><summary>Locations</summary><ul><li><a href="https://bolt.eu/en/cities/" target="_blank" rel="noopener">Our cities<span class="ext" aria-hidden="true">↗</span><span class="visually-hidden"> (opens bolt.eu)</span></a></li></ul></details></div>
+    <div class="foot-bar">
+      <div class="foot-id"><span class="wordmark foot-mark">Bolt</span><span class="region"><svg width="14" height="14" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 15s5-4.6 5-8.5A5 5 0 0 0 3 6.5C3 10.4 8 15 8 15z" fill="none" stroke="currentColor" stroke-width="1.6"/><circle cx="8" cy="6.5" r="1.8" fill="currentColor"/></svg>Tallinn, Estonia · English</span></div>
+      <div class="foot-cta"><button class="btn btn-small foot-btn" type="button" data-handoff>Get Bolt</button><a class="btn btn-small foot-btn" href="https://bolt.eu/en/food/" target="_blank" rel="noopener">Get Bolt Food<span class="ext" aria-hidden="true">↗</span><span class="visually-hidden"> (opens bolt.eu)</span></a></div>
+    </div>
+    <div class="legal"><span>Unofficial redesign concept for a portfolio by Andrii. Not affiliated with or endorsed by Bolt Technology OÜ. Photos are Bolt’s own, from bolt.eu, used for a non-commercial portfolio. Illustrations, the ride-type car images and the Drive studio frames are AI-generated. Links marked ↗ open the real bolt.eu.</span><span class="mono">2026</span></div>
+    
+  </div>
+</footer>
+
+<div class="stage" id="stage" role="dialog" aria-modal="true" aria-labelledby="stageTitle" hidden>
+  <button class="stage-close" type="button" data-close aria-label="Close">
+    <svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M1 1l12 12M13 1L1 13" stroke="currentColor" stroke-width="1.8"/></svg></button>
+  <div class="stage-phone">
+    <div class="phone" aria-hidden="true">
+      <div class="bezel"><div class="screen">
+        <div class="island"></div>
+        <div class="status"><span>9:41</span><span>●●● 5G</span></div>
+        
+        <div class="view on">
+          <svg class="full" viewBox="0 0 270 580" preserveAspectRatio="xMidYMid slice"><rect width="270" height="580" fill="#EEF2EF"/><g stroke="#fff" stroke-width="12" fill="none"><path d="M-10 120 L280 90"/><path d="M-10 260 L280 230"/><path d="M70 -10 L90 420"/><path d="M190 -10 L205 420"/></g><g fill="#2B8659"><rect x="120" y="150" width="18" height="18" rx="5"/><rect x="60" y="300" width="18" height="18" rx="5"/><rect x="200" y="210" width="18" height="18" rx="5"/></g><circle cx="140" cy="260" r="8" fill="#2F6BFF" stroke="#fff" stroke-width="3"/></svg>
+          <div class="ph-card"><div class="ph-row"><b>Bolt 7 · 3 min walk</b><span class="ph-pill">72%</span></div><div class="ph-row"><span>Display, navigation, parking guidance</span></div><div class="ph-btn">Scan to unlock</div></div>
+        </div>
+        <div class="view v-dark">
+          <div style="position:absolute;inset:0;display:grid;place-items:center;background:#0B0E0D;color:#fff;text-align:center"><div><div style="width:46cqi;height:46cqi;border:1.2cqi solid #3DDC84;border-radius:6cqi;margin:0 auto 6cqi"></div><b style="font-size:5.4cqi">Point at the handlebar code</b></div></div>
+        </div>
+
+      </div></div>
+    </div>
+  </div>
+  <div class="stage-panel">
+    <div style="display:grid;gap:10px">
+      <p class="eyebrow" id="stageEyebrow">Bolt · scooters</p>
+      <h2 id="stageTitle" tabindex="-1" style="outline:none">Find a Bolt 7 near you.</h2>
+    </div>
+    <ol class="steps" id="steps">
+      
+      <li><button type="button" data-step="0"><b>Find a Bolt 7</b><span>Where it is rolling out</span><i class="prog"></i></button></li>
+      <li><button type="button" data-step="1"><b>Scan to unlock</b><span>The code on the handlebar</span><i class="prog"></i></button></li>
+
+    </ol>
+    <button class="pause" type="button" id="pauseBtn" aria-pressed="false">Pause walkthrough</button>
+    <div class="handoff">
+      <div class="qr" aria-hidden="true"><svg id="qr" viewBox="0 0 29 29" shape-rendering="crispEdges"></svg></div>
+      <div class="handoff-copy">
+        <b id="handoffTitle">Point your phone camera at the code</b>
+        <p style="font-size:14px;color:var(--muted)" id="handoffText"></p>
+        <p class="send-or">No camera handy?</p>
+        <button class="btn btn-quiet btn-small send-link" type="button" id="sendLink">Send me a link instead</button>
+        <p class="send-msg" id="sendMsg" aria-live="polite"></p>
+        <button class="btn btn-primary open-app" type="button" id="openApp">Open the Bolt app</button>
+        
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<script>/* ===== shared behaviour: header menus, design notes, app handoff stage ===== */
+window.Concept = (() => {
+  const $ = (s, r = document) => r.querySelector(s);
+  const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+  const motionMQ = matchMedia('(prefers-reduced-motion: reduce)');
+  const reduced = () => motionMQ.matches; // gates large movement only
+  const tallFrame = () => window.self !== window.top && innerHeight > Math.max(screen.height || 0, 900) * 1.15;
+  const onPhone = () => matchMedia('(pointer:coarse) and (max-width:980px)').matches;
+
+  /* header */
+  const megaBtns = $$('.intent-btn[aria-controls]');
+  const closeMegas = except => megaBtns.forEach(b => { if (b !== except) { b.setAttribute('aria-expanded', 'false'); $('#' + b.getAttribute('aria-controls')).classList.remove('open'); } });
+  megaBtns.forEach(b => b.addEventListener('click', () => {
+    const open = b.getAttribute('aria-expanded') !== 'true'; closeMegas(b);
+    b.setAttribute('aria-expanded', String(open)); $('#' + b.getAttribute('aria-controls')).classList.toggle('open', open);
+  }));
+  document.addEventListener('click', e => { if (!e.target.closest('.intent > li')) closeMegas(); });
+  $('#menuBtn')?.addEventListener('click', e => { const open = $('#siteHead').classList.toggle('menu-open'); e.currentTarget.setAttribute('aria-expanded', String(open)); });
+
+  /* design notes */
+  let pop = null;
+  const closePop = () => { pop?.remove(); pop = null; };
+  { const t = $('#notesToggle'), n = $$('.pin').length; if (t && n) t.textContent = `Design notes · ${n}`; }
+  $('#notesToggle')?.addEventListener('click', e => { const on = document.body.classList.toggle('notes'); e.currentTarget.setAttribute('aria-pressed', String(on)); if (!on) closePop(); });
+  $$('.pin').forEach((p, i) => {
+    const text = p.textContent.trim(); p.textContent = i + 1; p.setAttribute('aria-label', `Design note ${i + 1}: ${p.dataset.note}`); p.setAttribute('aria-expanded', 'false');
+    p.addEventListener('click', e => {
+      e.stopPropagation();
+      if (pop && pop.dataset.for === String(i)) return closePop();
+      closePop();
+      pop = document.createElement('div'); pop.className = 'pin-pop'; pop.dataset.for = i; pop.setAttribute('role', 'note');
+      pop.innerHTML = '<b></b>'; pop.querySelector('b').textContent = p.dataset.note;
+      text.split(/\n+/).map(l => l.trim()).filter(Boolean).forEach(l => { const m = l.match(/^(Why|Kept|Changed|Build|Test|A11y|Data):\s*(.*)$/); const row = document.createElement('p'); if (m) { const k = document.createElement('i'); k.textContent = m[1]; row.append(k, document.createTextNode(m[2])); } else row.textContent = l; pop.appendChild(row); });
+      p.parentElement.appendChild(pop);
+      const pr = p.getBoundingClientRect(), par = p.parentElement.getBoundingClientRect();
+      let left = pr.left - par.left + 34;
+      const maxLeft = Math.min(window.innerWidth - 16, par.right) - par.left - pop.offsetWidth;
+      if (left > maxLeft) left = Math.max(-par.left + 16, pr.left - par.left - pop.offsetWidth - 8);
+      pop.style.left = left + 'px'; pop.style.top = (pr.top - par.top) + 'px';
+    });
+  });
+  document.addEventListener('click', e => { if (!e.target.closest('.pin-pop')) closePop(); });
+
+  /* decorative QR-style code (demo, not scannable) */
+  function drawQR(text, el = $('#qr')) {
+    if (!el) return;
+    let h = 2166136261; for (const ch of text) { h ^= ch.charCodeAt(0); h = Math.imul(h, 16777619); }
+    const rnd = () => ((h = Math.imul(h ^ (h >>> 15), 2246822507) ^ Math.imul(h ^ (h >>> 13), 3266489909)) >>> 0) / 4294967296;
+    const N = 29, cells = [];
+    const finder = (x, y) => { for (let i = 0; i < 7; i++) for (let j = 0; j < 7; j++) { const e = i === 0 || i === 6 || j === 0 || j === 6, c = i >= 2 && i <= 4 && j >= 2 && j <= 4; if (e || c) cells.push([x + i, y + j]); } };
+    const inF = (x, y) => (x < 8 && y < 8) || (x > N - 9 && y < 8) || (x < 8 && y > N - 9);
+    finder(0, 0); finder(N - 7, 0); finder(0, N - 7);
+    for (let x = 0; x < N; x++) for (let y = 0; y < N; y++) if (!inF(x, y) && rnd() > .52) cells.push([x, y]);
+    el.innerHTML = '<rect width="29" height="29" fill="#fff"/>' + cells.map(([x, y]) => `<rect x="${x}" y="${y}" width="1" height="1" fill="#0E1010"/>`).join('');
+  }
+
+  /* handoff stage */
+  const stage = $('#stage');
+  let current = 0, timer = null, playing = true, opener = null, opts = {};
+  const views = () => $$('#stage .view');
+  function showView(i) {
+    views().forEach((v, k) => { v.classList.toggle('on', k === i); v.classList.toggle('left', k < i); });
+    $('#stage .screen')?.classList.toggle('dark', !!opts.darkViews?.includes(i));
+    current = i;
+    $$('#steps button').forEach((b, k) => {
+      if (k === i) b.setAttribute('aria-current', 'step'); else b.removeAttribute('aria-current');
+      const p = b.querySelector('.prog'); p.classList.remove('run'); void p.offsetWidth;
+      if (k === i && playing) p.classList.add('run');
+    });
+    opts.onView?.(i);
+  }
+  function schedule() { clearTimeout(timer); if (!playing) return; timer = setTimeout(() => { showView((current + 1) % views().length); schedule(); }, 2800); }
+  function open(e, startAt = 0) {
+    if (!stage || !stage.hidden) return;
+    opener = e?.currentTarget || document.activeElement;
+    const phone = onPhone();
+    stage.classList.toggle('on-phone', phone);
+    $('#handoffTitle').textContent = phone ? 'Continue in the app' : 'Point your phone camera at the code';
+    $('#handoffText').textContent = phone ? opts.phoneText : opts.desktopText;
+    stage.classList.toggle('inline', tallFrame());
+    if (stage.classList.contains('inline')) {
+      const r = opener?.getBoundingClientRect ? opener.getBoundingClientRect() : { top: 0 };
+      stage.style.setProperty('--stage-top', Math.max(16, r.top + scrollY - 320) + 'px');
+    }
+    stage.hidden = false; if (!stage.classList.contains('inline')) document.body.style.overflow = 'hidden';
+    requestAnimationFrame(() => requestAnimationFrame(() => stage.classList.add('in')));
+    playing = true; $('#pauseBtn').textContent = 'Pause walkthrough'; $('#pauseBtn').setAttribute('aria-pressed', 'false');
+    showView(startAt); stage.scrollTop = 0; $('#stageTitle').focus({ preventScroll: true }); schedule();
+  }
+  function close() {
+    if (!stage || stage.hidden) return;
+    clearTimeout(timer); stage.classList.remove('in');
+    setTimeout(() => { stage.hidden = true; document.body.style.overflow = ''; opener?.focus?.(); }, 200);
+  }
+  function init(o) {
+    opts = o || {};
+    drawQR(opts.qr || 'bolt-concept');
+    $$('[data-handoff]').forEach(b => b.addEventListener('click', e => open(e)));
+    $$('[data-close]').forEach(b => b.addEventListener('click', close));
+    // footer: columns open on desktop, accordions on phones
+    const fq = matchMedia('(min-width:861px)'), fset = () => $$('.fcol').forEach(d => { d.open = fq.matches; });
+    fset(); fq.addEventListener('change', fset);
+    $$('svg[data-qr]').forEach(el => drawQR(el.dataset.qr, el));
+    // Explore apps: every Bolt app in one list (Food is a separate app, so it lives here instead of competing with Get Bolt)
+    const apps = $('#apps');
+    if (apps) {
+      $$('.apps-open').forEach(b => b.addEventListener('click', () => apps.showModal()));
+      $('.apps-x', apps).addEventListener('click', () => apps.close());
+      apps.addEventListener('click', e => { if (e.target === apps || e.target.closest('.app')) apps.close(); });
+    }
+    $$('#steps button').forEach(b => b.addEventListener('click', () => { showView(+b.dataset.step); schedule(); }));
+    $('#pauseBtn')?.addEventListener('click', e => {
+      playing = !playing; e.currentTarget.textContent = playing ? 'Pause walkthrough' : 'Play walkthrough';
+      e.currentTarget.setAttribute('aria-pressed', String(!playing)); showView(current); schedule();
+    });
+    $('#sendLink')?.addEventListener('click', () => { $('#sendMsg').textContent = 'In the live product this asks for your phone number and texts you a link that opens this trip. This concept collects nothing.'; });
+    $('#openApp')?.addEventListener('click', e => { e.currentTarget.textContent = 'Concept demo: this would open the app'; });
+  }
+  document.addEventListener('keydown', e => {
+    if (stage && !stage.hidden) {
+      if (e.key === 'Escape') { close(); return; }
+      if (e.key === 'Tab') {
+        const f = $$('button, input, [href]', stage).filter(x => x.offsetParent !== null);
+        const first = f[0], last = f[f.length - 1];
+        if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+        else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+      }
+    } else if (e.key === 'Escape') closeMegas();
+  });
+  return { $, $$, reduced, init, open, close, showView, drawQR };
+})();
+</script>
+<script>
+(() => {
+  const { $, $$, reduced } = Concept;
+  Concept.init({ qr: 'bolt-concept://scooters?model=bolt7', darkViews: [1],
+    desktopText: 'Opens Bolt on the scooter map. No app yet? It goes to the store first.',
+    phoneText: 'Opens Bolt on the scooter map, or the store if you do not have it yet.' });
+
+  /* hero video: visible pause control (WCAG 2.2.2), stops off screen, never autoplays with reduced motion */
+  const v = $('#heroVid'), vb = $('#vidBtn');
+  let userPaused = reduced;
+  const setBtn = () => { vb.textContent = v.paused ? 'Play video' : 'Pause video'; vb.setAttribute('aria-pressed', String(v.paused)); };
+  vb.addEventListener('click', () => { if (v.paused) { userPaused = false; v.play().catch(() => {}); } else { userPaused = true; v.pause(); } setBtn(); });
+  new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting && !userPaused) v.play().catch(() => {}); else v.pause(); setBtn(); }), { threshold: .2 }).observe(v);
+  setBtn();
+
+  /* scroll story: the display follows the step in view */
+  const S = {
+    route:    { limit: 25, spd: 18, pill: '', turn: 'Turn right in 120 m', sub: 'Then 600 m to your destination', rot: 90 },
+    slow:     { limit: 10, spd: 10, pill: 'SLOW ZONE', turn: 'Pedestrian zone ahead', sub: 'Limit 10 km/h for 300 m', rot: 0 },
+    pavement: { limit: 10, spd: 6, pill: 'PAVEMENT', turn: 'Back to the road, please', sub: 'Slowing down', rot: -90 },
+    park:     { limit: 10, spd: 0, pill: 'CAN PARK HERE', turn: 'Parking rack in 30 m', sub: 'End your ride in the green zone', rot: 0 },
+  };
+  const scr = $('#scr'), L = $('#sLimit');
+  const show = k => {
+    const s = S[k]; if (!s || scr.dataset.s === k) return; scr.dataset.s = k;
+    if (L.textContent !== String(s.limit)) { L.textContent = s.limit; if (!reduced) { L.classList.add('pulse'); setTimeout(() => L.classList.remove('pulse'), 320); } }
+    $('#sSpd').textContent = s.spd; $('#sPill').textContent = s.pill || 'SLOW ZONE'; $('#sTurn').textContent = s.turn; $('#sSub').textContent = s.sub;
+    $('#sArrow').style.transform = `rotate(${s.rot}deg)`;
+  };
+  const steps = $$("#storySteps li");
+  const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { steps.forEach(x => x.classList.toggle('on', x === e.target)); show(e.target.dataset.s); } }), { rootMargin: '-45% 0px -45% 0px' });
+  steps.forEach(s => io.observe(s)); steps[0].classList.add('on');
+})();
+</script>
+</body>
+</html>

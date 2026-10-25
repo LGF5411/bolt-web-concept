@@ -4,7 +4,8 @@
 <meta charset="utf-8">
 <meta name="robots" content="noindex">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Bolt Home Concept</title>
+<title>Explore Bolt services | Rides, scooters, car-sharing and delivery · Concept</title>
+<meta name="description" content="Rides, scooters and car-sharing in Bolt; food and groceries in Bolt Food. Compare three ways across Tallinn on a live map. Portfolio concept, not affiliated with Bolt.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@700..900&family=Inter:wght@400..800&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <style>
@@ -185,7 +186,8 @@ footer .legal{margin-top:24px}
 .pin{display:none;position:absolute;z-index:20;width:26px;height:26px;border-radius:50%;background:var(--note);color:#fff;font:600 12px/26px var(--mono);text-align:center;border:2px solid var(--bg);cursor:pointer;box-shadow:0 4px 12px rgba(60,40,180,.35);padding:0}
 body.notes .pin{display:block}
 .has-pin{position:relative}
-.pin-pop{position:absolute;z-index:40;width:290px;max-width:calc(100vw - 32px);background:var(--surface);color:var(--ink);border:1px solid var(--note);border-radius:14px;padding:14px;font-size:14px;line-height:1.45;box-shadow:0 20px 40px -20px rgba(40,20,120,.4)}
+.pin-pop{position:absolute;z-index:40;width:340px;max-height:min(70vh,520px);overflow:auto;max-width:calc(100vw - 32px);background:var(--surface);color:var(--ink);border:1px solid var(--note);border-radius:14px;padding:14px;font-size:14px;line-height:1.45;box-shadow:0 20px 40px -20px rgba(40,20,120,.4)}
+.pin-pop p{margin:8px 0 0}.pin-pop p i{display:block;font:600 10.5px/1.2 var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-style:normal;margin-bottom:2px}
 .pin-pop b{display:block;font:600 11px/1.2 var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--note);margin-bottom:6px}
 
 @media (max-width:980px){
@@ -245,7 +247,7 @@ body.notes .pin{display:block}
 .swap{width:40px;height:40px;border-radius:50%;border:1px solid var(--line);background:var(--surface);cursor:pointer;display:grid;place-items:center;transition:transform var(--t-scene) var(--glide),border-color var(--t-norm)}
 .swap:hover{border-color:var(--ink)}
 .swap.spin{transform:rotate(180deg)}
-.list{position:absolute;z-index:10;left:0;right:0;top:calc(100% + 6px);background:#fff;border-radius:16px;box-shadow:0 20px 40px -18px rgba(10,30,20,.35),0 0 0 1px rgba(14,16,16,.08);padding:6px;margin:0;list-style:none;max-height:300px;overflow:auto}
+.list{position:relative;z-index:10;margin-top:6px;background:#fff;border-radius:16px;box-shadow:0 20px 40px -18px rgba(10,30,20,.35),0 0 0 1px rgba(14,16,16,.08);padding:6px;margin:6px 0 0;list-style:none;max-height:min(300px,46vh);overflow:auto}
 .list[hidden]{display:none}
 .list li{display:grid;grid-template-columns:28px minmax(0,1fr);gap:10px;align-items:center;padding:10px;border-radius:10px;cursor:pointer}
 .list li[aria-selected="true"],.list li:hover{background:var(--bg)}
@@ -330,6 +332,8 @@ h3{font-family:var(--display);font-weight:700;letter-spacing:-.02em;font-size:22
 .btn-primary:hover{background:#257A50;box-shadow:none}
 .btn-quiet{background:#E9ECEB;border:0;color:var(--ink)}
 .btn-quiet:hover{background:#DEE3E0}
+.btn-ghost-dark{background:rgba(255,255,255,.1);color:#fff}
+.btn-ghost-dark:hover{background:rgba(255,255,255,.18)}
 .night .btn-quiet{background:rgba(255,255,255,.12);color:#fff;border:0}
 
 .btn-light{background:#E7F8EE;color:#0E1010}
@@ -507,13 +511,13 @@ section.block{padding-block:clamp(112px,11vw,160px)}
 .b7-src{margin-top:24px}
 .about{background:#217E53;color:#fff;padding:clamp(120px,12vw,168px) 0 0;text-align:center;overflow:hidden}
 .about-img{display:block;width:min(1200px,100%);height:auto;margin:48px auto 0}
-.about .eyebrow{color:#BFE8D0}
+.about .eyebrow{color:#fff}
 .about h2{font-size:clamp(40px,6vw,84px);max-width:16ch;margin:14px auto 0}
-.about-sub{max-width:42rem;margin:24px auto 0;font-size:20px;line-height:1.5;color:#E3F4EA}
+.about-sub{max-width:42rem;margin:24px auto 0;font-size:20px;line-height:1.5;color:#fff}
 .stats{list-style:none;padding:0;margin:56px auto 0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:28px;max-width:1000px}
-.stats li{display:grid;gap:6px;background:rgba(255,255,255,.08);border-radius:24px;padding:28px 16px}
+.stats li{display:grid;gap:6px;background:rgba(0,0,0,.14);border-radius:24px;padding:28px 16px}
 .stats b{font:900 clamp(40px,4.4vw,60px)/1 var(--display);letter-spacing:-.02em}
-.stats span{color:#CFEBDB;font-size:15px}
+.stats span{color:#E8F6EE;font-size:15px}
 /* download our apps: their dark band, plus a QR right there (one scan instead of a button that leads to a QR) and the earning apps */
 .dl{background:#0E1010;color:#F2F5F3;padding:112px 0;overflow:hidden}
 .dl-head{text-align:center;display:grid;gap:16px;justify-items:center}
@@ -667,7 +671,11 @@ section.block{padding-block:clamp(112px,11vw,160px)}
 
 <main id="top">
   <section class="hero-c">
-    <div class="wrap">
+    <div class="wrap has-pin"><button class="pin" type="button" style="left:8px;top:-8px" data-note="Hero: Bolt first, then both halves">Why: bolt.eu leads with a brand line (“Riding is the new driving”) because most people reach Home already knowing Bolt; the page confirms the brand before it sells.
+Kept: centred heavy headline, the two app buttons, the light page.
+Changed: the line names both halves of Bolt in its own nav words, so “Get Bolt Food” no longer looks out of place (audit F9).
+Build: Hero component, variant “centred”. Get Bolt opens the handoff; Get Bolt Food leaves to bolt.eu, marked ↗.
+Test: Bolt Food clicks from Home; guardrail Get Bolt clicks.</button>
       <h1>Get around. Get delivered.</h1>
       <p class="sub">Rides, scooters and car-sharing in Bolt. Food and groceries in Bolt Food. One account for both.</p>
       <div class="ctas"><button class="btn btn-primary" type="button" data-handoff>Get Bolt</button><a class="btn btn-quiet" href="https://bolt.eu/en/food/" target="_blank" rel="noopener">Get Bolt Food <span class="ext" aria-hidden="true">↗</span></a></div>
@@ -688,12 +696,15 @@ section.block{padding-block:clamp(112px,11vw,160px)}
     </div>
   </section>
 
-  <section class="b7" aria-labelledby="b7t">
-    <div class="wrap b7-head">
+  <section class="has-pin b7" aria-labelledby="b7t">
+    <div class="wrap b7-head"><button class="pin" type="button" style="left:8px;top:-4px" data-note="Bolt 7: a promo that lands">Why: a black band is how bolt.eu marks a product moment; it breaks the white rhythm on purpose.
+Kept: the band, Bolt&#x27;s own photo, the short facts.
+Changed: on bolt.eu “Learn more” opens the Bolt 6 story (audit F3). Here it opens a Bolt 7 launch page built from the same components.
+Build: campaign page = existing hero, video block, fact grid and footer; no new components.</button>
       <p class="eyebrow">New on the streets</p>
       <h2 id="b7t">Meet Bolt 7</h2>
       <p class="b7-sub">The next-generation scooter, built together with city authorities. A display on the handlebar shows the way, the slow zones and where to park, and on-board AI helps keep riders off the pavement.</p>
-      <div class="ctas"><a class="btn btn-primary" href="scooters.html">Start riding</a></div>
+      <div class="ctas"><a class="btn btn-primary" href="scooters.html">Start riding</a><a class="btn btn-ghost-dark" href="bolt7.html">Meet Bolt 7 <span aria-hidden="true">→</span></a></div>
     </div>
     <div class="wrap"><figure class="b7-shot"><img src="assets/img/b7.webp" alt="The Bolt 7 handlebar: a colour display shows the map with a parking icon and the message Can park here" loading="lazy" width="1600" height="900"><figcaption>Image: Bolt, from bolt.eu.</figcaption></figure></div>
     <div class="wrap">
@@ -708,7 +719,11 @@ section.block{padding-block:clamp(112px,11vw,160px)}
 
   <section class="planner block" aria-label="Compare three ways across Tallinn, simulated live">
    <div class="wrap"><div class="sec-head"><p class="eyebrow">Try it for your trip</p><h2>Ride, scooter or car-sharing? Watch them race.</h2><p>Every dot is a Bolt vehicle moving on real Tallinn streets. Pick a place and see which way wins.</p></div></div>
-   <div class="wrap planner-wrap">
+   <div class="has-pin wrap planner-wrap"><button class="pin" type="button" style="right:14px;top:-12px" data-note="Race: three products, one answer">Why: bolt.eu lists services side by side but never says which one fits a trip.
+Changed: pick a place and Ride, Scooter and Car-sharing race on real streets, including the wait and the walk. Fastest and cheapest are labelled; each lane opens its page with the trip filled in.
+A11y: result announced once; with reduced motion the result shows at once; Skip to result button.
+Data: example prices; in production from the pricing service, or a static ‘from’ table where estimates are not allowed.
+Test: clicks from Home to product pages; guardrail Home LCP.</button>
     <div class="mapstage mapcard" id="stageMap">
     <div class="map" id="map"><div class="loading" id="loading">Loading Tallinn…</div></div>
     <div class="overlay-r">
@@ -753,7 +768,6 @@ section.block{padding-block:clamp(112px,11vw,160px)}
         <p class="race-note">Real streets and distances. Wait times, traffic and prices are examples.</p>
         <div class="row"><button class="btn btn-quiet btn-small" type="button" id="again">Race again</button><button class="btn btn-quiet btn-small" type="button" id="change">Change destination</button></div>
       </div>
-      <button class="pin" type="button" style="right:14px;top:14px" data-note="Bolt first, then the answer">The hero keeps the bolt.eu pattern (centred heavy headline, Get Bolt and Get Bolt Food), so the page reads as Bolt in one second. On bolt.eu the headline talks only about riding, so the food button looks out of place. Here the headline names both halves (their own nav words: Get around, Get delivered), and after the race Bolt Food is offered at the moment the visitor is weighing the trip. The headline now says what Bolt is: simulated first-time visitors could not tell from a slogan. Right below, the map card answers the real question by racing three ways to the visitor's own destination.</button>
     </div>
     </div>
     <p class="live-note">Every dot is a simulated Bolt vehicle on real Tallinn streets. Prices and waits are examples.</p>
@@ -803,8 +817,11 @@ section.block{padding-block:clamp(112px,11vw,160px)}
     </div>
   </section>
 
-  <section class="dl" aria-labelledby="dlT">
-    <div class="wrap">
+  <section class="has-pin dl" aria-labelledby="dlT">
+    <div class="wrap"><button class="pin" type="button" style="left:8px;top:-8px" data-note="Download: one code per app">Why: bolt.eu has one generic QR for every product, simple to track and to maintain.
+Changed: Rides, Delivery and Earn each get their own code and app, so the code matches what the visitor came for (audit F1).
+Build: Download band, props: tabs[], qrTarget per tab. On a phone the code becomes an Open the app button.
+Test: installs per CTA click, by tab.</button>
       <div class="dl-head"><h2 id="dlT">Download our apps</h2><p>Available for iOS and Android. On a computer, scan the code with your phone.</p></div>
       <div class="dl-grid">
         <div class="dl-phone" aria-hidden="true"><div class="dl-screen">
@@ -843,7 +860,7 @@ section.block{padding-block:clamp(112px,11vw,160px)}
 
   <section class="block" aria-labelledby="newsT">
     <div class="wrap">
-      <div class="news-head"><h2 id="newsT">News and updates</h2><a class="btn btn-primary" href="https://bolt.eu/en/blog/" target="_blank" rel="noopener">View all <span class="ext" aria-hidden="true">↗</span></a></div>
+      <div class="news-head"><h2 id="newsT">News and updates</h2><a class="btn btn-primary" href="https://bolt.eu/en/blog/" target="_blank" rel="noopener" aria-label="View all news on the Bolt blog (opens bolt.eu)">View all <span class="ext" aria-hidden="true">↗</span></a></div>
       <div class="news2">
         <a class="feat photo" href="https://bolt.eu/en/blog/bolt-send-package-delivery/" target="_blank" rel="noopener">
           <span class="feat-img"><img src="assets/img/news-send.webp" alt="" loading="lazy" width="768" height="384"></span>
@@ -888,7 +905,7 @@ section.block{padding-block:clamp(112px,11vw,160px)}
       <div class="foot-id"><span class="wordmark foot-mark">Bolt</span><span class="region"><svg width="14" height="14" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 15s5-4.6 5-8.5A5 5 0 0 0 3 6.5C3 10.4 8 15 8 15z" fill="none" stroke="currentColor" stroke-width="1.6"/><circle cx="8" cy="6.5" r="1.8" fill="currentColor"/></svg>Tallinn, Estonia · English</span></div>
       <div class="foot-cta"><button class="btn btn-small foot-btn" type="button" data-handoff>Get Bolt</button><a class="btn btn-small foot-btn" href="https://bolt.eu/en/food/" target="_blank" rel="noopener">Get Bolt Food<span class="ext" aria-hidden="true">↗</span><span class="visually-hidden"> (opens bolt.eu)</span></a></div>
     </div>
-    <div class="legal"><span>Unofficial redesign concept for a portfolio by Andrii. Not affiliated with or endorsed by Bolt Technology OÜ. Illustrations are AI-generated; Bolt 7 and app images are Bolt’s own, from bolt.eu. Links marked ↗ open the real bolt.eu.</span><span class="mono">2026</span></div>
+    <div class="legal"><span>Unofficial redesign concept for a portfolio by Andrii. Not affiliated with or endorsed by Bolt Technology OÜ. Photos are Bolt’s own, from bolt.eu, used for a non-commercial portfolio. Illustrations, the ride-type car images and the Drive studio frames are AI-generated. Links marked ↗ open the real bolt.eu.</span><span class="mono">2026</span></div>
     
   </div>
 </footer>
@@ -983,15 +1000,17 @@ window.Concept = (() => {
   /* design notes */
   let pop = null;
   const closePop = () => { pop?.remove(); pop = null; };
+  { const t = $('#notesToggle'), n = $$('.pin').length; if (t && n) t.textContent = `Design notes · ${n}`; }
   $('#notesToggle')?.addEventListener('click', e => { const on = document.body.classList.toggle('notes'); e.currentTarget.setAttribute('aria-pressed', String(on)); if (!on) closePop(); });
   $$('.pin').forEach((p, i) => {
-    const text = p.textContent.trim(); p.textContent = i + 1; p.setAttribute('aria-label', `Design note ${i + 1}: ${p.dataset.note}`);
+    const text = p.textContent.trim(); p.textContent = i + 1; p.setAttribute('aria-label', `Design note ${i + 1}: ${p.dataset.note}`); p.setAttribute('aria-expanded', 'false');
     p.addEventListener('click', e => {
       e.stopPropagation();
       if (pop && pop.dataset.for === String(i)) return closePop();
       closePop();
       pop = document.createElement('div'); pop.className = 'pin-pop'; pop.dataset.for = i; pop.setAttribute('role', 'note');
-      pop.innerHTML = '<b></b><span></span>'; pop.querySelector('b').textContent = p.dataset.note; pop.querySelector('span').textContent = text;
+      pop.innerHTML = '<b></b>'; pop.querySelector('b').textContent = p.dataset.note;
+      text.split(/\n+/).map(l => l.trim()).filter(Boolean).forEach(l => { const m = l.match(/^(Why|Kept|Changed|Build|Test|A11y|Data):\s*(.*)$/); const row = document.createElement('p'); if (m) { const k = document.createElement('i'); k.textContent = m[1]; row.append(k, document.createTextNode(m[2])); } else row.textContent = l; pop.appendChild(row); });
       p.parentElement.appendChild(pop);
       const pr = p.getBoundingClientRect(), par = p.parentElement.getBoundingClientRect();
       let left = pr.left - par.left + 34;

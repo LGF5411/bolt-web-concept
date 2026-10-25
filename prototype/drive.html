@@ -4,7 +4,8 @@
 <meta charset="utf-8">
 <meta name="robots" content="noindex">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Bolt Drive Concept</title>
+<title>Car rental in Tallinn | Rent a car anytime with Bolt Drive · Concept</title>
+<meta name="description" content="Rent a car in Tallinn by the minute or by the day. See cars near you with fuel and the walk, then unlock with the Bolt app. Portfolio concept, not affiliated with Bolt.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@700..900&family=Inter:wght@400..800&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <style>
@@ -185,7 +186,8 @@ footer .legal{margin-top:24px}
 .pin{display:none;position:absolute;z-index:20;width:26px;height:26px;border-radius:50%;background:var(--note);color:#fff;font:600 12px/26px var(--mono);text-align:center;border:2px solid var(--bg);cursor:pointer;box-shadow:0 4px 12px rgba(60,40,180,.35);padding:0}
 body.notes .pin{display:block}
 .has-pin{position:relative}
-.pin-pop{position:absolute;z-index:40;width:290px;max-width:calc(100vw - 32px);background:var(--surface);color:var(--ink);border:1px solid var(--note);border-radius:14px;padding:14px;font-size:14px;line-height:1.45;box-shadow:0 20px 40px -20px rgba(40,20,120,.4)}
+.pin-pop{position:absolute;z-index:40;width:340px;max-height:min(70vh,520px);overflow:auto;max-width:calc(100vw - 32px);background:var(--surface);color:var(--ink);border:1px solid var(--note);border-radius:14px;padding:14px;font-size:14px;line-height:1.45;box-shadow:0 20px 40px -20px rgba(40,20,120,.4)}
+.pin-pop p{margin:8px 0 0}.pin-pop p i{display:block;font:600 10.5px/1.2 var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-style:normal;margin-bottom:2px}
 .pin-pop b{display:block;font:600 11px/1.2 var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--note);margin-bottom:6px}
 
 @media (max-width:980px){
@@ -245,7 +247,7 @@ body.notes .pin{display:block}
 .swap{width:40px;height:40px;border-radius:50%;border:1px solid var(--line);background:var(--surface);cursor:pointer;display:grid;place-items:center;transition:transform var(--t-scene) var(--glide),border-color var(--t-norm)}
 .swap:hover{border-color:var(--ink)}
 .swap.spin{transform:rotate(180deg)}
-.list{position:absolute;z-index:10;left:0;right:0;top:calc(100% + 6px);background:#fff;border-radius:16px;box-shadow:0 20px 40px -18px rgba(10,30,20,.35),0 0 0 1px rgba(14,16,16,.08);padding:6px;margin:0;list-style:none;max-height:300px;overflow:auto}
+.list{position:relative;z-index:10;margin-top:6px;background:#fff;border-radius:16px;box-shadow:0 20px 40px -18px rgba(10,30,20,.35),0 0 0 1px rgba(14,16,16,.08);padding:6px;margin:6px 0 0;list-style:none;max-height:min(300px,46vh);overflow:auto}
 .list[hidden]{display:none}
 .list li{display:grid;grid-template-columns:28px minmax(0,1fr);gap:10px;align-items:center;padding:10px;border-radius:10px;cursor:pointer}
 .list li[aria-selected="true"],.list li:hover{background:var(--bg)}
@@ -330,6 +332,8 @@ h3{font-family:var(--display);font-weight:700;letter-spacing:-.02em;font-size:22
 .btn-primary:hover{background:#257A50;box-shadow:none}
 .btn-quiet{background:#E9ECEB;border:0;color:var(--ink)}
 .btn-quiet:hover{background:#DEE3E0}
+.btn-ghost-dark{background:rgba(255,255,255,.1);color:#fff}
+.btn-ghost-dark:hover{background:rgba(255,255,255,.18)}
 .night .btn-quiet{background:rgba(255,255,255,.12);color:#fff;border:0}
 
 .btn-light{background:#E7F8EE;color:#0E1010}
@@ -464,8 +468,6 @@ section.block{padding-block:clamp(112px,11vw,160px)}
 @keyframes sweep{from{background-position:100% 0}to{background-position:0% 0}}
 .hero-d .sub{font-size:20px;line-height:1.55;color:#B9C1BD;max-width:30rem;margin-top:28px}
 .hero-d .ctas{justify-content:flex-start;margin-top:40px}
-.btn-ghost-dark{background:rgba(255,255,255,.1);color:#fff}
-.btn-ghost-dark:hover{background:rgba(255,255,255,.18)}
 /* beams: two cones of light from the headlights sweep across the dark towards the headline */
 .beam{position:absolute;z-index:0;pointer-events:none;height:46%;width:70vw;max-width:1100px;opacity:0;transform-origin:100% 50%;
   background:linear-gradient(270deg,rgba(235,244,255,.42),rgba(235,244,255,.12) 40%,transparent 85%);
@@ -769,7 +771,11 @@ section.block{padding-block:clamp(112px,11vw,160px)}
         </button>
         <p class="hold-hint" id="holdHint" aria-live="polite">Press and hold, or press Enter. In the app it is one tap.</p>
         <button class="relock" type="button" id="relock" hidden>Lock again</button>
-        <button class="pin" type="button" style="left:0;top:0" data-note="The banner car is a real car">bolt.eu says you unlock the car with your phone. Here the visitor does it. While you hold, the car wakes up step by step; at the end its LED lights strike up and sweep across the page, the floor glows Bolt green, and the trip counter starts. Both states are real studio frames of the same car (AI-rendered from Bolt's photo), not CSS glows. The car is not an illustration: it is one of the cars on the map below, and "Show it on the map" takes you to it.</button>
+        <button class="pin" type="button" style="left:0;top:0" data-note="Hold to unlock">Why: bolt.eu tells you the phone is the key; the hero shows a car photo.
+Changed: the visitor holds to unlock. Cabin light follows the hold, then indicators, headlights and the green underglow; the card shows it is a real car on the map below, with the live cost counter Bolt&#x27;s own customer praises.
+Build: two 2K studio frames of the same car (off, light layers). Timing: hold 1100 ms, indicators 1100 ms, headlights 900 ms from 1360 ms, card from 1800 ms.
+A11y: Enter works; reduced motion shows the lit car without beams or flicker.
+Test: clicks to the car map and to Rent a car; guardrail Drive LCP.</button>
       </div>
     </div>
   </section>
@@ -831,12 +837,15 @@ section.block{padding-block:clamp(112px,11vw,160px)}
           <div class="car-card"><img loading="lazy" decoding="async" id="carImg" alt="" width="640" height="482"><div><p class="eyebrow" style="font-size:13px" id="carKind">Everyday</p><h3 id="carTitle">4 min walk</h3><span class="plate" id="carPlate">512 BKD</span></div></div>
           <div class="sum3"><div><b id="carFuel">78%</b><span id="carFuelL">fuel</span></div><div><b id="carRange">410 km</b><span>range</span></div><div><b id="carRate">€0.21</b><span>per minute</span></div></div>
           <div class="cta2" id="carCta">
-            <button class="btn btn-primary" type="button" id="reserveBtn" data-handoff>Reserve in the app · free for 15 min</button>
+            <button class="btn btn-primary" type="button" id="reserveBtn" data-handoff>Reserve in the app</button>
           </div>
           <p class="hold-note"><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8.5l3 3 7-7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span id="carNote">The app opens on this car. It waits for you while you walk, and your phone unlocks it.</span></p>
           <p class="fine" style="margin:0">Example cars and rates. Reservation and unlocking happen in the app.</p>
         </div>
-        <button class="pin" type="button" style="right:14px;top:14px" data-note="See the car, reserve in the app">A car-sharing page that cannot show a single car makes the visitor install the app just to look. Here the cars, their fuel and the walk are visible first. Reserving and unlocking stay in the app, which opens on the chosen car: the page answers "is there one near me?", the app does the rest.</button>
+        <button class="pin" type="button" style="right:14px;top:14px" data-note="See the car, reserve in the app">Why: bolt.eu says ‘check the app’ for cars nearby, so the visitor installs just to look.
+Changed: cars, fuel, range and the walk are visible first. Reserving opens the app on the chosen car.
+Kept: no live driver or user positions; cars are examples on real streets.
+Test: Reserve clicks; guardrail map load time.</button>
       </div>
     </div>
     <p class="live-note">Example cars on real Tallinn streets. Reserving and unlocking happen in the app.</p>
@@ -855,8 +864,10 @@ section.block{padding-block:clamp(112px,11vw,160px)}
     </div>
   </section>
 
-  <section class="quote" aria-labelledby="qT">
-    <img src="assets/img/d-fuel.webp" alt="" loading="lazy" width="1280" height="818">
+  <section class="has-pin quote" aria-labelledby="qT"><button class="pin" type="button" style="left:14px;top:14px" data-note="Bolt’s own testimonial, made visible">Why: bolt.eu quotes Nikhil praising the cost counter, but never shows it.
+Changed: the counter runs here and in the hero card after unlock.
+Kept: his words, unedited.</button>
+    <img src="assets/img/d-fuel.webp" alt="A man pays at a fuel pump next to a Bolt Drive car" loading="lazy" width="1280" height="818">
     <div class="wrap q-grid">
       <blockquote>
         <p id="qT">“I really like the counter where it shows while you're driving how much you're spending, which none of the other apps have.”</p>
@@ -878,8 +889,10 @@ section.block{padding-block:clamp(112px,11vw,160px)}
     </div>
   </section>
 
-  <section class="block" id="cars" aria-labelledby="carsT">
-    <div class="wrap">
+  <section class="has-pin block" id="cars" aria-labelledby="carsT">
+    <div class="wrap"><button class="pin" type="button" style="left:8px;top:-12px" data-note="Minutes or days?">Why: bolt.eu explains both ways to pay in text and sends you to the app to compare.
+Changed: pick a trip and a car class; the page works out minutes against the day rate and names the cheaper one.
+Data: example rates, labelled; production reads the rate card per city.</button>
       <div class="sec-head center"><h2 id="carsT">Rent the car you need, at the price that fits</h2><p>Pick what you are doing and the car. The cheaper way to pay is highlighted.</p></div>
       <div class="plan-card">
       <p class="label" id="scenLabel" style="margin-bottom:10px">What are you doing?</p>
@@ -923,13 +936,13 @@ section.block{padding-block:clamp(112px,11vw,160px)}
     <div class="wrap">
       <div class="sec-head"><h2 id="payT">Pay for time and distance</h2><p>The app shows which options are available in Tallinn.</p></div>
       <div class="pays">
-        <article class="pay"><div class="pt2"><p class="eyebrow">Pay as you go</p><h3>Book and go anytime</h3><p>Find a car and drive it as far or as long as you like.</p><button class="btn btn-primary btn-small" type="button" data-handoff>Get started</button></div><img src="assets/img/d-shop.webp" alt="Two friends load groceries into a Bolt Drive car" loading="lazy" width="700" height="932"></article>
-        <article class="pay"><div class="pt2"><p class="eyebrow">Long-term rental</p><h3>Hours or days, one fixed rate</h3><p>Pay a fixed rate for exactly the hours or days you need.</p><button class="btn btn-primary btn-small" type="button" data-handoff>Get started</button></div><img src="assets/img/d-trip.webp" alt="Friends pack hiking gear into a car for a trip" loading="lazy" width="700" height="932"></article>
+        <article class="pay"><div class="pt2"><p class="eyebrow">Pay as you go</p><h3>Book and go anytime</h3><p>Find a car and drive it as far or as long as you like.</p><button class="btn btn-primary btn-small" type="button" data-handoff>Book a car now</button></div><img src="assets/img/d-shop.webp" alt="Two friends load groceries into a Bolt Drive car" loading="lazy" width="700" height="932"></article>
+        <article class="pay"><div class="pt2"><p class="eyebrow">Long-term rental</p><h3>Hours or days, one fixed rate</h3><p>Pay a fixed rate for exactly the hours or days you need.</p><button class="btn btn-primary btn-small" type="button" data-handoff>Rent for hours or days</button></div><img src="assets/img/d-trip.webp" alt="Friends pack hiking gear into a car for a trip" loading="lazy" width="700" height="932"></article>
       </div>
     </div>
   </section>
 
-  <img class="wide-photo" src="assets/img/d-forest.webp" alt="" loading="lazy" width="1280" height="640">
+  <img class="wide-photo" src="assets/img/d-forest.webp" alt="Friends by a Bolt Drive car at the edge of a forest, one on a Bolt e-bike, one on a Bolt scooter" loading="lazy" width="1280" height="640">
 
   <section class="block" id="faq" aria-labelledby="faqT">
     <div class="wrap">
@@ -973,7 +986,7 @@ section.block{padding-block:clamp(112px,11vw,160px)}
       <div class="foot-id"><span class="wordmark foot-mark">Bolt</span><span class="region"><svg width="14" height="14" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 15s5-4.6 5-8.5A5 5 0 0 0 3 6.5C3 10.4 8 15 8 15z" fill="none" stroke="currentColor" stroke-width="1.6"/><circle cx="8" cy="6.5" r="1.8" fill="currentColor"/></svg>Tallinn, Estonia · English</span></div>
       <div class="foot-cta"><button class="btn btn-small foot-btn" type="button" data-handoff>Get Bolt</button><a class="btn btn-small foot-btn" href="https://bolt.eu/en/food/" target="_blank" rel="noopener">Get Bolt Food<span class="ext" aria-hidden="true">↗</span><span class="visually-hidden"> (opens bolt.eu)</span></a></div>
     </div>
-    <div class="legal"><span>Unofficial redesign concept for a portfolio by Andrii. Not affiliated with or endorsed by Bolt Technology OÜ. Illustrations are AI-generated; Bolt 7 and app images are Bolt’s own, from bolt.eu. Links marked ↗ open the real bolt.eu.</span><span class="mono">2026</span></div>
+    <div class="legal"><span>Unofficial redesign concept for a portfolio by Andrii. Not affiliated with or endorsed by Bolt Technology OÜ. Photos are Bolt’s own, from bolt.eu, used for a non-commercial portfolio. Illustrations, the ride-type car images and the Drive studio frames are AI-generated. Links marked ↗ open the real bolt.eu.</span><span class="mono">2026</span></div>
     
   </div>
 </footer>
@@ -1075,15 +1088,17 @@ window.Concept = (() => {
   /* design notes */
   let pop = null;
   const closePop = () => { pop?.remove(); pop = null; };
+  { const t = $('#notesToggle'), n = $$('.pin').length; if (t && n) t.textContent = `Design notes · ${n}`; }
   $('#notesToggle')?.addEventListener('click', e => { const on = document.body.classList.toggle('notes'); e.currentTarget.setAttribute('aria-pressed', String(on)); if (!on) closePop(); });
   $$('.pin').forEach((p, i) => {
-    const text = p.textContent.trim(); p.textContent = i + 1; p.setAttribute('aria-label', `Design note ${i + 1}: ${p.dataset.note}`);
+    const text = p.textContent.trim(); p.textContent = i + 1; p.setAttribute('aria-label', `Design note ${i + 1}: ${p.dataset.note}`); p.setAttribute('aria-expanded', 'false');
     p.addEventListener('click', e => {
       e.stopPropagation();
       if (pop && pop.dataset.for === String(i)) return closePop();
       closePop();
       pop = document.createElement('div'); pop.className = 'pin-pop'; pop.dataset.for = i; pop.setAttribute('role', 'note');
-      pop.innerHTML = '<b></b><span></span>'; pop.querySelector('b').textContent = p.dataset.note; pop.querySelector('span').textContent = text;
+      pop.innerHTML = '<b></b>'; pop.querySelector('b').textContent = p.dataset.note;
+      text.split(/\n+/).map(l => l.trim()).filter(Boolean).forEach(l => { const m = l.match(/^(Why|Kept|Changed|Build|Test|A11y|Data):\s*(.*)$/); const row = document.createElement('p'); if (m) { const k = document.createElement('i'); k.textContent = m[1]; row.append(k, document.createTextNode(m[2])); } else row.textContent = l; pop.appendChild(row); });
       p.parentElement.appendChild(pop);
       const pr = p.getBoundingClientRect(), par = p.parentElement.getBoundingClientRect();
       let left = pr.left - par.left + 34;
@@ -1274,6 +1289,10 @@ window.Concept = (() => {
   const placeBeams = () => { const hr = heroD.getBoundingClientRect(); [['#beamA', 0], ['#beamB', 1]].forEach(([id, i]) => { const l = $$('.lt.head')[i].getBoundingClientRect(), b = $(id);
     b.style.left = (l.left + l.width / 2 - hr.left - b.offsetWidth) + 'px'; b.style.top = (l.top + l.height / 2 - hr.top - b.offsetHeight / 2) + 'px'; }); };
   addEventListener('resize', placeBeams);
+  // the car stage bleeds past the column on purpose; the card must not: keep it 24 px inside the viewport
+  const fitCard = () => { const c = $('#carInfo'); c.style.right = ''; if (matchMedia('(max-width:860px)').matches) return;
+    const over = c.getBoundingClientRect().right - (innerWidth - 24); if (over > 0) c.style.right = (parseFloat(getComputedStyle(c).right) + over) + 'px'; };
+  fitCard(); addEventListener('resize', fitCard);
   const heroCar = { plate: '512 BKD', where: 'Parked 2 min from Freedom Square', fuel: 78, range: 410, rate: .21 };
   addEventListener('drive:herocar', e => { Object.assign(heroCar, e.detail); $('#ciPlate').textContent = heroCar.plate; $('#ciWhere').textContent = heroCar.where; $('#ciFuel').textContent = `Fuel ${heroCar.fuel}% · ~${heroCar.range} km · ${eur(heroCar.rate)}/min`; });
   let meterT = null, meterS = 0;

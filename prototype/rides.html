@@ -4,7 +4,8 @@
 <meta charset="utf-8">
 <meta name="robots" content="noindex">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Bolt Rides Concept</title>
+<title>Bolt rides in Tallinn | See your price before you book · Concept</title>
+<meta name="description" content="Fast, safe and affordable rides in Tallinn. See the route, the pickup time and the fare for four ride types before you install. Portfolio concept, not affiliated with Bolt.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@700..900&family=Inter:wght@400..800&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <style>
@@ -185,7 +186,8 @@ footer .legal{margin-top:24px}
 .pin{display:none;position:absolute;z-index:20;width:26px;height:26px;border-radius:50%;background:var(--note);color:#fff;font:600 12px/26px var(--mono);text-align:center;border:2px solid var(--bg);cursor:pointer;box-shadow:0 4px 12px rgba(60,40,180,.35);padding:0}
 body.notes .pin{display:block}
 .has-pin{position:relative}
-.pin-pop{position:absolute;z-index:40;width:290px;max-width:calc(100vw - 32px);background:var(--surface);color:var(--ink);border:1px solid var(--note);border-radius:14px;padding:14px;font-size:14px;line-height:1.45;box-shadow:0 20px 40px -20px rgba(40,20,120,.4)}
+.pin-pop{position:absolute;z-index:40;width:340px;max-height:min(70vh,520px);overflow:auto;max-width:calc(100vw - 32px);background:var(--surface);color:var(--ink);border:1px solid var(--note);border-radius:14px;padding:14px;font-size:14px;line-height:1.45;box-shadow:0 20px 40px -20px rgba(40,20,120,.4)}
+.pin-pop p{margin:8px 0 0}.pin-pop p i{display:block;font:600 10.5px/1.2 var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-style:normal;margin-bottom:2px}
 .pin-pop b{display:block;font:600 11px/1.2 var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--note);margin-bottom:6px}
 
 @media (max-width:980px){
@@ -245,7 +247,7 @@ body.notes .pin{display:block}
 .swap{width:40px;height:40px;border-radius:50%;border:1px solid var(--line);background:var(--surface);cursor:pointer;display:grid;place-items:center;transition:transform var(--t-scene) var(--glide),border-color var(--t-norm)}
 .swap:hover{border-color:var(--ink)}
 .swap.spin{transform:rotate(180deg)}
-.list{position:absolute;z-index:10;left:0;right:0;top:calc(100% + 6px);background:#fff;border-radius:16px;box-shadow:0 20px 40px -18px rgba(10,30,20,.35),0 0 0 1px rgba(14,16,16,.08);padding:6px;margin:0;list-style:none;max-height:300px;overflow:auto}
+.list{position:relative;z-index:10;margin-top:6px;background:#fff;border-radius:16px;box-shadow:0 20px 40px -18px rgba(10,30,20,.35),0 0 0 1px rgba(14,16,16,.08);padding:6px;margin:6px 0 0;list-style:none;max-height:min(300px,46vh);overflow:auto}
 .list[hidden]{display:none}
 .list li{display:grid;grid-template-columns:28px minmax(0,1fr);gap:10px;align-items:center;padding:10px;border-radius:10px;cursor:pointer}
 .list li[aria-selected="true"],.list li:hover{background:var(--bg)}
@@ -330,6 +332,8 @@ h3{font-family:var(--display);font-weight:700;letter-spacing:-.02em;font-size:22
 .btn-primary:hover{background:#257A50;box-shadow:none}
 .btn-quiet{background:#E9ECEB;border:0;color:var(--ink)}
 .btn-quiet:hover{background:#DEE3E0}
+.btn-ghost-dark{background:rgba(255,255,255,.1);color:#fff}
+.btn-ghost-dark:hover{background:rgba(255,255,255,.18)}
 .night .btn-quiet{background:rgba(255,255,255,.12);color:#fff;border:0}
 
 .btn-light{background:#E7F8EE;color:#0E1010}
@@ -497,7 +501,7 @@ section.block{padding-block:clamp(112px,11vw,160px)}
 .wcard .btn{justify-self:start}
 .wcard>img{display:block;width:100%;height:auto;aspect-ratio:736/641;object-fit:cover;margin-top:auto}   /* own height, never stretched behind the text (iOS Safari) */
 .wcard.dark{background:#0E1010;color:#fff}.wcard.dark p{color:#B9C1BD}
-.wcard.photo{color:#fff}
+.wcard.photo{color:#fff;background:#1C211F}
 .wcard.photo>img{position:absolute;inset:0;height:100%;aspect-ratio:auto;margin:0}
 .wcard.photo::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(14,16,16,.9) 0%,rgba(14,16,16,.7) 38%,rgba(14,16,16,0) 70%)}
 .wcard.photo p{color:#E1E7E3}
@@ -648,7 +652,7 @@ section.block{padding-block:clamp(112px,11vw,160px)}
       <div class="why">
         <article class="wcard dark"><div class="wt"><h3>Find a ride near you anytime</h3><p>Millions of driver partners in 50+ countries. Day or night, Bolt is ready when you are.</p><button class="btn btn-primary btn-small" type="button" data-handoff>Get the Bolt app</button></div><img src="assets/img/r-driver.webp" alt="A driver checks the Bolt app on a phone held next to the steering wheel" loading="lazy" width="736" height="641"></article>
         <article class="wcard"><div class="wt"><h3>Your ride, your way</h3><p>From a quick hop to an airport run: compare four ride types on your own route, with fastest and cheapest marked.</p><a class="btn btn-quiet btn-small" href="#price">Compare on the map <span aria-hidden="true">↓</span></a></div><div class="mini-types" aria-hidden="true"><span><img loading="lazy" decoding="async" src="assets/img/car-everyday.webp" alt=""><b>Bolt</b><i class="f">Fastest</i></span><span><img loading="lazy" decoding="async" src="assets/img/car-electric.webp" alt=""><b>Electric</b></span><span><img loading="lazy" decoding="async" src="assets/img/car-premium.webp" alt=""><b>Comfort</b></span><span><img loading="lazy" decoding="async" src="assets/img/car-suv.webp" alt=""><b>XL</b><i>6 seats</i></span></div></article>
-        <article class="wcard photo"><img src="assets/img/r-crew.webp" alt="" loading="lazy" width="607" height="484"><div class="wt"><h3>Driving change in cities</h3><p>Cities for people, not cars. Bolt aims to be carbon net zero by 2040.</p><a class="btn btn-light btn-small" href="https://bolt.eu/en/about/mission/" target="_blank" rel="noopener">Learn more <span class="ext" aria-hidden="true">↗</span></a></div></article>
+        <article class="wcard photo"><img src="assets/img/r-crew.webp" alt="Three friends leaning on a Bolt car, laughing" loading="lazy" width="607" height="484"><div class="wt"><h3>Driving change in cities</h3><p>Cities for people, not cars. Bolt aims to be carbon net zero by 2040.</p><a class="btn btn-light btn-small" href="https://bolt.eu/en/about/mission/" target="_blank" rel="noopener" aria-label="Learn more about Bolt's mission (opens bolt.eu)">Learn more <span class="ext" aria-hidden="true">↗</span></a></div></article>
       </div>
     </div>
   </section>
@@ -691,7 +695,7 @@ section.block{padding-block:clamp(112px,11vw,160px)}
         <div id="result" hidden style="display:grid;gap:14px">
           <p class="meta"><span>Distance <b id="km">–</b></span><span>Trip <b id="mins">–</b></span><span>Arrive <b id="arrive">–</b></span></p>
           <p class="via" id="via"></p>
-          <ul class="types" role="group" aria-label="Ride type" id="types"></ul>
+          <ul class="types" role="group" aria-label="Ride type" id="typeList"></ul>
           <div class="cta">
             <button class="btn btn-primary" type="button" id="requestBtn" data-handoff><b>Continue in the app</b><span id="ctaPrice">–</span></button>
           </div>
@@ -699,7 +703,11 @@ section.block{padding-block:clamp(112px,11vw,160px)}
           <p class="fine">Example fares and pickup times for this concept. The app shows the exact upfront price before you confirm.</p>
         </div>
       </div>
-      <button class="pin" type="button" style="right:14px;top:14px" data-note="Plan on the web, finish in the app">Simulated visitors #3 and #4 left bolt.eu/rides because nothing could be done there. Here the visitor gets the answers that matter before installing: route, price, pickup and arrival time. Booking itself stays in the app, which opens with the trip filled in. Live driver positions are left out on purpose: a public page should not show where drivers are. v2 wraps the planner in the bolt.eu product-page frame (headline left, character right) so the page reads as Bolt before it reads as a tool.</button>
+      <button class="pin" type="button" style="right:14px;top:14px" data-note="Price before install">Why: bolt.eu shows no fare on Rides; prices change with demand and market, and a wrong number is a legal and trust risk.
+Kept: booking stays in the app, which shows the upfront price.
+Changed: a range per ride type for the visitor&#x27;s own route, labelled as an estimate, and one main action that carries route, type and price into the app (F1, F2).
+Data: production reads the pricing service; markets that do not allow estimates get a static ‘from’ table in the same component.
+Test: handoffs with a filled-in trip; guardrails LCP, price-related support contacts.</button>
     </div>
     </div>
     <p class="live-note">Real Tallinn streets and distances. Fares and pickup times are examples.</p>
@@ -708,7 +716,7 @@ section.block{padding-block:clamp(112px,11vw,160px)}
 
   <section class="block" id="types" style="padding-top:24px">
     <div class="wrap">
-      <div class="sec-head"><h2>Your ride, your way</h2><p>Availability depends on the city. Every option shows its price before you book.</p></div>
+      <div class="sec-head"><h2>Pick the ride for the trip</h2><p>Availability depends on the city. Every option shows its price before you book.</p></div>
       <div class="types-grid">
         <article class="tcard"><img src="assets/img/car-everyday.webp" alt="" loading="lazy" width="640" height="482"><div class="b"><span class="tag">Everyday</span><h3>Bolt</h3><p>Fast and affordable for most trips across town.</p></div></article>
         <article class="tcard"><img src="assets/img/car-electric.webp" alt="" loading="lazy" width="640" height="482"><div class="b"><span class="tag">Zero emission</span><h3>Electric</h3><p>Quiet electric cars for a small premium.</p></div></article>
@@ -733,8 +741,10 @@ section.block{padding-block:clamp(112px,11vw,160px)}
     </div>
   </section>
 
-  <section class="block" id="safety" aria-labelledby="safeT">
-    <div class="wrap">
+  <section class="has-pin block" id="safety" aria-labelledby="safeT">
+    <div class="wrap"><button class="pin" type="button" style="left:8px;top:-12px" data-note="Safety: Bolt’s content, readable on a phone">Kept: all of bolt.eu&#x27;s safety features and the ‘features vary by country’ line.
+Changed: text first, photo below, so text never sits on a busy photo (it broke on iOS Safari in v2). Every link says where it goes.
+A11y: photos repeat the card text, so they are marked decorative; the card text carries the meaning.</button>
       <div class="sec-head center"><h2 id="safeT">Staying safe with Bolt</h2><p>You are never on your own. Over 500 people on the Bolt Safety Team stand behind every ride. Features vary by country.</p></div>
       <div class="sgrid">
         <article class="sc tall"><img src="assets/img/r-emergency.webp" alt="" loading="lazy"><div><b>Emergency assist</b><span>Discreetly alert an emergency team from the app; the Safety team calls you straight away.</span></div></article>
@@ -748,8 +758,11 @@ section.block{padding-block:clamp(112px,11vw,160px)}
     </div>
   </section>
 
-  <section class="block" id="airport" aria-labelledby="airT" style="padding-top:0">
-    <div class="wrap air">
+  <section class="has-pin block" id="airport" aria-labelledby="airT" style="padding-top:0">
+    <div class="wrap air"><button class="pin" type="button" style="left:8px;top:-12px" data-note="Airport fares: the search query, answered">Why: “bolt price airport” is one of the most searched questions; bolt.eu answers it with a link to a list of 100+ airports.
+Changed: the five usual trips from Tallinn Airport with time and fare. Tapping one fills the planner above.
+Build: Route list, props: from, to[], computed from the same fare function as the planner, so numbers never disagree.
+Test: organic entrances on airport queries; route-list clicks.</button>
       <img class="air-img" src="assets/img/r-airport.webp" alt="A traveller with a suitcase waits for his ride outside an airport terminal" loading="lazy" width="800" height="1000">
       <div class="air-t">
         <p class="eyebrow">Airports</p>
@@ -812,7 +825,7 @@ section.block{padding-block:clamp(112px,11vw,160px)}
       <div class="foot-id"><span class="wordmark foot-mark">Bolt</span><span class="region"><svg width="14" height="14" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 15s5-4.6 5-8.5A5 5 0 0 0 3 6.5C3 10.4 8 15 8 15z" fill="none" stroke="currentColor" stroke-width="1.6"/><circle cx="8" cy="6.5" r="1.8" fill="currentColor"/></svg>Tallinn, Estonia · English</span></div>
       <div class="foot-cta"><button class="btn btn-small foot-btn" type="button" data-handoff>Get Bolt</button><a class="btn btn-small foot-btn" href="https://bolt.eu/en/food/" target="_blank" rel="noopener">Get Bolt Food<span class="ext" aria-hidden="true">↗</span><span class="visually-hidden"> (opens bolt.eu)</span></a></div>
     </div>
-    <div class="legal"><span>Unofficial redesign concept for a portfolio by Andrii. Not affiliated with or endorsed by Bolt Technology OÜ. Illustrations are AI-generated; Bolt 7 and app images are Bolt’s own, from bolt.eu. Links marked ↗ open the real bolt.eu.</span><span class="mono">2026</span></div>
+    <div class="legal"><span>Unofficial redesign concept for a portfolio by Andrii. Not affiliated with or endorsed by Bolt Technology OÜ. Photos are Bolt’s own, from bolt.eu, used for a non-commercial portfolio. Illustrations, the ride-type car images and the Drive studio frames are AI-generated. Links marked ↗ open the real bolt.eu.</span><span class="mono">2026</span></div>
     
   </div>
 </footer>
@@ -898,15 +911,17 @@ window.Concept = (() => {
   /* design notes */
   let pop = null;
   const closePop = () => { pop?.remove(); pop = null; };
+  { const t = $('#notesToggle'), n = $$('.pin').length; if (t && n) t.textContent = `Design notes · ${n}`; }
   $('#notesToggle')?.addEventListener('click', e => { const on = document.body.classList.toggle('notes'); e.currentTarget.setAttribute('aria-pressed', String(on)); if (!on) closePop(); });
   $$('.pin').forEach((p, i) => {
-    const text = p.textContent.trim(); p.textContent = i + 1; p.setAttribute('aria-label', `Design note ${i + 1}: ${p.dataset.note}`);
+    const text = p.textContent.trim(); p.textContent = i + 1; p.setAttribute('aria-label', `Design note ${i + 1}: ${p.dataset.note}`); p.setAttribute('aria-expanded', 'false');
     p.addEventListener('click', e => {
       e.stopPropagation();
       if (pop && pop.dataset.for === String(i)) return closePop();
       closePop();
       pop = document.createElement('div'); pop.className = 'pin-pop'; pop.dataset.for = i; pop.setAttribute('role', 'note');
-      pop.innerHTML = '<b></b><span></span>'; pop.querySelector('b').textContent = p.dataset.note; pop.querySelector('span').textContent = text;
+      pop.innerHTML = '<b></b>'; pop.querySelector('b').textContent = p.dataset.note;
+      text.split(/\n+/).map(l => l.trim()).filter(Boolean).forEach(l => { const m = l.match(/^(Why|Kept|Changed|Build|Test|A11y|Data):\s*(.*)$/); const row = document.createElement('p'); if (m) { const k = document.createElement('i'); k.textContent = m[1]; row.append(k, document.createTextNode(m[2])); } else row.textContent = l; pop.appendChild(row); });
       p.parentElement.appendChild(pop);
       const pr = p.getBoundingClientRect(), par = p.parentElement.getBoundingClientRect();
       let left = pr.left - par.left + 34;
@@ -1128,8 +1143,8 @@ window.Concept = (() => {
     mkB.querySelector('.t').textContent = st.to.label.length > 28 ? st.to.label.slice(0, 26) + '…' : st.to.label;
     mkB.querySelector('.e').textContent = clock(pm + tm);
     mkA.querySelector('.bub').textContent = `Pickup · about ${pm} min`;
-    $('#types').innerHTML = TYPES.map(t => `<li><button class="type" type="button" data-t="${t.id}" aria-pressed="${t.id === st.type}"><img loading="lazy" decoding="async" src="${IMG[t.id]}" alt="" width="640" height="482"><span class="n"><b>${t.name}</b><span>${t.sub} · pickup ~${pm + t.extra} min</span></span><span class="p">${range(fare(t))}<small>arrive ${clock(pm + t.extra + tm)}</small></span></button></li>`).join('');
-    $$('#types .type').forEach(b => b.addEventListener('click', () => { st.type = b.dataset.t; renderTypes(); }));
+    $('#typeList').innerHTML = TYPES.map(t => `<li><button class="type" type="button" data-t="${t.id}" aria-pressed="${t.id === st.type}"><img loading="lazy" decoding="async" src="${IMG[t.id]}" alt="" width="640" height="482"><span class="n"><b>${t.name}</b><span>${t.sub} · pickup ~${pm + t.extra} min</span></span><span class="p">${range(fare(t))}<small>arrive ${clock(pm + t.extra + tm)}</small></span></button></li>`).join('');
+    $$('#typeList .type').forEach(b => b.addEventListener('click', () => { st.type = b.dataset.t; renderTypes(); }));
     const t = TYPES.find(x => x.id === st.type), f = fare(t);
     setText($('#ctaPrice'), range(f));
     setText($('#phType'), t.name); setText($('#phPrice'), range(f));
