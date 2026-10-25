@@ -130,7 +130,7 @@ td b{font-weight:650}
 .swatches{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
 .sw{display:grid;gap:6px;font:500 11px/1.2 var(--mono);color:var(--muted)}
 .sw i{width:56px;height:40px;border-radius:10px;box-shadow:inset 0 0 0 1px rgba(14,16,16,.1)}
-.pages-links{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.pages-links{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px}
 .pages-links a{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:18px;text-decoration:none;color:var(--ink);display:grid;gap:4px}
 .pages-links a:hover{border-color:var(--ink)}
 .pages-links b{font-weight:680}
@@ -168,7 +168,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}
   <div class="wrap">
     <a class="who" href="#top">Andrii <span>· Product design</span></a>
     <nav aria-label="Case study sections">
-      <a href="#problem">Problem</a><a href="#brand">Brand fit</a><a href="#idea">Idea</a><a href="#pages">Pages</a><a href="#cuts">What I cut</a><a href="#a11y">Accessibility</a><a href="#perf">Performance</a><a href="#ship">Shipping</a><a href="#ai">AI</a>
+      <a href="#problem">Problem</a><a href="#brand">Brand fit</a><a href="#idea">Idea</a><a href="#pages">Pages</a><a href="#cuts">What I cut</a><a href="#a11y">Accessibility</a><a href="#selftest">Self-test</a><a href="#perf">Performance</a><a href="#ship">Shipping</a><a href="#ai">AI</a>
     </nav>
     <a class="btn btn-primary" href="prototype/index.html">Open the prototype</a>
   </div>
@@ -186,11 +186,11 @@ footer .wrap{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}
       </div>
       <div class="meta">
         <div><span class="label">Role</span><b>Solo, self-initiated: content audit, UX, UI and coded prototype</b></div>
-        <div><span class="label">Scope</span><b>4 product pages, navigation, footer, app handoff, shared web components</b></div>
+        <div><span class="label">Scope</span><b>4 product pages, a Bolt 7 launch page, navigation, footer, app handoff, shared web components</b></div>
         <div><span class="label">Built with</span><b>HTML, CSS, JavaScript (canvas), OpenStreetMap data. AI: Claude, Higgsfield</b></div>
         <div><span class="label">Audience</span><b>First-time visitors who do not have the app yet</b></div>
       </div>
-      <p class="disclaimer">Independent concept, not affiliated with or endorsed by Bolt. Prices, wait times and vehicles in the prototype are examples. Map data © OpenStreetMap contributors. Photos marked "Image: Bolt" are Bolt's own, from bolt.eu; the other photos and illustrations are AI-generated.</p>
+      <p class="disclaimer">Independent concept, not affiliated with or endorsed by Bolt. Prices, wait times and vehicles in the prototype are examples. Map data © OpenStreetMap contributors. Photos are Bolt's own, from bolt.eu, used for a non-commercial portfolio. Illustrations, the ride-type car images and the Drive studio frames are AI-generated.</p>
     </div>
     <div class="wide hero-media">
       <figure>
@@ -207,7 +207,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}
       <div class="tldr">
         <div class="card"><span class="label">The problem</span><p>bolt.eu explains its products well but rarely lets people act. Eight pages use six different main buttons, every rider button ends in the same generic QR code, and no page estimates your own trip.</p></div>
         <div class="card"><span class="label">What I designed</span><p>Pages that look and read like bolt.eu, with one working answer each: a price before install, the nearest scooter, a car you can "unlock". Booking stays in the app, which opens with the trip filled in.</p></div>
-        <div class="card"><span class="label">How I would ship it</span><p>Five A/B tests, smallest first, each with one primary metric and guardrails. WCAG AA by default, AAA where it matters, and a performance budget for the map.</p></div>
+        <div class="card"><span class="label">How I would ship it</span><p>Six A/B tests, smallest first, each with one primary metric and guardrails. WCAG AA by default, AAA where it matters, and a performance budget for the map.</p></div>
       </div>
     </div>
   </section>
@@ -231,6 +231,18 @@ footer .wrap{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}
       </ol>
       <div class="note"><span class="label">A signal, not evidence</span>
         <p>To sharpen the brief I also ran an AI-simulated usability test of the live site with 20 synthetic personas. In it, two "visitors" could not tell what Bolt is from the homepage, and two left Rides because they could not see what their own trip would cost. These match F1, F2, F6 and F9, so I used them to set priorities, not as proof. They are the first things I would check with five real first-time visitors.</p></div>
+      <h3 style="margin:64px 0 8px">Before changing anything: why bolt.eu works this way</h3>
+      <p class="muted" style="max-width:50rem;margin-bottom:20px">Most of what looks like a problem has a reason. I kept the reason and changed only what it costs the visitor.</p>
+      <div class="table-wrap"><table>
+        <thead><tr><th>What bolt.eu does</th><th>Likely reason</th><th>So in the concept</th></tr></thead>
+        <tbody>
+          <tr><td><b>No fare on Rides</b></td><td>Prices move with demand and differ by market; a wrong number on a public page is a trust and legal risk.</td><td>A labelled range for the visitor's own route, fed by the pricing service; markets that do not allow estimates get a static "from" table in the same component.</td></tr>
+          <tr><td><b>One generic QR for every product</b></td><td>On a desktop the page cannot know the phone; one smart link is simple to track and maintain.</td><td>Kept the dialog pattern; the link now carries the product and trip, one code per app.</td></tr>
+          <tr><td><b>Home leads with a brand line</b></td><td>Most people reach Home by searching "Bolt"; the page confirms the brand before it sells.</td><td>Kept the brand-first hero, but the line names both halves: "Get around. Get delivered." (F9).</td></tr>
+          <tr><td><b>"in Estonia" in every title and H1</b></td><td>One page template serves 50 countries; the country makes each copy rank locally.</td><td>Kept the pattern in titles and descriptions, with the city, because the concept works on a real Tallinn map.</td></tr>
+          <tr><td><b>Images without alt text</b></td><td>Media is uploaded to the CMS with file names like "Bolt_Drive_Media_14"; nothing asks for alt.</td><td>Alt on every meaningful photo, empty alt on decorative ones. For production: make alt a required CMS field, a process fix rather than a page fix.</td></tr>
+          <tr><td><b>Generic "Learn more" and "Get started"</b></td><td>Reusable CMS blocks with a default button label.</td><td>Same visible labels where they read well, but every link has a unique accessible name (WCAG 2.4.9, AAA).</td></tr>
+        </tbody></table></div>
     </div>
   </section>
 
@@ -268,6 +280,15 @@ footer .wrap{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}
         <div class="card"><b class="n">03</b><h3>One web language</h3><p>The same map card, search, price row, sticky sub-menu and handoff on every page, so the site feels like one product.</p></div>
         <div class="card"><b class="n">04</b><h3>Respect the person</h3><p>Reduced motion, keyboard paths, AA contrast, no personal data collected, and no driver positions on a public page.</p></div>
       </div>
+      <h3 style="margin:56px 0 16px">Button naming, one rule for every page</h3>
+      <div class="table-wrap"><table>
+        <thead><tr><th>Where</th><th>Label</th><th>Why</th></tr></thead>
+        <tbody>
+          <tr><td><b>Header, every page</b></td><td>Get the app</td><td>Always in the same place with the same words; opens the app on the page's product.</td></tr>
+          <tr><td><b>Hero, main action</b></td><td>The product's verb: Get Bolt · Rent a scooter · Rent a car</td><td>Says what you will do, as bolt.eu already does on Scooters and Drive.</td></tr>
+          <tr><td><b>After an answer</b></td><td>… in the app: Continue in the app · Reserve in the app · Unlock in the app</td><td>Makes clear the next step happens in the app, with the trip filled in.</td></tr>
+          <tr><td><b>Leaving bolt.eu's product</b></td><td>Get Bolt Food ↗</td><td>The arrow and its accessible name say it opens another site.</td></tr>
+        </tbody></table></div>
       <div class="two" style="margin-top:40px">
         <figure><div class="shot"><img src="case/apps.jpg" alt="Explore apps dialog listing four Bolt apps: Bolt, Bolt Food, Bolt Driver and Bolt Business." loading="lazy" width="1600" height="1000"></div>
           <figcaption><b>Explore apps (F4, F5).</b> One clear place for all four Bolt apps, so riders and partners never share a list. The header keeps "Get Bolt" as the one main action.</figcaption></figure>
@@ -279,7 +300,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}
 
   <section class="s" id="pages" aria-labelledby="pages-h">
     <div class="wrap">
-      <div class="s-head"><p class="label">04 · Pages</p><h2 id="pages-h">One question per page, answered where it comes up.</h2></div>
+      <div class="s-head"><p class="label">04 · Pages</p><h2 id="pages-h">One question per page, answered where it comes up.</h2><p>Every prototype page has <b>Design notes</b> in the top bar: numbered pins that explain, in place, why bolt.eu does it this way, what I kept, what I changed, how to build it and how to test it.</p></div>
 
       <article class="feature">
         <div class="media"><figure><div class="browser"><div class="bar"><i></i><i></i><i></i><span>prototype / home</span></div>
@@ -325,6 +346,17 @@ footer .wrap{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}
       </article>
 
       <article class="feature">
+        <div class="media"><figure><div class="browser"><div class="bar"><i></i><i></i><i></i><span>prototype / bolt 7 launch</span></div>
+          <video src="case/bolt7.mp4" poster="case/bolt7.jpg" muted loop playsinline preload="none" data-auto aria-label="Bolt 7 launch page: the hero with the scooter, then a scroll story where the handlebar display changes from navigation to slow zone, pavement warning and parking; then the fact cards."></video></div></figure></div>
+        <div class="copy"><span class="label">Campaign page · Bolt 7</span><p class="q">"What is new, and why should I care?"</p>
+          <ul><li>On bolt.eu the Bolt 7 promo's "Learn more" opens the Bolt 6 story (F3). A launch deserves its own page.</li>
+            <li>Built only from the site's parts: dark hero, video block with pause, fact cards, final CTA. The one new piece, a scroll story, reuses the handlebar display from Scooters.</li>
+            <li>Facts come from Bolt's announcement and press, with sources on the page. "Not in your city yet?" sends Tallinn riders to today's scooters.</li></ul>
+          <p class="aha"><b>AHA:</b> four AI and display features become one ride you scroll through: route, slow zone, pavement, parking.</p>
+          <a class="open" href="prototype/bolt7.html">Open the Bolt 7 page →</a></div>
+      </article>
+
+      <article class="feature">
         <div class="media"><div class="phone-frame"><video src="case/phone.mp4" poster="case/phone.jpg" muted loop playsinline preload="none" data-auto aria-label="Car-sharing on a phone: the car unlocks, the card appears under it, and 'Show it on the map' opens the same car on the map."></video></div></div>
         <div class="copy"><span class="label">On a phone</span><p class="q">One column, one thumb.</p>
           <ul><li>Photos sit between the headline and the text, so the first screen shows what the page is about.</li>
@@ -358,7 +390,8 @@ footer .wrap{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}
         <tbody>
           <tr><td><b>1.4.3 Contrast</b></td><td><span class="tag">AA</span></td><td>Body text 18:1, secondary text 5.6:1. Bolt green #2B8659 is only 4.3:1 as text on white, so text links use a darker #23744C (5.4:1). White text on green buttons keeps 4.5:1.</td></tr>
           <tr><td><b>1.4.6 Contrast (enhanced)</b></td><td><span class="tag aaa">AAA, partly</span></td><td>Body text on white and on the dark bands passes 7:1. Secondary text stays at 5.6:1 on purpose, to keep the hierarchy readable.</td></tr>
-          <tr><td><b>1.1.1 Non-text content</b></td><td><span class="tag">A</span></td><td>Every content photo has alt text (bolt.eu misses it on most images, F8). Decorative layers, like the car's light frames, are hidden from screen readers.</td></tr>
+          <tr><td><b>1.1.1 Non-text content</b></td><td><span class="tag">A</span></td><td>Photos that add something get alt text; photos that only repeat their card's text, and the car's light layers, are marked decorative so a screen reader does not read the same thing twice. bolt.eu has no alt on most images (F8).</td></tr>
+          <tr><td><b>2.4.9 Link purpose (link only)</b></td><td><span class="tag aaa">AAA</span></td><td>Repeated labels like "Learn more", "View all" and the two Drive plan buttons have unique accessible names, so a list of links still makes sense out of context.</td></tr>
           <tr><td><b>2.1.1 Keyboard</b></td><td><span class="tag">A</span></td><td>Place search is a combobox with arrow keys and Enter. Hold to unlock also works with Enter. Photo rails scroll with arrow buttons. Footer groups are native disclosure buttons.</td></tr>
           <tr><td><b>2.2.2 Pause, stop, hide</b></td><td><span class="tag">A</span></td><td>The Bolt 7 video has a pause button. The race and the scooter ride can be skipped. Moving parts stop when they leave the screen.</td></tr>
           <tr><td><b>2.3.3 Animation from interactions</b></td><td><span class="tag aaa">AAA</span></td><td>With "reduce motion" on, the race shows its result straight away, the headlight beams and flicker are off, and the unlocked car simply appears lit. The hold still needs a hold, so the meaning stays.</td></tr>
@@ -369,14 +402,31 @@ footer .wrap{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}
     </div>
   </section>
 
+  <section class="s" id="selftest" aria-labelledby="selftest-h">
+    <div class="wrap">
+      <div class="s-head"><p class="label">07 · Self-test</p><h2 id="selftest-h">I tested it as five visitors before sending it.</h2>
+        <p>Scripted walkthroughs in a real browser at 360, 768, 1024, 1280 and 1440 px, plus an accessibility checker I wrote for contrast, names, focus, target size and heading order. Every issue below was found this way and fixed.</p></div>
+      <div class="table-wrap"><table>
+        <thead><tr><th>As a…</th><th>I tried to</th><th>What broke</th><th>Fix</th></tr></thead>
+        <tbody>
+          <tr><td><b>Tourist at the airport, phone</b></td><td>Get the fare to the Old Town</td><td>The list of places was cut off by its own panel; only two and a half options showed.</td><td>The list now sits in the panel's flow and never clips.</td></tr>
+          <tr><td><b>Local on a 1280 px laptop</b></td><td>Unlock the car on Drive</td><td>The car card ran off the right edge on every screen narrower than 1440 px.</td><td>The card is kept 24 px inside the viewport at any width.</td></tr>
+          <tr><td><b>Visitor using the sub-menu</b></td><td>Jump to "Ride types"</td><td>Two elements shared one id, so the link landed inside the price planner.</td><td>Unique ids; one H2 renamed so no two headings repeat.</td></tr>
+          <tr><td><b>Low-vision visitor</b></td><td>Read the About band on Home</td><td>Light green text on Bolt green: 3.4–4.4:1, below AA.</td><td>White text and a darker card: 5.0–6.4:1.</td></tr>
+          <tr><td><b>Screen-reader user</b></td><td>Browse links out of context</td><td>Several "Learn more" and "Get started" with the same name.</td><td>Unique accessible names (2.4.9).</td></tr>
+        </tbody></table></div>
+      <p class="muted" style="margin-top:16px;font-size:14px">Not yet done: sessions with real screen-reader users, and a test on real iOS devices beyond one iPhone.</p>
+    </div>
+  </section>
+
   <section class="s" id="perf" aria-labelledby="perf-h">
     <div class="wrap">
-      <div class="s-head"><p class="label">07 · Performance and search</p><h2 id="perf-h">Text first, map second.</h2>
+      <div class="s-head"><p class="label">08 · Performance and search</p><h2 id="perf-h">Text first, map second.</h2>
         <p>Public pages are opened on cheap Android phones in 50 countries, often from search. The prototype paints text and the first photo first, loads the rest of the photos lazily, and loads the map data after; the data file is shared and cached across pages.</p></div>
       <div class="metrics">
-        <div class="metric"><b>≈0.8–1.0 s</b><span>Largest Contentful Paint, lab, throttled phone (1.6 Mbps, 4× slower CPU), across the four pages</span></div>
+        <div class="metric"><b>≈0.7–1.1 s</b><span>Largest Contentful Paint, lab, throttled phone (1.6 Mbps, 4× slower CPU), across the five pages</span></div>
         <div class="metric"><b>≈5 s</b><span>until the live map is ready on the same profile; the page is usable before that</span></div>
-        <div class="metric"><b>92–114 KB</b><span>of HTML per page, photos in WebP; the 425 KB map file is loaded once for all pages</span></div>
+        <div class="metric"><b>66–115 KB</b><span>of HTML per page, photos in WebP; the 425 KB map file is loaded once for all pages</span></div>
       </div>
       <div class="two">
         <div class="card"><h3>For production</h3><p>Text and links rendered on the server for search. The map from Bolt's own map and routing stack as vector tiles, loaded when the visitor interacts or when the page is idle. Responsive images per breakpoint. A budget per page: LCP under 2.5 s and INP under 200 ms at p75 on a mid-range Android.</p></div>
@@ -388,7 +438,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}
 
   <section class="s" id="ship" aria-labelledby="ship-h">
     <div class="wrap">
-      <div class="s-head"><p class="label">08 · Shipping</p><h2 id="ship-h">Not a big-bang redesign: five tests, smallest first.</h2>
+      <div class="s-head"><p class="label">09 · Shipping</p><h2 id="ship-h">Not a big-bang redesign: six tests, smallest first.</h2>
         <p>Every piece can ship on its own into today's bolt.eu, because it uses Bolt's own layout. The order follows effort against expected impact; each test has one primary metric and guardrails, so a win on one number can't hide a loss on another.</p></div>
       <div class="table-wrap"><table>
         <thead><tr><th>#</th><th>Change</th><th>Hypothesis</th><th>Primary metric</th><th>Guardrails</th></tr></thead>
@@ -398,21 +448,30 @@ footer .wrap{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}
           <tr><td>3</td><td><b>Price before install on Rides</b>, with airport fares</td><td>Seeing your own trip's price increases app opens with a trip filled in.</td><td>Handoffs with a filled-in trip</td><td>LCP, bounce rate</td></tr>
           <tr><td>4</td><td><b>"Get delivered" on Home</b> and the food note after the race</td><td>Naming delivery early helps visitors who think Bolt is only transport.</td><td>Bolt Food clicks from Home</td><td>Get Bolt clicks, Home LCP</td></tr>
           <tr><td>5</td><td><b>Hold to unlock hero on Drive</b></td><td>Showing a real car nearby makes car-sharing feel close and simple.</td><td>Clicks to the car map and to "Rent a car"</td><td>Drive LCP, scroll depth</td></tr>
+          <tr><td>6</td><td><b>Bolt 7 launch page</b> behind the Bolt 7 promos</td><td>A promo that lands on its own story converts better than one that lands on an old article.</td><td>Rent a scooter clicks from the promo</td><td>Bounce on the launch page</td></tr>
         </tbody></table></div>
       <div class="two" style="margin-top:40px">
         <div class="card"><h3>Beyond Tallinn</h3><p>The city comes from the URL or location, with a picker. Where there is no vehicle data, the same components fall back to a static price table and the handoff. Text is translated per locale; prices come from the pricing service, never from the page.</p></div>
-        <div class="card"><h3>Web components</h3><div class="chips"><span>Hero: photo, split, dark</span><span>Service card</span><span>Sticky sub-menu</span><span>Map card</span><span>Place search</span><span>Price row</span><span>Planner</span><span>Photo rail</span><span>Video block</span><span>Hold button</span><span>FAQ</span><span>Download band</span><span>Explore apps</span><span>Footer</span></div>
+        <div class="card"><h3>Web components</h3><div class="chips"><span>Hero: photo, split, dark</span><span>Service card</span><span>Sticky sub-menu</span><span>Map card</span><span>Place search</span><span>Price row</span><span>Planner</span><span>Photo rail</span><span>Video block</span><span>Hold button</span><span>Scroll story</span><span>Design notes</span><span>FAQ</span><span>Download band</span><span>Explore apps</span><span>Footer</span></div>
           <p class="muted" style="font-size:14px">One shared stylesheet for every page. Each component has default, hover, focus, pressed, loading, empty and error states (for example "That is right here, pick somewhere a little further away").</p>
           <div class="swatches" aria-label="Colour tokens"><span class="sw"><i style="background:#0E1010"></i>ink</span><span class="sw"><i style="background:#FFFFFF"></i>page</span><span class="sw"><i style="background:#2B8659"></i>green</span><span class="sw"><i style="background:#23744C"></i>green text</span><span class="sw"><i style="background:#E3F1E8"></i>green soft</span><span class="sw"><i style="background:#5C6660"></i>muted</span><span class="sw"><i style="background:#0B0D0D"></i>dark band</span></div></div>
       </div>
     </div>
   </section>
 
+  <section class="s" aria-labelledby="handoff-h">
+    <div class="wrap">
+      <div class="s-head"><p class="label">Handoff</p><h2 id="handoff-h">The prototype explains itself.</h2><p>Turn on Design notes on any page. Each pin answers the questions an engineer, a brand designer or a PM would ask: why, what changed, how to build it, how to test it. Timings and states match the code.</p></div>
+      <figure><div class="shot"><img src="case/notes.jpg" alt="Drive hero with Design notes on: a note next to the unlocked car lists why, what changed, build timings, accessibility and the test metric." loading="lazy" width="1600" height="1000"></div>
+        <figcaption>Design note on the Drive hero: the unlock timing (hold 1100 ms, headlights from 1360 ms, card from 1800 ms), the keyboard path and the metric to test.</figcaption></figure>
+    </div>
+  </section>
+
   <section class="s" id="ai" aria-labelledby="ai-h">
     <div class="wrap">
-      <div class="s-head"><p class="label">09 · Working with AI</p><h2 id="ai-h">Faster, with the standard kept high.</h2></div>
+      <div class="s-head"><p class="label">10 · Working with AI</p><h2 id="ai-h">Faster, with the standard kept high.</h2></div>
       <div class="two">
-        <div class="card"><h3>Where AI helped</h3><p>Claude was my second reviewer for the audit, my pair programmer for the coded prototype, and a critic that pushed back on ideas, like the ride replay and the dark theme. AI-simulated personas sharpened the hypotheses. Higgsfield turned Bolt's own 926 px car photo into two matched 2K studio frames (lights off, lights on) for the Drive hero, and made the illustrations where Bolt had no photo.</p></div>
+        <div class="card"><h3>Where AI helped</h3><p>Claude was my second reviewer for the audit, my pair programmer for the coded prototype, and a critic that pushed back on ideas, like the ride replay and the dark theme. AI-simulated personas sharpened the hypotheses. Higgsfield turned Bolt's own 926 px car photo into two matched 2K studio frames (lights off, lights on) for the Drive hero, and made the illustrations where Bolt had no photo. When standard accessibility tools were not available, I wrote a small checker with Claude; it caught the AA failure on the green band.</p></div>
         <div class="card"><h3>What I owned</h3><p>The questions each page answers, the brand audit and the decision to rebuild v1, every cut in section 05, and the line between what the web should do and what belongs in the app. I checked every generated image against the original (livery, plate, wheels) and labelled it. Every number on the page is marked as real (distances, street names) or as an example (prices, wait times).</p></div>
       </div>
     </div>
@@ -420,7 +479,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}
 
   <section class="s" aria-labelledby="next-h">
     <div class="wrap">
-      <div class="s-head"><p class="label">10 · Next</p><h2 id="next-h">What I would check with real data.</h2></div>
+      <div class="s-head"><p class="label">11 · Next</p><h2 id="next-h">What I would check with real data.</h2></div>
       <ol class="findings">
         <li><span class="code">1</span><p><b>Five moderated sessions</b> with first-time visitors in Tallinn, on Home and Rides, before any build. Can they say what Bolt does, and what their trip would cost?</p><span></span></li>
         <li><span class="code">2</span><p><b>Analytics:</b> where visitors drop between a product page and an app install, by device and market.</p><span></span></li>
@@ -439,6 +498,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}
         <a href="prototype/rides.html"><b>Rides</b><span>Price before install, airport fares</span></a>
         <a href="prototype/scooters.html"><b>Scooters</b><span>Nearest scooter, Bolt 7 ride</span></a>
         <a href="prototype/drive.html"><b>Car-sharing</b><span>Hold to unlock, cars near you</span></a>
+        <a href="prototype/bolt7.html"><b>Bolt 7</b><span>Launch page, scroll story</span></a>
       </div>
       <p class="muted" style="margin-top:16px;font-size:14px">The first version is kept for comparison: <a href="v1/index.html">open v1</a>.</p>
     </div>

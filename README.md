@@ -3,12 +3,14 @@
 Product design case study by Andrii (October 2026).
 
 - **Case study:** `index.html`
-- **Prototype:** `prototype/index.html` (Home), `prototype/rides.html`, `prototype/scooters.html`, `prototype/drive.html` (Car-sharing)
+- **Prototype:** `prototype/index.html` (Home), `prototype/rides.html`, `prototype/scooters.html`, `prototype/drive.html` (Car-sharing), `prototype/bolt7.html` (Bolt 7 launch page)
 - **First version, kept for comparison:** `v1/`
+
+Turn on **Design notes** in the top bar of any prototype page to see why each part is built the way it is, how to build it and how to test it.
 
 Independent portfolio concept. Not affiliated with, commissioned or endorsed by Bolt Technology OÜ.
 Prices, wait times and vehicles in the prototype are examples. Map data © OpenStreetMap contributors (ODbL).
-Photos marked "Image: Bolt" are Bolt's own, from bolt.eu; other photos and illustrations are AI-generated. The prototype pages are marked `noindex` and are kept out of search engines.
+Photos are Bolt's own, from bolt.eu, used for a non-commercial portfolio. Illustrations, the ride-type car images and the Drive studio frames are AI-generated. The prototype pages are marked `noindex` and are kept out of search engines.
 
 ## Run locally
 
