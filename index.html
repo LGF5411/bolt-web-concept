@@ -1,0 +1,488 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Answers before the app · bolt.eu concept · Andrii</title>
+<meta name="description" content="A product design case study: a redesign concept for Bolt's public web pages that keeps Bolt's house style and answers the visitor's question before the app. Independent work, not affiliated with Bolt.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 64 64%22%3E%3Crect width=%2264%22 height=%2264%22 rx=%2216%22 fill=%22%230E1010%22/%3E%3Ctext x=%2232%22 y=%2244%22 font-family=%22Arial%22 font-weight=%22700%22 font-size=%2234%22 fill=%22%23fff%22 text-anchor=%22middle%22%3EA%3C/text%3E%3C/svg%3E">
+<meta property="og:title" content="Answers before the app: a bolt.eu redesign concept">
+<meta property="og:description" content="Product design case study by Andrii. Independent concept, not affiliated with Bolt.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400..800&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --paper:#F7F9F8; --surface:#FFFFFF; --ink:#0E1010; --muted:#5C6660; --line:#DCE3DE;
+  --green:#2B8659; --green-text:#23744C; --green-soft:#E3F1E8; --amber:#94560A; --amber-soft:#FBF1E2;
+  --font:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif; --mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+  --wrap:1120px; --r:22px;
+}
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:72px}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+body{margin:0;background:var(--paper);color:var(--ink);font:400 17px/1.6 var(--font);-webkit-font-smoothing:antialiased}
+img,video{max-width:100%;height:auto;display:block}
+a{color:var(--green-text);text-underline-offset:3px}
+:focus-visible{outline:2px solid var(--green);outline-offset:3px;border-radius:6px}
+h1,h2,h3{margin:0;text-wrap:balance;letter-spacing:-.03em}
+h1{font:780 clamp(44px,7.4vw,92px)/.98 var(--font);letter-spacing:-.045em}
+h2{font:760 clamp(32px,4.2vw,52px)/1.04 var(--font)}
+h3{font:680 22px/1.25 var(--font);letter-spacing:-.015em}
+p{margin:0}
+.wrap{max-width:var(--wrap);margin:0 auto;padding:0 max(20px,env(safe-area-inset-left,0px))}
+.wide{max-width:1240px;margin:0 auto;padding:0 20px}
+.mono{font-family:var(--mono)}
+.label{font:500 12px/1.3 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.muted{color:var(--muted)}
+.visually-hidden{position:absolute!important;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+/* top bar */
+.top{position:sticky;top:0;z-index:20;background:rgba(247,249,248,.92);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.top .wrap{display:flex;align-items:center;gap:24px;height:60px}
+.top .who{font-weight:700;letter-spacing:-.01em;white-space:nowrap;color:var(--ink);text-decoration:none}
+.top .who span{font-weight:500;color:var(--muted)}
+.top nav{display:flex;gap:2px;overflow-x:auto;scrollbar-width:none;flex:1;min-width:0}
+.top nav::-webkit-scrollbar{display:none}
+.top nav a{color:var(--muted);text-decoration:none;font-size:14px;font-weight:550;padding:8px 10px;border-radius:999px;white-space:nowrap}
+.top nav a:hover,.top nav a[aria-current="true"]{color:var(--ink);background:#EAEFEC}
+.btn{display:inline-flex;align-items:center;gap:8px;min-height:48px;padding:0 22px;border-radius:999px;font:650 16px/1 var(--font);text-decoration:none;border:1px solid transparent;cursor:pointer;white-space:nowrap}
+.btn-primary{background:var(--green);color:#fff}
+.btn-primary:hover{background:#24734C}
+.btn-quiet{background:var(--surface);color:var(--ink);border-color:var(--line)}
+.btn-quiet:hover{border-color:var(--ink)}
+.top .btn{min-height:40px;padding:0 16px;font-size:14px}
+
+/* hero */
+.hero{padding:72px 0 40px}
+.hero .label{margin-bottom:22px}
+.lede{font-size:clamp(19px,2vw,23px);line-height:1.45;max-width:46rem;margin-top:26px;color:#2A302D}
+.cta-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:32px}
+.meta{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:24px;margin-top:56px;padding-top:24px;border-top:1px solid var(--line)}
+.meta div{display:grid;gap:6px;align-content:start}
+.meta b{font-weight:600;font-size:15px;line-height:1.45}
+.disclaimer{margin-top:28px;font-size:13px;color:var(--muted);max-width:52rem}
+.browser{border-radius:var(--r);overflow:hidden;background:#fff;box-shadow:0 40px 80px -40px rgba(10,30,20,.35),0 0 0 1px rgba(14,16,16,.08)}
+.browser .bar{display:flex;align-items:center;gap:7px;height:36px;padding:0 14px;background:#EEF2EF;border-bottom:1px solid var(--line)}
+.browser .bar i{width:10px;height:10px;border-radius:50%;background:#D3DAD6}
+.browser .bar span{margin-left:12px;font:500 12px/1 var(--mono);color:var(--muted)}
+.browser video,.browser img{width:100%;height:auto;aspect-ratio:16/10;object-fit:cover;background:#0C100F}
+figure{margin:0}
+figcaption{font-size:14px;color:var(--muted);margin-top:12px;max-width:52rem}
+.hero-media{margin-top:56px}
+
+/* sections */
+section.s{padding:104px 0 0}
+.s-head{display:grid;gap:16px;max-width:50rem;margin-bottom:44px}
+.s-head p{font-size:19px;color:#2A302D}
+.tldr{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:26px;display:grid;gap:12px;align-content:start}
+.card p{color:#2A302D;font-size:16px}
+.stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin-bottom:40px}
+.stat{border-top:2px solid var(--ink);padding-top:16px;display:grid;gap:8px}
+.stat b{font:780 56px/1 var(--font);letter-spacing:-.04em}
+.stat span{color:var(--muted);font-size:15px}
+.findings{list-style:none;margin:0;padding:0;border-top:1px solid var(--line)}
+.findings li{display:grid;grid-template-columns:64px minmax(0,1fr) 110px;gap:16px;padding:18px 0;border-bottom:1px solid var(--line);align-items:baseline}
+.findings .code{font:600 13px/1 var(--mono);color:var(--green-text)}
+.findings p{font-size:16px}
+.findings p b{font-weight:650}
+.sev{font:500 12px/1 var(--mono);text-transform:uppercase;letter-spacing:.06em;color:var(--muted);text-align:right}
+.sev.high{color:#9B2C2C}
+.note{margin-top:32px;background:var(--amber-soft);border-radius:var(--r);padding:24px 26px;display:grid;gap:8px;max-width:52rem}
+.note .label{color:var(--amber)}
+.note p{font-size:16px}
+.principles{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}
+.principles .card b.n{font:500 13px/1 var(--mono);color:var(--green-text)}
+.two{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px;align-items:start}
+.shot{border-radius:var(--r);overflow:hidden;box-shadow:0 0 0 1px rgba(14,16,16,.08),0 30px 60px -40px rgba(10,30,20,.35);background:#fff}
+.shot img{width:100%;height:auto}
+.feature{display:grid;grid-template-columns:minmax(0,7fr) minmax(0,5fr);gap:48px;align-items:center;padding:56px 0;border-top:1px solid var(--line)}
+.feature:first-of-type{border-top:0;padding-top:0}
+.feature.flip{grid-template-columns:minmax(0,5fr) minmax(0,7fr)}
+.feature.flip .media{order:2}
+.feature .copy{display:grid;gap:16px;align-content:start}
+.feature .q{font:700 26px/1.2 var(--font);letter-spacing:-.02em}
+.feature ul{margin:0;padding-left:20px;display:grid;gap:8px;color:#2A302D;font-size:16px}
+.feature .aha{background:var(--green-soft);border-radius:14px;padding:14px 16px;font-size:15px}
+.feature .aha b{color:var(--green-text)}
+.open{font-weight:650;text-decoration:none}
+.open:hover{text-decoration:underline}
+.phone-frame{width:min(300px,80%);margin:0 auto;border-radius:44px;padding:12px;background:#0E1010;box-shadow:0 40px 80px -40px rgba(10,30,20,.45)}
+.phone-frame video{border-radius:32px;width:100%;height:auto;aspect-ratio:390/844;object-fit:cover;background:#EEF1EE}
+table{width:100%;border-collapse:collapse;font-size:15px}
+th,td{text-align:left;vertical-align:top;padding:14px 12px 14px 0;border-bottom:1px solid var(--line)}
+th{font:500 12px/1.3 var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:500}
+td b{font-weight:650}
+.tag{display:inline-block;font:600 11px/1 var(--mono);padding:4px 7px;border-radius:999px;background:#EAEFEC;color:var(--ink);white-space:nowrap}
+.tag.aaa{background:var(--green-soft);color:var(--green-text)}
+.table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.cuts{display:grid;gap:12px}
+.cut{display:grid;grid-template-columns:minmax(0,4fr) minmax(0,5fr) minmax(0,3fr);gap:24px;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:22px 24px}
+.cut .label{margin-bottom:6px;display:block}
+.cut p{font-size:15px}
+.cut h3{font-size:18px}
+.metrics{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin-bottom:32px}
+.metric{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:22px;display:grid;gap:6px}
+.metric b{font:760 36px/1 var(--font);letter-spacing:-.03em}
+.metric span{font-size:14px;color:var(--muted)}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chips span{background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:7px 12px;font-size:14px;font-weight:550}
+.swatches{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
+.sw{display:grid;gap:6px;font:500 11px/1.2 var(--mono);color:var(--muted)}
+.sw i{width:56px;height:40px;border-radius:10px;box-shadow:inset 0 0 0 1px rgba(14,16,16,.1)}
+.pages-links{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.pages-links a{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:18px;text-decoration:none;color:var(--ink);display:grid;gap:4px}
+.pages-links a:hover{border-color:var(--ink)}
+.pages-links b{font-weight:680}
+.pages-links span{font-size:14px;color:var(--muted)}
+footer{margin-top:120px;padding:40px 0 56px;border-top:1px solid var(--line);font-size:14px;color:var(--muted)}
+footer .wrap{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}
+@media (max-width:900px){
+  .meta{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .tldr,.stats,.metrics{grid-template-columns:minmax(0,1fr)}
+  .principles{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .two{grid-template-columns:minmax(0,1fr)}
+  .feature,.feature.flip{grid-template-columns:minmax(0,1fr);gap:24px}
+  .feature.flip .media{order:0}
+  .cut{grid-template-columns:minmax(0,1fr);gap:10px}
+  .pages-links{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .top .btn{display:none}
+}
+@media (max-width:560px){
+  body{font-size:16px}
+  .principles{grid-template-columns:minmax(0,1fr)}
+  .findings li{grid-template-columns:44px minmax(0,1fr);}
+  .findings .sev{grid-column:2;text-align:left}
+  .stat b{font-size:44px}
+  .hero{padding-top:48px}
+  section.s{padding-top:80px}
+}
+.compare{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px;align-items:start}
+.compare figcaption a{font-weight:650}
+@media (max-width:900px){.compare{grid-template-columns:minmax(0,1fr)}}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <a class="who" href="#top">Andrii <span>· Product design</span></a>
+    <nav aria-label="Case study sections">
+      <a href="#problem">Problem</a><a href="#brand">Brand fit</a><a href="#idea">Idea</a><a href="#pages">Pages</a><a href="#cuts">What I cut</a><a href="#a11y">Accessibility</a><a href="#perf">Performance</a><a href="#ship">Shipping</a><a href="#ai">AI</a>
+    </nav>
+    <a class="btn btn-primary" href="prototype/index.html">Open the prototype</a>
+  </div>
+</header>
+
+<main id="top">
+  <section class="hero">
+    <div class="wrap">
+      <p class="label">Case study · bolt.eu public web · concept · October 2026</p>
+      <h1>Answers before the app.</h1>
+      <p class="lede">A redesign concept for Bolt's public pages: Home, Rides, Scooters and Car-sharing. It keeps bolt.eu's own look and page order, and adds one thing to each page: the answer to the question that brought the visitor there. How much, how long, is there one near me. Then the app opens with the trip already filled in.</p>
+      <div class="cta-row">
+        <a class="btn btn-primary" href="prototype/index.html">Open the prototype</a>
+        <a class="btn btn-quiet" href="#pages">See the walkthroughs</a>
+      </div>
+      <div class="meta">
+        <div><span class="label">Role</span><b>Solo, self-initiated: content audit, UX, UI and coded prototype</b></div>
+        <div><span class="label">Scope</span><b>4 product pages, navigation, footer, app handoff, shared web components</b></div>
+        <div><span class="label">Built with</span><b>HTML, CSS, JavaScript (canvas), OpenStreetMap data. AI: Claude, Higgsfield</b></div>
+        <div><span class="label">Audience</span><b>First-time visitors who do not have the app yet</b></div>
+      </div>
+      <p class="disclaimer">Independent concept, not affiliated with or endorsed by Bolt. Prices, wait times and vehicles in the prototype are examples. Map data © OpenStreetMap contributors. Photos marked "Image: Bolt" are Bolt's own, from bolt.eu; the other photos and illustrations are AI-generated.</p>
+    </div>
+    <div class="wide hero-media">
+      <figure>
+        <div class="browser"><div class="bar"><i></i><i></i><i></i><span>prototype / car-sharing</span></div>
+          <video src="case/drive.mp4" poster="case/drive.jpg" muted loop playsinline preload="metadata" data-auto aria-label="Car-sharing hero: holding the button wakes the car up; it unlocks, the headlights come on, and a card shows that this is a real car parked one minute from Freedom Square. 'Show it on the map' scrolls to the same car on the map."></video></div>
+        <figcaption>Car-sharing: bolt.eu says "unlock the car with your phone". Here the visitor does it. Hold, and the car wakes up: cabin lights, indicators, headlights. The card shows it is one of the real cars on the map below, with a running trip meter.</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section class="s" aria-labelledby="tldr-h">
+    <div class="wrap">
+      <h2 id="tldr-h" class="visually-hidden">In short</h2>
+      <div class="tldr">
+        <div class="card"><span class="label">The problem</span><p>bolt.eu explains its products well but rarely lets people act. Eight pages use six different main buttons, every rider button ends in the same generic QR code, and no page estimates your own trip.</p></div>
+        <div class="card"><span class="label">What I designed</span><p>Pages that look and read like bolt.eu, with one working answer each: a price before install, the nearest scooter, a car you can "unlock". Booking stays in the app, which opens with the trip filled in.</p></div>
+        <div class="card"><span class="label">How I would ship it</span><p>Five A/B tests, smallest first, each with one primary metric and guardrails. WCAG AA by default, AAA where it matters, and a performance budget for the map.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="s" id="problem" aria-labelledby="problem-h">
+    <div class="wrap">
+      <div class="s-head"><p class="label">01 · Problem</p><h2 id="problem-h">A brochure that sends you away to act.</h2>
+        <p>I reviewed eight English pages on desktop and mobile, plus the header, menu and footer, against five lenses: path to first ride, content accuracy, consistency, navigation and accessibility signals.</p></div>
+      <div class="stats">
+        <div class="stat"><b>6</b><span>different main button labels across 8 product pages</span></div>
+        <div class="stat"><b>2 of 8</b><span>pages let a visitor do anything without the app (Food: order online; Business: contact us)</span></div>
+        <div class="stat"><b>0</b><span>pages estimate the visitor's own trip; Scooters shows a per-minute rate without the unlock fee</span></div>
+      </div>
+      <ol class="findings">
+        <li><span class="code">F1</span><p><b>Every rider button ends in the same QR code.</b> "Get Bolt", "Rent a scooter" and "Rent an e-bike" open one modal that doesn't know the product, the city or the price, and offers no link to send to a phone.</p><span class="sev high">High</span></li>
+        <li><span class="code">F2</span><p><b>Online booking is promised, not offered.</b> The Rides FAQ says you can request a ride online in some regions; the page has no way to do it, and its app link points to "#".</p><span class="sev high">High</span></li>
+        <li><span class="code">F3</span><p><b>The Bolt 7 promo opens the Bolt 6 story.</b> "Learn more" on the new scooter leads to an article that never mentions it.</p><span class="sev high">High</span></li>
+        <li><span class="code">F4 · F5</span><p><b>Products hide behind a menu icon, and "Register" means partners.</b> The menu mixes riders with drivers, couriers and restaurants, repeats links and doesn't match the footer.</p><span class="sev">Medium</span></li>
+        <li><span class="code">F6</span><p><b>The scooter price leaves out the unlock fee.</b> The card says "from €0.15 per minute"; the FAQ on the same page says the total also includes an unlock fee.</p><span class="sev">Medium</span></li>
+        <li><span class="code">F9</span><p><b>Home reads as a transport company.</b> Every headline starts with moving (rides, scooters, cars); food appears only as a second button, "Get Bolt Food". A first-time visitor can leave without learning that Bolt also delivers.</p><span class="sev">Medium</span></li>
+      </ol>
+      <div class="note"><span class="label">A signal, not evidence</span>
+        <p>To sharpen the brief I also ran an AI-simulated usability test of the live site with 20 synthetic personas. In it, two "visitors" could not tell what Bolt is from the homepage, and two left Rides because they could not see what their own trip would cost. These match F1, F2, F6 and F9, so I used them to set priorities, not as proof. They are the first things I would check with five real first-time visitors.</p></div>
+    </div>
+  </section>
+
+  <section class="s" id="brand" aria-labelledby="brand-h">
+    <div class="wrap">
+      <div class="s-head"><p class="label">02 · Brand fit</p><h2 id="brand-h">My first version solved the problem and lost the brand.</h2>
+        <p>Version 1 answered every question on a dark, app-like city map. It worked, but when I put it next to bolt.eu, it did not look like Bolt anymore. A public page has to be recognised in a second, so I audited Bolt's house style and rebuilt every page inside it.</p></div>
+      <div class="compare">
+        <figure><div class="shot"><img src="case/v1-home.jpg" alt="Version 1 of Home: a dark full-screen city map at night with moving services and a race panel." loading="lazy" width="1600" height="1000"></div>
+          <figcaption><b>v1 · first idea.</b> A night city as the homepage. Strong demo, but dark, dense and closer to the app than to bolt.eu. <a href="v1/index.html">Open v1 →</a></figcaption></figure>
+        <figure><div class="shot"><img src="case/v3-home.jpg" alt="Version 3 of Home: a light page with the headline 'Get around. Get delivered.', the Get Bolt and Get Bolt Food buttons and a link to the other Bolt apps." loading="lazy" width="1600" height="1000"></div>
+          <figcaption><b>v3 · this concept.</b> Bolt's own page order, light pages, real photography. The map and the race moved down to where a visitor is ready to compare.</figcaption></figure>
+      </div>
+      <h3 style="margin:56px 0 20px">What I took from bolt.eu, and what I added</h3>
+      <div class="table-wrap"><table>
+        <thead><tr><th>House style on bolt.eu</th><th>Kept in the concept</th><th>Added on top</th></tr></thead>
+        <tbody>
+          <tr><td><b>Space</b>: one idea per section, a lot of white around it</td><td>Section spacing of 112–160 px on desktop, 96 px on a phone; text never wider than about 38 rem</td><td>Nothing. Space is what lets each interactive part be noticed</td></tr>
+          <tr><td><b>Type</b>: heavy, tight headlines, plain short sentences</td><td>Inter Tight 800 for headlines, Inter for text, sentence case, Bolt's own headline wording where it was clear ("Ride with Bolt", "Download our apps")</td><td>Headlines that answer ("Your price, before you install", "From Tallinn Airport, priced in advance")</td></tr>
+          <tr><td><b>Colour</b>: white pages, Bolt green for main actions, black only for special bands</td><td>Green #2B8659 for buttons only; black only where Bolt uses it: the Drive hero, Bolt 7, the download band and the footer</td><td>A darker green #23744C for text links, to pass AA contrast</td></tr>
+          <tr><td><b>Photography</b>: real people on real vehicles</td><td>Bolt's own photos from bolt.eu, credited "Image: Bolt"</td><td>AI images only where Bolt had none, made from Bolt's photos and labelled</td></tr>
+          <tr><td><b>Page order</b>: hero → products → facts → download → news → footer</td><td>The same order on every page, so the site still reads as bolt.eu</td><td>One answer block per page, placed where the visitor's question comes up</td></tr>
+          <tr><td><b>Footer and app links</b></td><td>Bolt's six footer groups and "Get Bolt" / "Get Bolt Food"</td><td>Footer groups become an accordion on phones; "Explore apps" lists all four Bolt apps</td></tr>
+        </tbody></table></div>
+    </div>
+  </section>
+
+  <section class="s" id="idea" aria-labelledby="idea-h">
+    <div class="wrap">
+      <div class="s-head"><p class="label">03 · Idea</p><h2 id="idea-h">Plan on the web, finish in the app.</h2>
+        <p>People who reach bolt.eu mostly don't have the app yet. The page's job is to answer their question well enough that installing feels like the obvious next step, without rebuilding the app in the browser.</p></div>
+      <div class="principles">
+        <div class="card"><b class="n">01</b><h3>Answer first</h3><p>Each page has one block that answers the visitor's question: cost, time, the nearest vehicle, the rules.</p></div>
+        <div class="card"><b class="n">02</b><h3>Recognisably Bolt</h3><p>Bolt's page order, photography, colours and words. The new parts use the same cards, buttons and spacing.</p></div>
+        <div class="card"><b class="n">03</b><h3>One web language</h3><p>The same map card, search, price row, sticky sub-menu and handoff on every page, so the site feels like one product.</p></div>
+        <div class="card"><b class="n">04</b><h3>Respect the person</h3><p>Reduced motion, keyboard paths, AA contrast, no personal data collected, and no driver positions on a public page.</p></div>
+      </div>
+      <div class="two" style="margin-top:40px">
+        <figure><div class="shot"><img src="case/apps.jpg" alt="Explore apps dialog listing four Bolt apps: Bolt, Bolt Food, Bolt Driver and Bolt Business." loading="lazy" width="1600" height="1000"></div>
+          <figcaption><b>Explore apps (F4, F5).</b> One clear place for all four Bolt apps, so riders and partners never share a list. The header keeps "Get Bolt" as the one main action.</figcaption></figure>
+        <figure><div class="shot"><img src="case/download.jpg" alt="Download our apps band: a phone with the Bolt app, tabs for Rides, Delivery and Earn, and a QR code for the chosen app." loading="lazy" width="1600" height="1000"></div>
+          <figcaption><b>A handoff that knows the product (F1).</b> Rides, Delivery and Earn each get their own QR code and app. On the product pages, the handoff also carries the route and price.</figcaption></figure>
+      </div>
+    </div>
+  </section>
+
+  <section class="s" id="pages" aria-labelledby="pages-h">
+    <div class="wrap">
+      <div class="s-head"><p class="label">04 · Pages</p><h2 id="pages-h">One question per page, answered where it comes up.</h2></div>
+
+      <article class="feature">
+        <div class="media"><figure><div class="browser"><div class="bar"><i></i><i></i><i></i><span>prototype / home</span></div>
+          <video src="case/home.mp4" poster="case/home.jpg" muted loop playsinline preload="none" data-auto aria-label="Home: services, Bolt 7, then a race between ride, scooter and car-sharing to a chosen place; after the race a note suggests Bolt Food; the download band switches between Rides, Delivery and Earn."></video></div></figure></div>
+        <div class="copy"><span class="label">Home</span><p class="q">"What is Bolt, and which way is best for me?"</p>
+          <ul><li>Bolt's own homepage order: hero, six services, Bolt 7, about, earn, download, news.</li>
+            <li>"Get around. Get delivered." names both halves of Bolt in the first line (F9).</li>
+            <li>The race compares Ride, Scooter and Car-sharing on real routes. After it: "Staying in instead? Try Bolt Food", with a delivery time for the same place.</li></ul>
+          <p class="aha"><b>AHA:</b> for 2 km the scooter wins, for the airport the ride does, and if you would rather stay in, food is 25 minutes away. Three products in one answer.</p>
+          <a class="open" href="prototype/index.html">Open Home →</a></div>
+      </article>
+
+      <article class="feature flip">
+        <div class="media"><figure><div class="browser"><div class="bar"><i></i><i></i><i></i><span>prototype / rides</span></div>
+          <video src="case/rides.mp4" poster="case/rides.jpg" muted loop playsinline preload="none" data-auto aria-label="Rides: picking a place draws the route and shows prices per ride type; below, fixed fares from Tallinn Airport fill the planner when clicked."></video></div></figure></div>
+        <div class="copy"><span class="label">Rides</span><p class="q">"How much, and how long?"</p>
+          <ul><li>"Your price, before you install": the route follows real streets and one-way rules, with a fare range per ride type and the arrival time.</li>
+            <li>"From Tallinn Airport, priced in advance": five common trips with their fares. One click puts the trip into the planner.</li>
+            <li>One main action, "Continue in the app", carries the route, ride type and price (F1, F2).</li></ul>
+          <p class="aha"><b>AHA:</b> the answer to one of the most searched questions, "bolt price to the airport", is on the page, before any install.</p>
+          <a class="open" href="prototype/rides.html">Open Rides →</a></div>
+      </article>
+
+      <article class="feature">
+        <div class="media"><figure><div class="browser"><div class="bar"><i></i><i></i><i></i><span>prototype / scooters</span></div>
+          <video src="case/scooters.mp4" poster="case/scooters.jpg" muted loop playsinline preload="none" data-auto aria-label="Scooters: the nearest scooter on the map with battery and the full trip price; then the Bolt 7 block plays a ride on the handlebar display."></video></div></figure></div>
+        <div class="copy"><span class="label">Scooters &amp; e-bikes</span><p class="q">"Where can I ride and park, and what will it cost?"</p>
+          <ul><li>"How to rent" becomes the map itself: step one finds the nearest scooter, its battery and the walk.</li>
+            <li>The full price includes the unlock fee (F6), and a battery check for this exact trip.</li>
+            <li>The Bolt 7 block plays a ride on the handlebar display: speed limit, the Old Town slow zone, green parking (F3).</li></ul>
+          <p class="aha"><b>AHA:</b> "the scooter slows down by itself in the Old Town" is understood in seconds, not read in an FAQ.</p>
+          <a class="open" href="prototype/scooters.html">Open Scooters →</a></div>
+      </article>
+
+      <article class="feature flip">
+        <div class="media"><figure><div class="shot"><img src="case/drive-map.jpg" alt="Car-sharing map: the unlocked Hyundai i20 selected on the map with its plate, fuel, range and the walk to it." loading="lazy" width="1600" height="1000"></div></figure></div>
+        <div class="copy"><span class="label">Car-sharing</span><p class="q">"Is there a car near me, and should I pay by the minute or the day?"</p>
+          <ul><li>Hold to unlock: the hero turns "your phone is the key" into a gesture, keyboard included. Both car states are real studio frames, not CSS glows.</li>
+            <li>The unlocked car is a real car on the map below. "Show it on the map" scrolls to it, with fuel, range and the walk.</li>
+            <li>A planner compares minute and day rates for common trips and names the cheaper one.</li></ul>
+          <p class="aha"><b>AHA:</b> the page shows a real car one minute away instead of asking for an install just to look.</p>
+          <a class="open" href="prototype/drive.html">Open Car-sharing →</a></div>
+      </article>
+
+      <article class="feature">
+        <div class="media"><div class="phone-frame"><video src="case/phone.mp4" poster="case/phone.jpg" muted loop playsinline preload="none" data-auto aria-label="Car-sharing on a phone: the car unlocks, the card appears under it, and 'Show it on the map' opens the same car on the map."></video></div></div>
+        <div class="copy"><span class="label">On a phone</span><p class="q">One column, one thumb.</p>
+          <ul><li>Photos sit between the headline and the text, so the first screen shows what the page is about.</li>
+            <li>On maps, one finger scrolls the page and two fingers move the map, so the map never traps the scroll.</li>
+            <li>The handoff opens the app directly, no QR code. The footer folds into an accordion.</li></ul></div>
+      </article>
+    </div>
+  </section>
+
+  <section class="s" id="cuts" aria-labelledby="cuts-h">
+    <div class="wrap">
+      <div class="s-head"><p class="label">05 · What I cut</p><h2 id="cuts-h">Six things I built, then took out.</h2>
+        <p>Each one was impressive. Each one either copied the app, set an expectation the page couldn't meet, or worked against Bolt's own look.</p></div>
+      <div class="cuts">
+        <div class="cut"><div><span class="label">Cut</span><h3>A night city as the homepage hero</h3></div><p><span class="label">Why</span>It was the strongest demo of v1, but it made the first screen look like an app, not like bolt.eu. Visitors first need to know what Bolt is.</p><p><span class="label">Kept</span>The race, lower on the page, in day colours.</p></div>
+        <div class="cut"><div><span class="label">Cut</span><h3>A dark theme across the site</h3></div><p><span class="label">Why</span>bolt.eu is light. Black stays only where Bolt already uses it.</p><p><span class="label">Kept</span>Dark Drive hero, Bolt 7, download band, footer.</p></div>
+        <div class="cut"><div><span class="label">Cut</span><h3>A full ride replay with a named driver, pickup code and turn-by-turn</h3></div><p><span class="label">Why</span>It rebuilt the app's in-trip screen on a page where nobody can book, so the end of the demo felt like a dead end.</p><p><span class="label">Kept</span>Route, price, arrival time.</p></div>
+        <div class="cut"><div><span class="label">Cut</span><h3>Live driver positions near the pickup</h3></div><p><span class="label">Why</span>A public page should never show where drivers are. Pickup time is an estimate by area.</p><p><span class="label">Kept</span>"Pickup about 2 min".</p></div>
+        <div class="cut"><div><span class="label">Cut</span><h3>Real reserving and unlocking on the web</h3></div><p><span class="label">Why</span>They belong to the app. The hero unlock is a demonstration; its next step says "continue in the app".</p><p><span class="label">Kept</span>Cars, fuel, the walk, and a handoff on the chosen car.</p></div>
+        <div class="cut"><div><span class="label">Cut</span><h3>Light effects drawn with CSS on a small photo</h3></div><p><span class="label">Why</span>The car looked blurry and the glow looked fake, which hurt trust in the whole page.</p><p><span class="label">Kept</span>Two matched 2K studio frames: lights off and lights on.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="s" id="a11y" aria-labelledby="a11y-h">
+    <div class="wrap">
+      <div class="s-head"><p class="label">06 · Accessibility</p><h2 id="a11y-h">AA by default, AAA where it matters.</h2>
+        <p>Checked with automated tests (contrast, target size, reflow at 320 px) and manual keyboard passes. Not yet tested with screen-reader users.</p></div>
+      <div class="table-wrap"><table>
+        <thead><tr><th>WCAG 2.2</th><th>Level</th><th>What the design does</th></tr></thead>
+        <tbody>
+          <tr><td><b>1.4.3 Contrast</b></td><td><span class="tag">AA</span></td><td>Body text 18:1, secondary text 5.6:1. Bolt green #2B8659 is only 4.3:1 as text on white, so text links use a darker #23744C (5.4:1). White text on green buttons keeps 4.5:1.</td></tr>
+          <tr><td><b>1.4.6 Contrast (enhanced)</b></td><td><span class="tag aaa">AAA, partly</span></td><td>Body text on white and on the dark bands passes 7:1. Secondary text stays at 5.6:1 on purpose, to keep the hierarchy readable.</td></tr>
+          <tr><td><b>1.1.1 Non-text content</b></td><td><span class="tag">A</span></td><td>Every content photo has alt text (bolt.eu misses it on most images, F8). Decorative layers, like the car's light frames, are hidden from screen readers.</td></tr>
+          <tr><td><b>2.1.1 Keyboard</b></td><td><span class="tag">A</span></td><td>Place search is a combobox with arrow keys and Enter. Hold to unlock also works with Enter. Photo rails scroll with arrow buttons. Footer groups are native disclosure buttons.</td></tr>
+          <tr><td><b>2.2.2 Pause, stop, hide</b></td><td><span class="tag">A</span></td><td>The Bolt 7 video has a pause button. The race and the scooter ride can be skipped. Moving parts stop when they leave the screen.</td></tr>
+          <tr><td><b>2.3.3 Animation from interactions</b></td><td><span class="tag aaa">AAA</span></td><td>With "reduce motion" on, the race shows its result straight away, the headlight beams and flicker are off, and the unlocked car simply appears lit. The hold still needs a hold, so the meaning stays.</td></tr>
+          <tr><td><b>2.5.8 Target size</b></td><td><span class="tag">AA</span></td><td>All controls are at least 24 px; main actions are 44–52 px, which also meets AAA 2.5.5.</td></tr>
+          <tr><td><b>1.4.10 Reflow</b></td><td><span class="tag">AA</span></td><td>Every page works at 320 px wide with no horizontal page scroll.</td></tr>
+          <tr><td><b>4.1.2 Name, role, value</b></td><td><span class="tag">A</span></td><td>ARIA combobox and listbox, pressed states on toggles and tabs, and one short status message per result (route, price, "unlocked"), never a stream of updates.</td></tr>
+        </tbody></table></div>
+    </div>
+  </section>
+
+  <section class="s" id="perf" aria-labelledby="perf-h">
+    <div class="wrap">
+      <div class="s-head"><p class="label">07 · Performance and search</p><h2 id="perf-h">Text first, map second.</h2>
+        <p>Public pages are opened on cheap Android phones in 50 countries, often from search. The prototype paints text and the first photo first, loads the rest of the photos lazily, and loads the map data after; the data file is shared and cached across pages.</p></div>
+      <div class="metrics">
+        <div class="metric"><b>≈0.8–1.0 s</b><span>Largest Contentful Paint, lab, throttled phone (1.6 Mbps, 4× slower CPU), across the four pages</span></div>
+        <div class="metric"><b>≈5 s</b><span>until the live map is ready on the same profile; the page is usable before that</span></div>
+        <div class="metric"><b>92–114 KB</b><span>of HTML per page, photos in WebP; the 425 KB map file is loaded once for all pages</span></div>
+      </div>
+      <div class="two">
+        <div class="card"><h3>For production</h3><p>Text and links rendered on the server for search. The map from Bolt's own map and routing stack as vector tiles, loaded when the visitor interacts or when the page is idle. Responsive images per breakpoint. A budget per page: LCP under 2.5 s and INP under 200 ms at p75 on a mid-range Android.</p></div>
+        <div class="card"><h3>For search</h3><p>Each product page answers a high-intent query in its own text ("bolt price to Tallinn airport", "how to rent a Bolt scooter in Tallinn", "rent a car in Tallinn"). Popular routes could get their own pages with the same components, a test for the SEO team.</p></div>
+      </div>
+      <p class="muted" style="margin-top:20px;font-size:14px">Lab numbers from my own test runs, not field data.</p>
+    </div>
+  </section>
+
+  <section class="s" id="ship" aria-labelledby="ship-h">
+    <div class="wrap">
+      <div class="s-head"><p class="label">08 · Shipping</p><h2 id="ship-h">Not a big-bang redesign: five tests, smallest first.</h2>
+        <p>Every piece can ship on its own into today's bolt.eu, because it uses Bolt's own layout. The order follows effort against expected impact; each test has one primary metric and guardrails, so a win on one number can't hide a loss on another.</p></div>
+      <div class="table-wrap"><table>
+        <thead><tr><th>#</th><th>Change</th><th>Hypothesis</th><th>Primary metric</th><th>Guardrails</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td><b>Handoff that knows the product</b> (QR per app, send a link)</td><td>A handoff that names the product and trip turns more desktop clicks into installs.</td><td>App installs per CTA click</td><td>Bounce rate, dialog close rate</td></tr>
+          <tr><td>2</td><td><b>Full scooter price</b>, unlock fee included</td><td>A price that matches the first bill raises intent.</td><td>CTA click-through on Scooters</td><td>Price-related support contacts</td></tr>
+          <tr><td>3</td><td><b>Price before install on Rides</b>, with airport fares</td><td>Seeing your own trip's price increases app opens with a trip filled in.</td><td>Handoffs with a filled-in trip</td><td>LCP, bounce rate</td></tr>
+          <tr><td>4</td><td><b>"Get delivered" on Home</b> and the food note after the race</td><td>Naming delivery early helps visitors who think Bolt is only transport.</td><td>Bolt Food clicks from Home</td><td>Get Bolt clicks, Home LCP</td></tr>
+          <tr><td>5</td><td><b>Hold to unlock hero on Drive</b></td><td>Showing a real car nearby makes car-sharing feel close and simple.</td><td>Clicks to the car map and to "Rent a car"</td><td>Drive LCP, scroll depth</td></tr>
+        </tbody></table></div>
+      <div class="two" style="margin-top:40px">
+        <div class="card"><h3>Beyond Tallinn</h3><p>The city comes from the URL or location, with a picker. Where there is no vehicle data, the same components fall back to a static price table and the handoff. Text is translated per locale; prices come from the pricing service, never from the page.</p></div>
+        <div class="card"><h3>Web components</h3><div class="chips"><span>Hero: photo, split, dark</span><span>Service card</span><span>Sticky sub-menu</span><span>Map card</span><span>Place search</span><span>Price row</span><span>Planner</span><span>Photo rail</span><span>Video block</span><span>Hold button</span><span>FAQ</span><span>Download band</span><span>Explore apps</span><span>Footer</span></div>
+          <p class="muted" style="font-size:14px">One shared stylesheet for every page. Each component has default, hover, focus, pressed, loading, empty and error states (for example "That is right here, pick somewhere a little further away").</p>
+          <div class="swatches" aria-label="Colour tokens"><span class="sw"><i style="background:#0E1010"></i>ink</span><span class="sw"><i style="background:#FFFFFF"></i>page</span><span class="sw"><i style="background:#2B8659"></i>green</span><span class="sw"><i style="background:#23744C"></i>green text</span><span class="sw"><i style="background:#E3F1E8"></i>green soft</span><span class="sw"><i style="background:#5C6660"></i>muted</span><span class="sw"><i style="background:#0B0D0D"></i>dark band</span></div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="s" id="ai" aria-labelledby="ai-h">
+    <div class="wrap">
+      <div class="s-head"><p class="label">09 · Working with AI</p><h2 id="ai-h">Faster, with the standard kept high.</h2></div>
+      <div class="two">
+        <div class="card"><h3>Where AI helped</h3><p>Claude was my second reviewer for the audit, my pair programmer for the coded prototype, and a critic that pushed back on ideas, like the ride replay and the dark theme. AI-simulated personas sharpened the hypotheses. Higgsfield turned Bolt's own 926 px car photo into two matched 2K studio frames (lights off, lights on) for the Drive hero, and made the illustrations where Bolt had no photo.</p></div>
+        <div class="card"><h3>What I owned</h3><p>The questions each page answers, the brand audit and the decision to rebuild v1, every cut in section 05, and the line between what the web should do and what belongs in the app. I checked every generated image against the original (livery, plate, wheels) and labelled it. Every number on the page is marked as real (distances, street names) or as an example (prices, wait times).</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="s" aria-labelledby="next-h">
+    <div class="wrap">
+      <div class="s-head"><p class="label">10 · Next</p><h2 id="next-h">What I would check with real data.</h2></div>
+      <ol class="findings">
+        <li><span class="code">1</span><p><b>Five moderated sessions</b> with first-time visitors in Tallinn, on Home and Rides, before any build. Can they say what Bolt does, and what their trip would cost?</p><span></span></li>
+        <li><span class="code">2</span><p><b>Analytics:</b> where visitors drop between a product page and an app install, by device and market.</p><span></span></li>
+        <li><span class="code">3</span><p><b>Brand team review:</b> photography, tone of voice and the dark bands, before anything ships.</p><span></span></li>
+        <li><span class="code">4</span><p><b>Pricing and legal:</b> whether an estimate on the web is accurate and allowed in every market.</p><span></span></li>
+        <li><span class="code">5</span><p><b>Engineering:</b> the cost of a live map on public pages against a static estimate, to decide where each fits.</p><span></span></li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="s" aria-labelledby="proto-h">
+    <div class="wrap">
+      <div class="s-head"><p class="label">Prototype</p><h2 id="proto-h">Try it.</h2><p>Works on a phone and a computer. Best in Chrome, Safari or Edge.</p></div>
+      <div class="pages-links">
+        <a href="prototype/index.html"><b>Home</b><span>Services, the race, apps</span></a>
+        <a href="prototype/rides.html"><b>Rides</b><span>Price before install, airport fares</span></a>
+        <a href="prototype/scooters.html"><b>Scooters</b><span>Nearest scooter, Bolt 7 ride</span></a>
+        <a href="prototype/drive.html"><b>Car-sharing</b><span>Hold to unlock, cars near you</span></a>
+      </div>
+      <p class="muted" style="margin-top:16px;font-size:14px">The first version is kept for comparison: <a href="v1/index.html">open v1</a>.</p>
+    </div>
+  </section>
+
+  <section class="s" id="appendix" aria-labelledby="appendix-h">
+    <div class="wrap">
+      <div class="s-head"><p class="label">Appendix</p><h2 id="appendix-h">Content audit: consistency across eight pages.</h2><p>Reviewed on 23 October 2026. Severity is a design judgement; without analytics every finding is a hypothesis to validate.</p></div>
+      <div class="table-wrap"><table>
+        <thead><tr><th>Page</th><th>Headline pattern</th><th>Main button</th><th>Act on the web</th><th>Price on page</th></tr></thead>
+        <tbody>
+          <tr><td><b>Home</b></td><td>Slogan</td><td>Get Bolt / Get Bolt Food</td><td>No</td><td>No</td></tr>
+          <tr><td><b>Rides</b></td><td>Product</td><td>Get Bolt</td><td>No (promised in FAQ)</td><td>No</td></tr>
+          <tr><td><b>Scooters</b></td><td>Product</td><td>Rent a scooter</td><td>No</td><td>From €0.15/min</td></tr>
+          <tr><td><b>E-bikes</b></td><td>Benefit</td><td>Rent an e-bike</td><td>No</td><td>From €0.15/min</td></tr>
+          <tr><td><b>Bolt Drive</b></td><td>Benefit</td><td>Get the app</td><td>No</td><td>No</td></tr>
+          <tr><td><b>Bolt Food</b></td><td>Offer</td><td>Get the app</td><td>Order online</td><td>Offer only</td></tr>
+          <tr><td><b>Bolt Market</b></td><td>Product</td><td>Get Bolt Food</td><td>No</td><td>No</td></tr>
+          <tr><td><b>Bolt for Business</b></td><td>Benefit</td><td>Get Started</td><td>Contact us</td><td>No</td></tr>
+        </tbody></table></div>
+      <p class="muted" style="margin-top:16px;font-size:14px">Also found: copy slips such as "in over 850+ cities" (F7), and images without alt text on every page reviewed, for example 30 of 34 on Scooters (F8, needs a manual pass).</p>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap"><span>Andrii · Product design case study · 2026</span><span>Independent concept. Not affiliated with or endorsed by Bolt Technology OÜ. Contact details are in my CV.</span></div>
+</footer>
+
+<script>
+(() => {
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  // videos play only while visible; with reduced motion they wait for the visitor to press play
+  const vids = [...document.querySelectorAll('video[data-auto]')];
+  if (reduce) vids.forEach(v => { v.controls = true; v.removeAttribute('loop'); });
+  else {
+    const io = new IntersectionObserver(es => es.forEach(e => { const v = e.target; if (e.isIntersecting) { if (v.preload === 'none') v.preload = 'auto'; v.play().catch(() => { v.controls = true; }); } else v.pause(); }), { threshold: .35 });
+    vids.forEach(v => io.observe(v));
+  }
+  // highlight the section in view
+  const links = [...document.querySelectorAll('.top nav a')], map = new Map(links.map(a => [a.getAttribute('href').slice(1), a]));
+  const so = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { links.forEach(a => a.removeAttribute('aria-current')); map.get(e.target.id)?.setAttribute('aria-current', 'true'); } }), { rootMargin: '-40% 0px -55% 0px' });
+  map.forEach((a, id) => { const s = document.getElementById(id); if (s) so.observe(s); });
+})();
+</script>
+</body>
+</html>
