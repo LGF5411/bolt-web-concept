@@ -8,14 +8,59 @@ window.Concept = (() => {
   const onPhone = () => matchMedia('(pointer:coarse) and (max-width:980px)').matches;
 
   /* header */
-  const megaBtns = $$('.intent-btn[aria-controls]');
-  const closeMegas = except => megaBtns.forEach(b => { if (b !== except) { b.setAttribute('aria-expanded', 'false'); $('#' + b.getAttribute('aria-controls')).classList.remove('open'); } });
-  megaBtns.forEach(b => b.addEventListener('click', () => {
-    const open = b.getAttribute('aria-expanded') !== 'true'; closeMegas(b);
-    b.setAttribute('aria-expanded', String(open)); $('#' + b.getAttribute('aria-controls')).classList.toggle('open', open);
-  }));
-  document.addEventListener('click', e => { if (!e.target.closest('.intent > li')) closeMegas(); });
-  $('#menuBtn')?.addEventListener('click', e => { const open = $('#siteHead').classList.toggle('menu-open'); e.currentTarget.setAttribute('aria-expanded', String(open)); });
+  const menu = $('#siteMenu'), menuBtn = $('#menuBtn'), head = $('#siteHead');
+  const setMenu = open => {
+    if (!menu) return;
+    if (open) document.documentElement.style.setProperty('--menu-top', head.getBoundingClientRect().bottom + 'px');
+    menu.hidden = !open; head.classList.toggle('menu-open', open); document.body.classList.toggle('menu-lock', open);
+    menuBtn.setAttribute('aria-expanded', String(open)); menuBtn.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+    if (open) { pickTab(tabs[0]); tabs[0]?.focus(); } else menuBtn.focus();
+  };
+  menuBtn?.addEventListener('click', () => setMenu(menu.hidden));
+  document.addEventListener('keydown', e => {
+    if (!menu || menu.hidden) return;
+    if (e.key === 'Escape') return setMenu(false);
+    if (e.key === 'Tab') { // keep focus inside the open menu (header controls stay reachable)
+      const f = $$('a,button', head).filter(x => x.offsetParent !== null);
+      const first = f[0], last = f[f.length - 1];
+      if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+      else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+    }
+  });
+  menu?.addEventListener('click', e => { if (e.target.closest('a[href^="#"],a[href*=".html#"]')) setMenu(false); });
+  const tabs = $$('.menu-tabs [role="tab"]');
+  function pickTab(t) { if (!t) return; tabs.forEach(x => { const on = x === t; x.setAttribute('aria-selected', String(on)); x.tabIndex = on ? 0 : -1; $('#' + x.getAttribute('aria-controls')).hidden = !on; }); }
+  tabs.forEach((t, i) => {
+    t.addEventListener('click', () => pickTab(t));
+    t.addEventListener('keydown', e => {
+      const d = e.key === 'ArrowRight' ? 1 : e.key === 'ArrowLeft' ? -1 : 0; if (!d) return;
+      e.preventDefault(); const n = tabs[(i + d + tabs.length) % tabs.length]; pickTab(n); n.focus();
+    });
+  });
+
+  /* rails: mouse drag (touch scrolls natively), arrow buttons, end states */
+  $$('.rail').forEach(r => {
+    let x0 = 0, s0 = 0, moved = false, id = null;
+    r.addEventListener('pointerdown', e => { if (e.pointerType !== 'mouse' || e.button !== 0) return; id = e.pointerId; x0 = e.clientX; s0 = r.scrollLeft; moved = false; });
+    r.addEventListener('pointermove', e => {
+      if (e.pointerId !== id) return; const dx = e.clientX - x0;
+      if (!moved && Math.abs(dx) > 5) { moved = true; r.classList.add('dragging'); r.setPointerCapture(id); }
+      if (moved) r.scrollLeft = s0 - dx;
+    });
+    const end = () => {
+      if (id === null) return; id = null; if (!moved) return;
+      const kids = [...r.children], pad = parseFloat(getComputedStyle(r).paddingLeft) || 0;
+      const near = kids.reduce((b, k) => Math.abs(k.offsetLeft - pad - r.scrollLeft) < Math.abs(b.offsetLeft - pad - r.scrollLeft) ? k : b, kids[0]);
+      r.classList.remove('dragging'); r.scrollTo({ left: near.offsetLeft - pad, behavior: reduced() ? 'auto' : 'smooth' });
+    };
+    r.addEventListener('pointerup', end); r.addEventListener('pointercancel', end); r.addEventListener('lostpointercapture', end);
+    r.addEventListener('click', e => { if (moved) { e.preventDefault(); e.stopPropagation(); moved = false; } }, true);
+    r.addEventListener('dragstart', e => e.preventDefault());
+    const btns = $$(`[data-rail="${r.id}"]`);
+    const sync = () => btns.forEach(b => { b.disabled = +b.dataset.d < 0 ? r.scrollLeft < 4 : r.scrollLeft > r.scrollWidth - r.clientWidth - 4; });
+    btns.forEach(b => b.addEventListener('click', () => { const k = r.children[0]; r.scrollBy({ left: +b.dataset.d * ((k?.offsetWidth || 300) + 20), behavior: reduced() ? 'auto' : 'smooth' }); }));
+    r.addEventListener('scroll', sync, { passive: true }); addEventListener('resize', sync); sync();
+  });
 
   /* design notes */
   let pop = null;
@@ -126,7 +171,7 @@ window.Concept = (() => {
         if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
         else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
       }
-    } else if (e.key === 'Escape') closeMegas();
+    }
   });
   return { $, $$, reduced, init, open, close, showView, drawQR };
 })();

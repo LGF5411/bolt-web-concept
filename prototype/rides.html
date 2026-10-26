@@ -198,8 +198,6 @@ body.notes .pin{display:block}
 .pin-pop b{display:block;font:600 11px/1.2 var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--note);margin-bottom:6px}
 
 @media (max-width:980px){
-  .intent,.head-right .btn{display:none}
-  .menu-btn{display:grid;place-items:center}
   .final{grid-template-columns:minmax(0,1fr);padding:32px}
   .foot{grid-template-columns:repeat(2,minmax(0,1fr))}
   .stage{grid-template-columns:minmax(0,1fr);align-content:start;gap:20px;overflow-y:auto}
@@ -208,8 +206,6 @@ body.notes .pin{display:block}
   .stage.on-phone .stage-visual{display:none}
   .stage-panel{max-width:none}
 }
-.site-head.menu-open .intent{display:flex;position:absolute;top:64px;left:0;right:0;flex-direction:column;background:var(--surface);border-bottom:1px solid var(--line);padding:12px max(20px,env(safe-area-inset-right,0px)) 16px max(20px,env(safe-area-inset-left,0px))}
-.site-head.menu-open .mega{position:static;width:auto;grid-template-columns:minmax(0,1fr);box-shadow:none;margin-top:6px}
 @media (max-width:560px){
   section.block{padding-block:64px}
   .foot{grid-template-columns:minmax(0,1fr)}
@@ -312,36 +308,76 @@ body.notes .pin{display:block}
    white rounded cards on a light grey page, plain header with one dark pill, black product bands, 3D characters in green.
    Bolt's own typeface and illustrations are not used: Inter Tight and original illustrations stand in for them. */
 :root{
-  --bg:#F5F7F6; --line:#E1E6E3;
+  --bg:#F4F5F5; --page:#FFFFFF; --line:#E6E8E7;
   --display:"Inter Tight","Inter Display","Inter",system-ui,-apple-system,"Segoe UI",sans-serif;
-  --r-btn:14px; --r-card:24px; --dark:#24282C;
+  --r-btn:10px; --r-card:24px; --dark:#24282C;
   --card-shadow:0 1px 2px rgba(14,16,16,.04),0 12px 32px -18px rgba(14,16,16,.16);
 }
-body{background:var(--bg)}
+body{background:var(--page)}
 h1,h2{font-family:var(--display);font-weight:800;letter-spacing:-.015em}
-h1{font-size:clamp(44px,7.2vw,104px);line-height:1.02}
-h2{font-size:clamp(34px,4.8vw,64px);line-height:1.05}
+h1{font-size:clamp(40px,5.2vw,76px);line-height:1.04}
+h2{font-size:clamp(32px,3.6vw,52px);line-height:1.08}
 h3{font-family:var(--display);font-weight:700;letter-spacing:-.02em;font-size:22px}
 .eyebrow{font-size:15px}
 
-/* header: plain, like bolt.eu */
-.site-head{background:rgba(245,247,246,.92);border-bottom:0}
-@supports (backdrop-filter:blur(1px)){.site-head{background:rgba(245,247,246,.82)}}
-.site-head .wrap{height:76px}
-.wordmark{font:900 32px/1 var(--display);letter-spacing:-.02em}
-.intent-btn{font-size:16px;font-weight:600;padding:10px 12px;border-radius:12px}
-.intent-btn:hover,.intent-btn[aria-expanded="true"]{background:#E8ECEA}
-.mega{border-radius:20px;border:0;box-shadow:0 2px 6px rgba(14,16,16,.05),0 24px 48px -20px rgba(14,16,16,.22)}
-.head-right .help-link{font-weight:600}
-.btn-dark{background:var(--dark);color:#fff}
-.btn-dark:hover{background:#000}
-.head-right .btn{border-radius:999px}
+/* header: bolt.eu structure. Logo left; language, Support, one dark pill and the menu on the right. */
+.site-head{background:rgba(255,255,255,.94);border-bottom:0}
+@supports (backdrop-filter:blur(1px)){.site-head{background:rgba(255,255,255,.84)}}
+.site-head .wrap{height:72px}
+.wordmark{font:900 32px/1 var(--display);letter-spacing:-.02em;position:relative;z-index:2}
+.head-right{gap:8px}
+.head-right .lang,.head-right .head-link{font:600 16px/1 var(--font);color:var(--ink);text-decoration:none;padding:14px 12px;border-radius:10px}
+.head-right .head-link:hover{background:#EEF0EF}
+.btn-head{font:700 16px/1 var(--font);background:var(--dark);color:#fff;border:0;border-radius:999px;min-height:44px;padding:0 22px;cursor:pointer;margin-left:4px}
+.btn-head:hover{background:#000}
+.burger{width:48px;height:48px;border:0;background:none;border-radius:12px;display:grid;place-items:center;cursor:pointer;color:var(--ink);margin-right:-10px;position:relative;z-index:2}
+.burger:hover{background:#EEF0EF}
+.burger svg{width:26px;height:26px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round}
+.burger .i-close,.site-head.menu-open .burger .i-open{display:none}
+.site-head.menu-open .burger .i-close{display:block}
+.site-menu{position:fixed;left:0;right:0;bottom:0;top:var(--menu-top,72px);z-index:1;background:#fff;overflow-y:auto;padding:8px 0 40px;overscroll-behavior:contain}
+.site-menu[hidden]{display:none}
+.site-head.menu-open{z-index:60;background:#fff;-webkit-backdrop-filter:none;backdrop-filter:none}
+.menu-grid{display:grid!important;grid-template-columns:minmax(0,1fr) 340px;gap:16px;align-items:start!important;height:auto!important}
+.menu-main{background:#F4F5F5;border-radius:24px;padding:12px 12px 32px}
+.menu-tabs{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:28px}
+.menu-tabs button{font:600 16px/1 var(--font);border:0;background:none;color:#4A524E;border-radius:12px;padding:15px 18px;cursor:pointer}
+.menu-tabs button:hover{color:var(--ink)}
+.menu-tabs button[aria-selected="true"]{background:#fff;color:var(--ink);box-shadow:0 1px 2px rgba(14,16,16,.06)}
+.menu-panel{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:36px 24px;padding:0 18px}
+.menu-panel[hidden]{display:none}
+.menu-panel ul{list-style:none;margin:0;padding:0;display:grid;gap:14px;align-content:start}
+.menu-panel li:first-child a{font-weight:700;font-size:18px;color:var(--ink)}
+.menu-panel a{font:500 16px/1.3 var(--font);color:#4A524E;text-decoration:none}
+.menu-panel a:hover{color:var(--ink);text-decoration:underline;text-underline-offset:3px}
+.menu-panel a[aria-current="page"]{color:var(--green-text)}
+.menu-side{list-style:none;margin:0;padding:8px;background:#F4F5F5;border-radius:24px;display:grid;gap:2px}
+.menu-side a{display:grid;grid-template-columns:24px minmax(0,1fr) 20px;gap:14px;align-items:center;padding:16px 14px;border-radius:16px;text-decoration:none;color:var(--ink)}
+.menu-side a:hover{background:#fff}
+.menu-side svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.menu-side .chev{width:18px;height:18px;color:#7A837E}
+.menu-side b{display:block;font:700 16px/1.25 var(--font)}
+.menu-side b + span{display:block;font:400 14px/1.35 var(--font);color:#5C6660;margin-top:2px}
+.menu-foot{display:flex!important;justify-content:space-between;gap:16px;flex-wrap:wrap;height:auto!important;margin-top:24px;font-size:14px;color:#5C6660}
+body.menu-lock{overflow:hidden}
+@media (max-width:980px){
+  .head-right .lang,.head-right .head-link{display:none}
+  .menu-grid{grid-template-columns:minmax(0,1fr)}
+  .menu-panel{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media (max-width:560px){
+  .btn-head{min-height:40px;padding:0 16px;font-size:15px}
+  .menu-tabs{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;margin-inline:-4px}
+  .menu-tabs button{white-space:nowrap;padding:13px 14px}
+  .menu-panel{grid-template-columns:minmax(0,1fr);gap:28px;padding:0 10px}
+  .menu-foot{flex-direction:column}
+}
 
 /* buttons: rounded rectangles, green or grey */
-.btn{border-radius:var(--r-btn);min-height:56px;padding:0 28px;font-weight:700;font-size:17px}
-.btn-small{min-height:44px;padding:0 18px;font-size:15px;border-radius:12px}
+.btn{border-radius:var(--r-btn);min-height:52px;padding:0 40px;font-weight:700;font-size:17px;letter-spacing:-.005em}
+.btn-small{min-height:44px;padding:0 22px;font-size:15px;border-radius:10px}
 .btn-primary:hover{background:#257A50;box-shadow:none}
-.btn-quiet{background:#E9ECEB;border:0;color:var(--ink)}
+.btn-quiet{background:#E9EAEA;border:0;color:#2E3330}
 .btn-quiet:hover{background:#DEE3E0}
 .vid-ico{position:absolute;z-index:3;right:max(20px,calc((100vw - 1240px) / 2));bottom:24px;width:44px;height:44px;border-radius:50%;border:1px solid rgba(255,255,255,.28);background:rgba(0,0,0,.35);color:#fff;display:grid;place-items:center;cursor:pointer;opacity:.75;transition:opacity 200ms ease,background 200ms ease}
 .vid-ico:hover,.vid-ico:focus-visible{opacity:1;background:rgba(0,0,0,.55)}
@@ -398,8 +434,8 @@ section.block{padding-block:clamp(112px,11vw,160px)}
 .facts span{font-size:14px;color:var(--muted)}
 .tag{justify-self:start;font-size:12px;font-weight:700;color:var(--green-text);background:#E6F4EC;padding:5px 9px;border-radius:999px}
 
-.qa{background:var(--surface);border-radius:var(--r-card);box-shadow:var(--card-shadow);padding:40px}
-.qa h2{font-size:clamp(32px,3.4vw,46px);margin:8px 0 12px}
+.qa{padding:0}
+.qa h2{margin:0 0 24px}
 .faq.light details{border-color:var(--line)}
 .faq.light summary::after{color:var(--muted)}
 .faq.light details p{color:var(--muted)}
@@ -468,6 +504,25 @@ section.block{padding-block:clamp(112px,11vw,160px)}
 .stage-panel{gap:20px}
 @media (max-height:760px) and (min-width:981px){.stage-panel .steps span{display:none}}
 
+/* rail: bolt.eu's sideways strip. Drag with the mouse, swipe on touch, arrows or keys for everyone else. */
+.rail{--gut:max(20px,calc((100vw - 1240px) / 2 + 20px));display:flex;gap:20px;overflow-x:auto;scroll-snap-type:x mandatory;padding:0 var(--gut) 8px;scroll-padding-inline:var(--gut);scrollbar-width:none;cursor:grab;-webkit-user-select:none;user-select:none}
+.rail::-webkit-scrollbar{display:none}
+.rail{position:relative}
+.rail > *{scroll-snap-align:start;flex:0 0 auto;position:relative}
+.rail.dragging{cursor:grabbing;scroll-snap-type:none}
+.rail.dragging a{pointer-events:none}
+.rail img{-webkit-user-drag:none;user-select:none}
+.rail-head{display:flex!important;align-items:end;justify-content:space-between;gap:24px;margin-bottom:40px}
+.rail-head h2{margin:0}
+.rail-head p{margin:14px 0 0;font-size:19px;line-height:1.45;color:var(--muted);max-width:36rem}
+.rail-nav{display:flex;gap:8px;flex:none}
+.rbtn{width:48px;height:48px;border-radius:50%;border:0;background:#E9EAEA;cursor:pointer;color:var(--ink);display:grid;place-items:center}
+.rbtn svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.rbtn:hover{background:#DCDEDD}
+.rbtn:disabled{opacity:.4;cursor:default;background:#E9EAEA}
+@media (max-width:640px){.rail{gap:12px}.rail-nav{display:none}.rail-head{margin-bottom:28px}}
+@media (max-width:560px){.hero-c .ctas{flex-direction:column;align-items:stretch;max-width:320px;margin-inline:auto}}
+
 .meta{display:flex;gap:14px;flex-wrap:wrap;font-size:14px;color:var(--muted);padding-top:2px}
 .meta b{color:var(--ink);font-variant-numeric:tabular-nums}
 .via{font-size:13px;color:var(--muted);margin-top:-8px}
@@ -495,11 +550,11 @@ section.block{padding-block:clamp(112px,11vw,160px)}
 .tlist span{font-size:14px;font-weight:600;color:var(--ink)}
 /* v3: bolt.eu/rides order (photo hero, why-cards, ride types, growing photo, business, safety, airports, scheduling, FAQ)
    plus what it cannot do: the price of your trip on the page, and airport fares on real streets */
-.hero-r{padding:56px 0 0;text-align:center}
+.hero-r{padding:clamp(96px,9vw,144px) 0 0;text-align:center}
 .hr-head{display:grid;justify-items:center}
 .hero-r h1{margin-top:14px}
 .hero-r .sub{font-size:20px;line-height:1.45;color:var(--muted);max-width:36rem;margin-top:22px}
-.hr-img{display:block;width:100%;height:clamp(360px,48vw,640px);object-fit:cover;object-position:center 60%;margin-top:48px}
+.hr-img{display:block;width:100%;height:clamp(360px,48vw,640px);object-fit:cover;object-position:center 60%;margin-top:72px}
 .subnav{position:sticky;top:76px;z-index:20;background:rgba(245,247,246,.94);border-bottom:1px solid var(--line)}
 @supports (backdrop-filter:blur(1px)){.subnav{background:rgba(245,247,246,.8);backdrop-filter:blur(12px)}}
 .sn-in{display:flex;align-items:center;justify-content:space-between;gap:20px;height:56px}
@@ -536,33 +591,27 @@ section.block{padding-block:clamp(112px,11vw,160px)}
 .biz-list span{color:#C3D3CA}
 .biz .ctas{justify-content:flex-start}
 .biz-grid>img{width:100%;height:auto;border-radius:28px}
-.sgrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:28px}
-.sc{border-radius:24px;overflow:hidden;background:var(--surface);box-shadow:var(--card-shadow);height:400px;display:flex;flex-direction:column}
-.sc.tall{height:540px}
-.sc>div{order:-1;padding:28px 28px 16px;display:grid;gap:8px;align-content:start}   /* text first, picture below: they never overlap */
-.sc img{flex:1;min-height:0;width:100%;object-fit:cover;object-position:center top}
-.sc.photo img{object-position:var(--op,center 30%)}
-.sc b{font:800 24px/1.12 var(--display)}
-.sc span{color:var(--muted)}
-.sc.dark{background:#0E1010;color:#fff}.sc.dark span{color:#B9C1BD}
-.sc-more{color:var(--muted);text-align:center;margin-top:24px}
+.sc{width:min(380px,78vw);display:grid;gap:6px;align-content:start}
+.sc img{display:block;width:100%;height:auto;aspect-ratio:4/5;object-fit:cover;object-position:var(--op,center 30%);border-radius:24px;background:#F4F5F5;margin-bottom:18px}
+.sc b{font:700 24px/1.15 var(--display);letter-spacing:-.02em}
+.sc span{color:var(--muted);font-size:17px}
 .air{display:grid;grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr);gap:56px;align-items:center}
 .air-img{width:100%;height:auto;border-radius:28px}
 .air-t h2{margin-top:12px}
 .air-t>p{color:var(--muted);font-size:18px;margin-top:18px}
-.routes{list-style:none;padding:0;margin:24px 0 0;display:grid;gap:8px}
-.routes button{width:100%;display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:16px;align-items:center;border:0;background:var(--surface);box-shadow:var(--card-shadow);border-radius:16px;padding:16px 18px;font:inherit;text-align:left;cursor:pointer;color:inherit}
-.routes button:hover{box-shadow:0 0 0 2px var(--green)}
+.routes{list-style:none;padding:0;margin:28px 0 0;display:grid;border-top:1px solid var(--line)}
+.routes button{width:100%;display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:20px;align-items:center;border:0;border-bottom:1px solid var(--line);background:none;padding:20px 4px;font:inherit;font-size:17px;text-align:left;cursor:pointer;color:inherit}
+.routes button:hover b{color:var(--green-text)}
 .routes b{font-weight:650}
 .routes .rm{color:var(--muted);font-variant-numeric:tabular-nums;white-space:nowrap}
 .routes .rp{font-weight:700;font-variant-numeric:tabular-nums;white-space:nowrap}
 .sched-band{background:#0E1010;color:#fff;padding:clamp(112px,11vw,152px) 0;overflow:hidden}
-.sb-grid{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:48px;align-items:center}
+.sb-grid{display:grid;grid-template-columns:minmax(0,.75fr) minmax(0,1.25fr);gap:56px;align-items:center}
 .sb-grid h2{margin-top:12px}
 .sb-grid p:not(.eyebrow){color:#B9C1BD;font-size:18px;margin-top:18px;max-width:30rem}
 .sched-band .eyebrow{color:#9AA39E}
 .sched-band .ctas{justify-content:flex-start}
-.sb-grid img{width:100%;height:auto;align-self:center}
+.sb-grid img{width:118%;max-width:none;height:auto;align-self:center;margin-right:-18%}
 .qa-wrap{max-width:860px;margin:0 auto}
 .v-driver{background:#F2F5F3}
 .drv{position:absolute;left:3cqi;right:3cqi;bottom:3cqi;background:#fff;border-radius:8cqi;padding:5.2cqi;display:grid;gap:3.6cqi}
@@ -570,10 +619,10 @@ section.block{padding-block:clamp(112px,11vw,160px)}
 .ph-code span{flex:1;background:#F2F5F3;border-radius:3cqi;text-align:center;padding:2.4cqi 0;font:700 6cqi/1 -apple-system,system-ui,sans-serif}
 
 @media (max-width:860px){
-  .sched,.qa{padding:28px 28px 0}.qa{padding-bottom:20px}
+  .sched{padding:28px 28px 0}
   .tlist{grid-template-columns:repeat(2,minmax(0,1fr));gap:36px 32px}
   .why,.sgrid,.biz-grid,.air,.sb-grid{grid-template-columns:minmax(0,1fr)}
-  .wcard{min-height:0}.wcard.photo{min-height:440px}.sc,.sc.tall{height:440px}
+  .wcard{min-height:0}.wcard.photo{min-height:440px}.sb-grid img{width:100%;margin:0}
   .subnav{top:64px}.sn-in>b{display:none}
   .grow{height:auto}.grow-in{position:static;height:auto}.grow-in img{width:100%;height:auto;border-radius:0}
   .biz{padding:72px 0}.sched-band{padding:72px 0}
@@ -597,37 +646,24 @@ section.block{padding-block:clamp(112px,11vw,160px)}
 <header class="site-head" id="siteHead">
   <div class="wrap has-pin">
     <a class="wordmark" href="index.html" aria-label="Bolt concept home">Bolt <small>concept</small></a>
-    <nav aria-label="Main">
-      <ul class="intent" id="intentNav">
-        <li>
-          <button class="intent-btn" type="button" aria-expanded="false" aria-controls="megaGo" aria-current="true">Get around
-            <svg class="chev" viewBox="0 0 10 10" aria-hidden="true"><path d="M1 3l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.6"/></svg></button>
-          <div class="mega" id="megaGo">
-            <a href="rides.html" aria-current="page"><b>Rides</b><span>A driver picks you up in minutes</span></a>
-            <a href="scooters.html"><b>Scooters &amp; e-bikes</b><span>Grab one on the next corner</span></a>
-            <a href="drive.html"><b>Car-sharing</b><span>Drive yourself, by the minute or day</span></a>
-          </div>
-        </li>
-        <li>
-          <button class="intent-btn" type="button" aria-expanded="false" aria-controls="megaDel">Get delivered
-            <svg class="chev" viewBox="0 0 10 10" aria-hidden="true"><path d="M1 3l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.6"/></svg></button>
-          <div class="mega" id="megaDel">
-            <a href="https://bolt.eu/en/food/" target="_blank" rel="noopener"><b>Food<span class="ext" aria-hidden="true">↗</span><span class="visually-hidden"> (opens bolt.eu)</span></b><span>Order in your browser or the app</span></a>
-            <a href="https://bolt.eu/en/food/market/" target="_blank" rel="noopener"><b>Groceries<span class="ext" aria-hidden="true">↗</span><span class="visually-hidden"> (opens bolt.eu)</span></b><span>Essentials in minutes</span></a>
-            <a href="https://bolt.eu/en/rides/features/bolt-send/" target="_blank" rel="noopener"><b>Parcels<span class="ext" aria-hidden="true">↗</span><span class="visually-hidden"> (opens bolt.eu)</span></b><span>Send something across town</span></a>
-          </div>
-        </li>
-        <li><a class="intent-btn" href="index.html#earn">Earn</a></li>
-        <li><a class="intent-btn" href="index.html#business">For business</a></li>
-      </ul>
-    </nav>
     <div class="head-right">
-      <a class="help-link" href="https://bolt.eu/en/support/" target="_blank" rel="noopener">Help<span class="ext" aria-hidden="true">↗</span><span class="visually-hidden"> (opens bolt.eu)</span></a>
-      <button class="btn btn-dark btn-small" type="button" data-handoff>Get the app</button>
-      <button class="menu-btn" type="button" id="menuBtn" aria-expanded="false" aria-controls="intentNav" aria-label="Open menu">
-        <svg width="18" height="14" viewBox="0 0 18 14" aria-hidden="true"><path d="M0 1h18M0 7h18M0 13h18" stroke="currentColor" stroke-width="1.8"/></svg></button>
+      <span class="lang" aria-label="Language: English">EN</span>
+      <a class="head-link" href="https://bolt.eu/en/support/" target="_blank" rel="noopener">Support<span class="visually-hidden"> (opens bolt.eu)</span></a>
+      <button class="btn-head" type="button" data-handoff>Get the app</button>
+      <button class="burger" type="button" id="menuBtn" aria-expanded="false" aria-controls="siteMenu" aria-label="Open menu">
+        <svg class="i-open" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+        <svg class="i-close" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
     </div>
     
+  </div>
+  <div class="site-menu" id="siteMenu" hidden>
+    <div class="wrap menu-grid">
+      <nav class="menu-main" aria-label="Main">
+        <div class="menu-tabs" role="tablist" aria-label="Menu sections"><button type="button" role="tab" id="mt-products" aria-controls="mp-products" aria-selected="true">Products</button><button type="button" role="tab" id="mt-earn" aria-controls="mp-earn" aria-selected="false" tabindex="-1">Earn with Bolt</button><button type="button" role="tab" id="mt-company" aria-controls="mp-company" aria-selected="false" tabindex="-1">Company</button><button type="button" role="tab" id="mt-safety" aria-controls="mp-safety" aria-selected="false" tabindex="-1">Safety</button><button type="button" role="tab" id="mt-support" aria-controls="mp-support" aria-selected="false" tabindex="-1">Support</button></div>
+        <div class="menu-panel" role="tabpanel" id="mp-products" aria-labelledby="mt-products"><ul><li><a href="rides.html" aria-current="page">Rides</a></li><li><a href="rides.html#safety">Rider safety</a></li><li><a href="https://bolt.eu/en/driver/" target="_blank" rel="noopener">Become a driver<span class="visually-hidden"> (opens bolt.eu)</span></a></li><li><a href="https://bolt.eu/en/rides/features/bolt-send/" target="_blank" rel="noopener">Bolt Send<span class="visually-hidden"> (opens bolt.eu)</span></a></li></ul><ul><li><a href="scooters.html">Scooters</a></li><li><a href="scooters.html#safety">Scooter safety</a></li><li><a href="bolt7.html">Meet Bolt 7</a></li><li><a href="https://bolt.eu/en/scooters/report/" target="_blank" rel="noopener">Report an issue<span class="visually-hidden"> (opens bolt.eu)</span></a></li></ul><ul><li><a href="drive.html">Bolt Drive</a></li><li><a href="drive.html#cars">Cars and prices</a></li><li><a href="drive.html#faq">FAQ</a></li><li><a href="https://bolt.eu/en/drive/" target="_blank" rel="noopener">Report a vehicle<span class="visually-hidden"> (opens bolt.eu)</span></a></li></ul><ul><li><a href="https://bolt.eu/en/food/" target="_blank" rel="noopener">Bolt Food<span class="visually-hidden"> (opens bolt.eu)</span></a></li><li><a href="https://bolt.eu/en/food/market/" target="_blank" rel="noopener">Bolt Market<span class="visually-hidden"> (opens bolt.eu)</span></a></li><li><a href="https://bolt.eu/en/food/courier/" target="_blank" rel="noopener">Become a courier<span class="visually-hidden"> (opens bolt.eu)</span></a></li><li><a href="https://bolt.eu/en/food/merchant/" target="_blank" rel="noopener">Add a restaurant or store<span class="visually-hidden"> (opens bolt.eu)</span></a></li></ul><ul><li><a href="https://bolt.eu/en/business/" target="_blank" rel="noopener">Bolt for Business<span class="visually-hidden"> (opens bolt.eu)</span></a></li><li><a href="https://bolt.eu/en/business/" target="_blank" rel="noopener">Benefits<span class="visually-hidden"> (opens bolt.eu)</span></a></li><li><a href="https://bolt.eu/en/business/" target="_blank" rel="noopener">Work profile<span class="visually-hidden"> (opens bolt.eu)</span></a></li></ul><ul><li><a href="https://bolt.eu/en/scooters/" target="_blank" rel="noopener">E-bikes<span class="visually-hidden"> (opens bolt.eu)</span></a></li><li><a href="https://bolt.eu/en/rides/" target="_blank" rel="noopener">Bolt Plus<span class="visually-hidden"> (opens bolt.eu)</span></a></li></ul></div><div class="menu-panel" role="tabpanel" id="mp-earn" aria-labelledby="mt-earn" hidden><ul><li><a href="https://bolt.eu/en/driver/" target="_blank" rel="noopener">Drive with Bolt<span class="visually-hidden"> (opens bolt.eu)</span></a></li><li><a href="https://bolt.eu/en/driver/" target="_blank" rel="noopener">Driver earnings<span class="visually-hidden"> (opens bolt.eu)</span></a></li></ul><ul><li><a href="https://bolt.eu/en/food/courier/" target="_blank" rel="noopener">Deliver with Bolt Food<span class="visually-hidden"> (opens bolt.eu)</span></a></li><li><a href="https://bolt.eu/en/food/courier/" target="_blank" rel="noopener">Courier earnings<span class="visually-hidden"> (opens bolt.eu)</span></a></li></ul><ul><li><a href="https://bolt.eu/en/food/merchant/" target="_blank" rel="noopener">Sell on Bolt Food<span class="visually-hidden"> (opens bolt.eu)</span></a></li><li><a href="https://bolt.eu/en/fleet/" target="_blank" rel="noopener">Bolt Fleets<span class="visually-hidden"> (opens bolt.eu)</span></a></li></ul></div><div class="menu-panel" role="tabpanel" id="mp-company" aria-labelledby="mt-company" hidden><ul><li><a href="https://bolt.eu/en/about/mission/" target="_blank" rel="noopener">About Bolt<span class="visually-hidden"> (opens bolt.eu)</span></a></li><li><a href="https://bolt.eu/en/about/mission/" target="_blank" rel="noopener">Our mission<span class="visually-hidden"> (opens bolt.eu)</span></a></li></ul><ul><li><a href="https://bolt.eu/en/careers/" target="_blank" rel="noopener">Careers<span class="visually-hidden"> (opens bolt.eu)</span></a></li><li><a href="https://bolt.eu/en/blog/" target="_blank" rel="noopener">Blog<span class="visually-hidden"> (opens bolt.eu)</span></a></li></ul></div><div class="menu-panel" role="tabpanel" id="mp-safety" aria-labelledby="mt-safety" hidden><ul><li><a href="rides.html#safety">Rider safety</a></li><li><a href="scooters.html#safety">Scooter safety</a></li></ul><ul><li><a href="https://bolt.eu/en/safety/" target="_blank" rel="noopener">Safety lab<span class="visually-hidden"> (opens bolt.eu)</span></a></li></ul></div><div class="menu-panel" role="tabpanel" id="mp-support" aria-labelledby="mt-support" hidden><ul><li><a href="https://bolt.eu/en/support/" target="_blank" rel="noopener">Riders<span class="visually-hidden"> (opens bolt.eu)</span></a></li><li><a href="https://bolt.eu/en/support/" target="_blank" rel="noopener">Drivers<span class="visually-hidden"> (opens bolt.eu)</span></a></li></ul><ul><li><a href="https://bolt.eu/en/support/" target="_blank" rel="noopener">Bolt Food<span class="visually-hidden"> (opens bolt.eu)</span></a></li><li><a href="https://bolt.eu/en/support/" target="_blank" rel="noopener">Bolt for Business<span class="visually-hidden"> (opens bolt.eu)</span></a></li></ul></div>
+      </nav>
+      <ul class="menu-side"><li><a href="https://bolt.eu/en/driver/" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM4 21c0-4 3.6-7 8-7s8 3 8 7"/></svg><span><b>Become a driver</b><span>Make money on your terms</span></span><span class="visually-hidden"> (opens bolt.eu)</span><svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a></li><li><a href="https://bolt.eu/en/food/courier/" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="6" cy="17" r="3"/><circle cx="18" cy="17" r="3"/><path d="M6 17l4-8h5l3 8M10 9 9 6H7"/></svg><span><b>Become a courier</b><span>Deliver food and get paid weekly</span></span><span class="visually-hidden"> (opens bolt.eu)</span><svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a></li><li><a href="https://bolt.eu/en/food/merchant/" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9h16l-1-5H5zM5 9v11h14V9M10 20v-6h4v6"/></svg><span><b>Add a restaurant or store</b><span>Reach more customers</span></span><span class="visually-hidden"> (opens bolt.eu)</span><svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a></li><li><a href="https://bolt.eu/en/fleet/" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 16V11l2-5h10l2 5v5M3 16h18M7 19v-3M17 19v-3"/></svg><span><b>Sign up as a fleet owner</b><span>Add your fleet to Bolt</span></span><span class="visually-hidden"> (opens bolt.eu)</span><svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a></li><li><a href="https://bolt.eu/en/business/" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8h16v11H4zM9 8V5h6v3"/></svg><span><b>Bolt for Business</b><span>Rides and meals for your team</span></span><span class="visually-hidden"> (opens bolt.eu)</span><svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a></li></ul>
+    </div>
   </div>
 </header>
 
@@ -636,7 +672,7 @@ section.block{padding-block:clamp(112px,11vw,160px)}
     <div class="wrap hr-head">
       <p class="eyebrow">Bolt Rides</p>
       <h1>Ride with Bolt</h1>
-      <p class="sub">Fast, safe and reliable rides in 850+ cities, and in Tallinn the price is right here before you book.</p>
+      <p class="sub">Fast, safe and reliable rides in 850+ cities.</p>
       <div class="ctas"><button class="btn btn-primary" type="button" data-handoff>Get Bolt</button><a class="btn btn-quiet" href="#price">See your price <span aria-hidden="true">↓</span></a></div>
     </div>
     <img class="hr-img" src="assets/img/r-hero.webp" srcset="assets/img/r-hero-sm.webp 800w, assets/img/r-hero.webp 1440w" sizes="(max-width: 860px) 100vw, 1200px" alt="A white Bolt car with the green Bolt logo, a woman walking towards it with her phone" width="1440" height="721" fetchpriority="high">
@@ -658,11 +694,11 @@ section.block{padding-block:clamp(112px,11vw,160px)}
 
   <section class="block" aria-labelledby="whyT">
     <div class="wrap">
-      <div class="sec-head center"><h2 id="whyT">Why ride with Bolt?</h2><p>Top-rated drivers, a pickup in minutes, and the price before you book. Or book ahead for later.</p></div>
+      <div class="sec-head center"><h2 id="whyT">Why ride with Bolt?</h2><p>A pickup in minutes and the price before you book.</p></div>
       <div class="why">
-        <article class="wcard dark"><div class="wt"><h3>Find a ride near you anytime</h3><p>Millions of driver partners in 50+ countries. Day or night, Bolt is ready when you are.</p><button class="btn btn-primary btn-small" type="button" data-handoff>Get the Bolt app</button></div><img src="assets/img/r-driver.webp" alt="A driver checks the Bolt app on a phone held next to the steering wheel" loading="lazy" width="736" height="641"></article>
-        <article class="wcard green"><div class="wt"><h3>Your ride, your way</h3><p>From a quick hop to an airport run: compare four ride types on your own route, with the fastest and the cheapest marked.</p><a class="btn btn-light btn-small" href="#price">Compare on the map <span aria-hidden="true">↓</span></a></div><img src="assets/img/superapp.webp" alt="The Bolt app listing ride options side by side with their prices" loading="lazy" width="1600" height="800"></article>
-        <article class="wcard photo"><img src="assets/img/r-crew.webp" alt="Three friends leaning on a Bolt car, laughing" loading="lazy" width="607" height="484"><div class="wt"><h3>Driving change in cities</h3><p>Cities for people, not cars. Bolt aims to be carbon net zero by 2040.</p><a class="btn btn-light btn-small" href="https://bolt.eu/en/about/mission/" target="_blank" rel="noopener" aria-label="Learn more about Bolt's mission (opens bolt.eu)">Learn more <span class="ext" aria-hidden="true">↗</span></a></div></article>
+        <article class="wcard dark"><div class="wt"><h3>Find a ride near you anytime</h3><p>Day or night, in 50+ countries.</p><button class="btn btn-primary btn-small" type="button" data-handoff>Get the Bolt app</button></div><img src="assets/img/r-driver.webp" alt="A driver checks the Bolt app on a phone held next to the steering wheel" loading="lazy" width="736" height="641"></article>
+        <article class="wcard green"><div class="wt"><h3>Your ride, your way</h3><p>Compare four ride types on your own route.</p><a class="btn btn-light btn-small" href="#price">Compare on the map <span aria-hidden="true">↓</span></a></div><img src="assets/img/superapp.webp" alt="The Bolt app listing ride options side by side with their prices" loading="lazy" width="1600" height="800"></article>
+        <article class="wcard photo"><img src="assets/img/r-crew.webp" alt="Three friends leaning on a Bolt car, laughing" loading="lazy" width="607" height="484"><div class="wt"><h3>Driving change in cities</h3><p>Cities for people, not cars.</p><a class="btn btn-light btn-small" href="https://bolt.eu/en/about/mission/" target="_blank" rel="noopener" aria-label="Learn more about Bolt's mission (opens bolt.eu)">Learn more <span class="ext" aria-hidden="true">↗</span></a></div></article>
       </div>
     </div>
   </section>
@@ -740,10 +776,8 @@ Test: handoffs with a filled-in trip; guardrails LCP, price-related support cont
   <section class="biz" id="business" aria-labelledby="bizT">
     <div class="wrap biz-grid">
       <div class="biz-t">
-        <p class="eyebrow">Bolt for Business</p>
         <h2 id="bizT">Business travel made easy</h2>
-        <p>One company account for the whole team: central billing, limits you set, and every ride on one monthly invoice.</p>
-        <ul class="biz-list"><li><b>Save time</b><span>Automated ride reports and expense integrations replace manual claims.</span></li><li><b>Stay in control</b><span>Set who can ride, when, and with which ride types.</span></li></ul>
+        <p>One company account, limits you set and one monthly invoice.</p>
         <div class="ctas"><a class="btn btn-primary" href="https://bolt.eu/en/business/" target="_blank" rel="noopener">Bolt for Business <span class="ext" aria-hidden="true">↗</span></a></div>
       </div>
       <img src="assets/img/r-business.webp" alt="Two colleagues check the time before a business ride" loading="lazy" width="800" height="1000">
@@ -754,16 +788,15 @@ Test: handoffs with a filled-in trip; guardrails LCP, price-related support cont
     <div class="wrap"><button class="pin" type="button" style="left:8px;top:-12px" data-note="Safety: Bolt’s content, readable on a phone">Kept: all of bolt.eu&#x27;s safety features and the ‘features vary by country’ line.
 Changed: text first, photo below, so text never sits on a busy photo (it broke on iOS Safari in v2). Every link says where it goes.
 A11y: photos repeat the card text, so they are marked decorative; the card text carries the meaning.</button>
-      <div class="sec-head center"><h2 id="safeT">Staying safe with Bolt</h2><p>You are never on your own. Over 500 people on the Bolt Safety Team stand behind every ride. Features vary by country.</p></div>
-      <div class="sgrid">
-        <article class="sc tall"><img src="assets/img/r-emergency.webp" alt="" loading="lazy"><div><b>Emergency assist</b><span>Discreetly alert an emergency team from the app; the Safety team calls you straight away.</span></div></article>
-        <article class="sc tall photo"><img src="assets/img/r-women.webp" alt="" loading="lazy"><div><b>Women for women</b><span>Where available, request rides only from female drivers.</span></div></article>
-        <article class="sc tall dark photo"><img src="assets/img/r-night.webp" alt="" loading="lazy"><div><b>Ride Check</b><span>Unexpected long stops during a ride are noticed and checked.</span></div></article>
-        <article class="sc dark"><img src="assets/img/r-toolkit.webp" alt="" loading="lazy"><div><b>Share your trip</b><span>Send the car, plate and live location to friends with one link.</span></div></article>
-        <article class="sc"><img src="assets/img/r-shield.webp" alt="" loading="lazy"><div><b>Your number stays private</b><span>Calls through the app hide your phone number.</span></div></article>
-        <article class="sc photo" style="--op:center 45%"><img src="assets/img/r-team.webp" alt="" loading="lazy"><div><b>24/7 support</b><span>Real people in the app or by phone, any hour.</span></div></article>
-      </div>
-      <p class="sc-more">Also: pickup codes so nobody else can take your trip, and every ride is tracked and recorded.</p>
+      <div class="rail-head"><div><h2 id="safeT">Staying safe with Bolt</h2><p>Over 500 people on the Bolt Safety Team stand behind every ride. Features vary by country.</p></div><div class="rail-nav"><button class="rbtn" type="button" data-rail="safeRail" data-d="-1" aria-label="Previous safety feature"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg></button><button class="rbtn" type="button" data-rail="safeRail" data-d="1" aria-label="Next safety feature"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button></div></div>
+    </div>
+    <div class="rail" id="safeRail" tabindex="0" aria-label="Safety features, scroll sideways">
+        <article class="sc"><img src="assets/img/r-emergency.webp" alt="" loading="lazy" style="--op:center top"><b>Emergency assist</b><span>Alert the Safety team from the app.</span></article>
+        <article class="sc"><img src="assets/img/r-women.webp" alt="" loading="lazy"><b>Women for women</b><span>Ride with female drivers, where available.</span></article>
+        <article class="sc"><img src="assets/img/r-night.webp" alt="" loading="lazy"><b>Ride Check</b><span>Long, unexpected stops are checked.</span></article>
+        <article class="sc"><img src="assets/img/r-toolkit.webp" alt="" loading="lazy" style="--op:center top"><b>Share your trip</b><span>Send your live location in one tap.</span></article>
+        <article class="sc"><img src="assets/img/r-shield.webp" alt="" loading="lazy" style="--op:center"><b>Your number stays private</b><span>Calls go through the app.</span></article>
+        <article class="sc" style="--op:center 35%"><img src="assets/img/r-team.webp" alt="" loading="lazy"><b>24/7 support</b><span>Real people, any hour.</span></article>
     </div>
   </section>
 
@@ -774,9 +807,8 @@ Build: Route list, props: from, to[], computed from the same fare function as th
 Test: organic entrances on airport queries; route-list clicks.</button>
       <img class="air-img" src="assets/img/r-airport.webp" alt="A traveller with a suitcase waits for his ride outside an airport terminal" loading="lazy" width="800" height="1000">
       <div class="air-t">
-        <p class="eyebrow">Airports</p>
         <h2 id="airT">From Tallinn Airport, priced in advance</h2>
-        <p>Seamless transfers at 100+ airports worldwide. Here are the usual trips from Tallinn Airport, priced on real streets. Tap one to plan it.</p>
+        <p>The usual trips from Tallinn Airport, priced on real streets. Tap one to plan it.</p>
         <ul class="routes" id="routes"></ul>
         <p class="fine">Bolt ride type, example fares.</p>
       </div>
@@ -785,8 +817,8 @@ Test: organic entrances on airport queries; route-list clicks.</button>
 
   <section class="sched-band" aria-labelledby="schT">
     <div class="wrap sb-grid">
-      <div><p class="eyebrow">Latest features</p><h2 id="schT">Book a ride up to 90 days ahead</h2><p>For an early flight or an important meeting: set the time and pickup once, and the ride is waiting. With a flight number, the pickup follows your landing time.</p><div class="ctas"><button class="btn btn-primary" type="button" data-handoff>Schedule in the app</button></div></div>
-      <img src="assets/img/r-sched.webp" alt="The Bolt app showing a scheduled airport pickup with a pickup window and the price" loading="lazy" width="1200" height="768">
+      <div><h2 id="schT">Book a ride up to 90 days ahead</h2><p>Set the time once. With a flight number, the pickup follows your landing.</p><div class="ctas"><button class="btn btn-primary" type="button" data-handoff>Schedule in the app</button></div></div>
+      <img src="assets/img/r-sched-c.webp" alt="The Bolt app showing a scheduled airport pickup with a pickup window and the price" loading="lazy" width="980" height="510">
     </div>
   </section>
 
@@ -887,14 +919,59 @@ window.Concept = (() => {
   const onPhone = () => matchMedia('(pointer:coarse) and (max-width:980px)').matches;
 
   /* header */
-  const megaBtns = $$('.intent-btn[aria-controls]');
-  const closeMegas = except => megaBtns.forEach(b => { if (b !== except) { b.setAttribute('aria-expanded', 'false'); $('#' + b.getAttribute('aria-controls')).classList.remove('open'); } });
-  megaBtns.forEach(b => b.addEventListener('click', () => {
-    const open = b.getAttribute('aria-expanded') !== 'true'; closeMegas(b);
-    b.setAttribute('aria-expanded', String(open)); $('#' + b.getAttribute('aria-controls')).classList.toggle('open', open);
-  }));
-  document.addEventListener('click', e => { if (!e.target.closest('.intent > li')) closeMegas(); });
-  $('#menuBtn')?.addEventListener('click', e => { const open = $('#siteHead').classList.toggle('menu-open'); e.currentTarget.setAttribute('aria-expanded', String(open)); });
+  const menu = $('#siteMenu'), menuBtn = $('#menuBtn'), head = $('#siteHead');
+  const setMenu = open => {
+    if (!menu) return;
+    if (open) document.documentElement.style.setProperty('--menu-top', head.getBoundingClientRect().bottom + 'px');
+    menu.hidden = !open; head.classList.toggle('menu-open', open); document.body.classList.toggle('menu-lock', open);
+    menuBtn.setAttribute('aria-expanded', String(open)); menuBtn.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+    if (open) { pickTab(tabs[0]); tabs[0]?.focus(); } else menuBtn.focus();
+  };
+  menuBtn?.addEventListener('click', () => setMenu(menu.hidden));
+  document.addEventListener('keydown', e => {
+    if (!menu || menu.hidden) return;
+    if (e.key === 'Escape') return setMenu(false);
+    if (e.key === 'Tab') { // keep focus inside the open menu (header controls stay reachable)
+      const f = $$('a,button', head).filter(x => x.offsetParent !== null);
+      const first = f[0], last = f[f.length - 1];
+      if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+      else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+    }
+  });
+  menu?.addEventListener('click', e => { if (e.target.closest('a[href^="#"],a[href*=".html#"]')) setMenu(false); });
+  const tabs = $$('.menu-tabs [role="tab"]');
+  function pickTab(t) { if (!t) return; tabs.forEach(x => { const on = x === t; x.setAttribute('aria-selected', String(on)); x.tabIndex = on ? 0 : -1; $('#' + x.getAttribute('aria-controls')).hidden = !on; }); }
+  tabs.forEach((t, i) => {
+    t.addEventListener('click', () => pickTab(t));
+    t.addEventListener('keydown', e => {
+      const d = e.key === 'ArrowRight' ? 1 : e.key === 'ArrowLeft' ? -1 : 0; if (!d) return;
+      e.preventDefault(); const n = tabs[(i + d + tabs.length) % tabs.length]; pickTab(n); n.focus();
+    });
+  });
+
+  /* rails: mouse drag (touch scrolls natively), arrow buttons, end states */
+  $$('.rail').forEach(r => {
+    let x0 = 0, s0 = 0, moved = false, id = null;
+    r.addEventListener('pointerdown', e => { if (e.pointerType !== 'mouse' || e.button !== 0) return; id = e.pointerId; x0 = e.clientX; s0 = r.scrollLeft; moved = false; });
+    r.addEventListener('pointermove', e => {
+      if (e.pointerId !== id) return; const dx = e.clientX - x0;
+      if (!moved && Math.abs(dx) > 5) { moved = true; r.classList.add('dragging'); r.setPointerCapture(id); }
+      if (moved) r.scrollLeft = s0 - dx;
+    });
+    const end = () => {
+      if (id === null) return; id = null; if (!moved) return;
+      const kids = [...r.children], pad = parseFloat(getComputedStyle(r).paddingLeft) || 0;
+      const near = kids.reduce((b, k) => Math.abs(k.offsetLeft - pad - r.scrollLeft) < Math.abs(b.offsetLeft - pad - r.scrollLeft) ? k : b, kids[0]);
+      r.classList.remove('dragging'); r.scrollTo({ left: near.offsetLeft - pad, behavior: reduced() ? 'auto' : 'smooth' });
+    };
+    r.addEventListener('pointerup', end); r.addEventListener('pointercancel', end); r.addEventListener('lostpointercapture', end);
+    r.addEventListener('click', e => { if (moved) { e.preventDefault(); e.stopPropagation(); moved = false; } }, true);
+    r.addEventListener('dragstart', e => e.preventDefault());
+    const btns = $$(`[data-rail="${r.id}"]`);
+    const sync = () => btns.forEach(b => { b.disabled = +b.dataset.d < 0 ? r.scrollLeft < 4 : r.scrollLeft > r.scrollWidth - r.clientWidth - 4; });
+    btns.forEach(b => b.addEventListener('click', () => { const k = r.children[0]; r.scrollBy({ left: +b.dataset.d * ((k?.offsetWidth || 300) + 20), behavior: reduced() ? 'auto' : 'smooth' }); }));
+    r.addEventListener('scroll', sync, { passive: true }); addEventListener('resize', sync); sync();
+  });
 
   /* design notes */
   let pop = null;
@@ -1005,7 +1082,7 @@ window.Concept = (() => {
         if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
         else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
       }
-    } else if (e.key === 'Escape') closeMegas();
+    }
   });
   return { $, $$, reduced, init, open, close, showView, drawQR };
 })();

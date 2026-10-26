@@ -198,8 +198,6 @@ body.notes .pin{display:block}
 .pin-pop b{display:block;font:600 11px/1.2 var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--note);margin-bottom:6px}
 
 @media (max-width:980px){
-  .intent,.head-right .btn{display:none}
-  .menu-btn{display:grid;place-items:center}
   .final{grid-template-columns:minmax(0,1fr);padding:32px}
   .foot{grid-template-columns:repeat(2,minmax(0,1fr))}
   .stage{grid-template-columns:minmax(0,1fr);align-content:start;gap:20px;overflow-y:auto}
@@ -208,8 +206,6 @@ body.notes .pin{display:block}
   .stage.on-phone .stage-visual{display:none}
   .stage-panel{max-width:none}
 }
-.site-head.menu-open .intent{display:flex;position:absolute;top:64px;left:0;right:0;flex-direction:column;background:var(--surface);border-bottom:1px solid var(--line);padding:12px max(20px,env(safe-area-inset-right,0px)) 16px max(20px,env(safe-area-inset-left,0px))}
-.site-head.menu-open .mega{position:static;width:auto;grid-template-columns:minmax(0,1fr);box-shadow:none;margin-top:6px}
 @media (max-width:560px){
   section.block{padding-block:64px}
   .foot{grid-template-columns:minmax(0,1fr)}
@@ -312,36 +308,76 @@ body.notes .pin{display:block}
    white rounded cards on a light grey page, plain header with one dark pill, black product bands, 3D characters in green.
    Bolt's own typeface and illustrations are not used: Inter Tight and original illustrations stand in for them. */
 :root{
-  --bg:#F5F7F6; --line:#E1E6E3;
+  --bg:#F4F5F5; --page:#FFFFFF; --line:#E6E8E7;
   --display:"Inter Tight","Inter Display","Inter",system-ui,-apple-system,"Segoe UI",sans-serif;
-  --r-btn:14px; --r-card:24px; --dark:#24282C;
+  --r-btn:10px; --r-card:24px; --dark:#24282C;
   --card-shadow:0 1px 2px rgba(14,16,16,.04),0 12px 32px -18px rgba(14,16,16,.16);
 }
-body{background:var(--bg)}
+body{background:var(--page)}
 h1,h2{font-family:var(--display);font-weight:800;letter-spacing:-.015em}
-h1{font-size:clamp(44px,7.2vw,104px);line-height:1.02}
-h2{font-size:clamp(34px,4.8vw,64px);line-height:1.05}
+h1{font-size:clamp(40px,5.2vw,76px);line-height:1.04}
+h2{font-size:clamp(32px,3.6vw,52px);line-height:1.08}
 h3{font-family:var(--display);font-weight:700;letter-spacing:-.02em;font-size:22px}
 .eyebrow{font-size:15px}
 
-/* header: plain, like bolt.eu */
-.site-head{background:rgba(245,247,246,.92);border-bottom:0}
-@supports (backdrop-filter:blur(1px)){.site-head{background:rgba(245,247,246,.82)}}
-.site-head .wrap{height:76px}
-.wordmark{font:900 32px/1 var(--display);letter-spacing:-.02em}
-.intent-btn{font-size:16px;font-weight:600;padding:10px 12px;border-radius:12px}
-.intent-btn:hover,.intent-btn[aria-expanded="true"]{background:#E8ECEA}
-.mega{border-radius:20px;border:0;box-shadow:0 2px 6px rgba(14,16,16,.05),0 24px 48px -20px rgba(14,16,16,.22)}
-.head-right .help-link{font-weight:600}
-.btn-dark{background:var(--dark);color:#fff}
-.btn-dark:hover{background:#000}
-.head-right .btn{border-radius:999px}
+/* header: bolt.eu structure. Logo left; language, Support, one dark pill and the menu on the right. */
+.site-head{background:rgba(255,255,255,.94);border-bottom:0}
+@supports (backdrop-filter:blur(1px)){.site-head{background:rgba(255,255,255,.84)}}
+.site-head .wrap{height:72px}
+.wordmark{font:900 32px/1 var(--display);letter-spacing:-.02em;position:relative;z-index:2}
+.head-right{gap:8px}
+.head-right .lang,.head-right .head-link{font:600 16px/1 var(--font);color:var(--ink);text-decoration:none;padding:14px 12px;border-radius:10px}
+.head-right .head-link:hover{background:#EEF0EF}
+.btn-head{font:700 16px/1 var(--font);background:var(--dark);color:#fff;border:0;border-radius:999px;min-height:44px;padding:0 22px;cursor:pointer;margin-left:4px}
+.btn-head:hover{background:#000}
+.burger{width:48px;height:48px;border:0;background:none;border-radius:12px;display:grid;place-items:center;cursor:pointer;color:var(--ink);margin-right:-10px;position:relative;z-index:2}
+.burger:hover{background:#EEF0EF}
+.burger svg{width:26px;height:26px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round}
+.burger .i-close,.site-head.menu-open .burger .i-open{display:none}
+.site-head.menu-open .burger .i-close{display:block}
+.site-menu{position:fixed;left:0;right:0;bottom:0;top:var(--menu-top,72px);z-index:1;background:#fff;overflow-y:auto;padding:8px 0 40px;overscroll-behavior:contain}
+.site-menu[hidden]{display:none}
+.site-head.menu-open{z-index:60;background:#fff;-webkit-backdrop-filter:none;backdrop-filter:none}
+.menu-grid{display:grid!important;grid-template-columns:minmax(0,1fr) 340px;gap:16px;align-items:start!important;height:auto!important}
+.menu-main{background:#F4F5F5;border-radius:24px;padding:12px 12px 32px}
+.menu-tabs{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:28px}
+.menu-tabs button{font:600 16px/1 var(--font);border:0;background:none;color:#4A524E;border-radius:12px;padding:15px 18px;cursor:pointer}
+.menu-tabs button:hover{color:var(--ink)}
+.menu-tabs button[aria-selected="true"]{background:#fff;color:var(--ink);box-shadow:0 1px 2px rgba(14,16,16,.06)}
+.menu-panel{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:36px 24px;padding:0 18px}
+.menu-panel[hidden]{display:none}
+.menu-panel ul{list-style:none;margin:0;padding:0;display:grid;gap:14px;align-content:start}
+.menu-panel li:first-child a{font-weight:700;font-size:18px;color:var(--ink)}
+.menu-panel a{font:500 16px/1.3 var(--font);color:#4A524E;text-decoration:none}
+.menu-panel a:hover{color:var(--ink);text-decoration:underline;text-underline-offset:3px}
+.menu-panel a[aria-current="page"]{color:var(--green-text)}
+.menu-side{list-style:none;margin:0;padding:8px;background:#F4F5F5;border-radius:24px;display:grid;gap:2px}
+.menu-side a{display:grid;grid-template-columns:24px minmax(0,1fr) 20px;gap:14px;align-items:center;padding:16px 14px;border-radius:16px;text-decoration:none;color:var(--ink)}
+.menu-side a:hover{background:#fff}
+.menu-side svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.menu-side .chev{width:18px;height:18px;color:#7A837E}
+.menu-side b{display:block;font:700 16px/1.25 var(--font)}
+.menu-side b + span{display:block;font:400 14px/1.35 var(--font);color:#5C6660;margin-top:2px}
+.menu-foot{display:flex!important;justify-content:space-between;gap:16px;flex-wrap:wrap;height:auto!important;margin-top:24px;font-size:14px;color:#5C6660}
+body.menu-lock{overflow:hidden}
+@media (max-width:980px){
+  .head-right .lang,.head-right .head-link{display:none}
+  .menu-grid{grid-template-columns:minmax(0,1fr)}
+  .menu-panel{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media (max-width:560px){
+  .btn-head{min-height:40px;padding:0 16px;font-size:15px}
+  .menu-tabs{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;margin-inline:-4px}
+  .menu-tabs button{white-space:nowrap;padding:13px 14px}
+  .menu-panel{grid-template-columns:minmax(0,1fr);gap:28px;padding:0 10px}
+  .menu-foot{flex-direction:column}
+}
 
 /* buttons: rounded rectangles, green or grey */
-.btn{border-radius:var(--r-btn);min-height:56px;padding:0 28px;font-weight:700;font-size:17px}
-.btn-small{min-height:44px;padding:0 18px;font-size:15px;border-radius:12px}
+.btn{border-radius:var(--r-btn);min-height:52px;padding:0 40px;font-weight:700;font-size:17px;letter-spacing:-.005em}
+.btn-small{min-height:44px;padding:0 22px;font-size:15px;border-radius:10px}
 .btn-primary:hover{background:#257A50;box-shadow:none}
-.btn-quiet{background:#E9ECEB;border:0;color:var(--ink)}
+.btn-quiet{background:#E9EAEA;border:0;color:#2E3330}
 .btn-quiet:hover{background:#DEE3E0}
 .vid-ico{position:absolute;z-index:3;right:max(20px,calc((100vw - 1240px) / 2));bottom:24px;width:44px;height:44px;border-radius:50%;border:1px solid rgba(255,255,255,.28);background:rgba(0,0,0,.35);color:#fff;display:grid;place-items:center;cursor:pointer;opacity:.75;transition:opacity 200ms ease,background 200ms ease}
 .vid-ico:hover,.vid-ico:focus-visible{opacity:1;background:rgba(0,0,0,.55)}
@@ -398,8 +434,8 @@ section.block{padding-block:clamp(112px,11vw,160px)}
 .facts span{font-size:14px;color:var(--muted)}
 .tag{justify-self:start;font-size:12px;font-weight:700;color:var(--green-text);background:#E6F4EC;padding:5px 9px;border-radius:999px}
 
-.qa{background:var(--surface);border-radius:var(--r-card);box-shadow:var(--card-shadow);padding:40px}
-.qa h2{font-size:clamp(32px,3.4vw,46px);margin:8px 0 12px}
+.qa{padding:0}
+.qa h2{margin:0 0 24px}
 .faq.light details{border-color:var(--line)}
 .faq.light summary::after{color:var(--muted)}
 .faq.light details p{color:var(--muted)}
@@ -468,6 +504,25 @@ section.block{padding-block:clamp(112px,11vw,160px)}
 .stage-panel{gap:20px}
 @media (max-height:760px) and (min-width:981px){.stage-panel .steps span{display:none}}
 
+/* rail: bolt.eu's sideways strip. Drag with the mouse, swipe on touch, arrows or keys for everyone else. */
+.rail{--gut:max(20px,calc((100vw - 1240px) / 2 + 20px));display:flex;gap:20px;overflow-x:auto;scroll-snap-type:x mandatory;padding:0 var(--gut) 8px;scroll-padding-inline:var(--gut);scrollbar-width:none;cursor:grab;-webkit-user-select:none;user-select:none}
+.rail::-webkit-scrollbar{display:none}
+.rail{position:relative}
+.rail > *{scroll-snap-align:start;flex:0 0 auto;position:relative}
+.rail.dragging{cursor:grabbing;scroll-snap-type:none}
+.rail.dragging a{pointer-events:none}
+.rail img{-webkit-user-drag:none;user-select:none}
+.rail-head{display:flex!important;align-items:end;justify-content:space-between;gap:24px;margin-bottom:40px}
+.rail-head h2{margin:0}
+.rail-head p{margin:14px 0 0;font-size:19px;line-height:1.45;color:var(--muted);max-width:36rem}
+.rail-nav{display:flex;gap:8px;flex:none}
+.rbtn{width:48px;height:48px;border-radius:50%;border:0;background:#E9EAEA;cursor:pointer;color:var(--ink);display:grid;place-items:center}
+.rbtn svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.rbtn:hover{background:#DCDEDD}
+.rbtn:disabled{opacity:.4;cursor:default;background:#E9EAEA}
+@media (max-width:640px){.rail{gap:12px}.rail-nav{display:none}.rail-head{margin-bottom:28px}}
+@media (max-width:560px){.hero-c .ctas{flex-direction:column;align-items:stretch;max-width:320px;margin-inline:auto}}
+
 /* Drive v3: bolt.eu/drive order (dark hero, three ways to use it, how-to, user quote, car classes, pricing, FAQ)
    plus the parts it cannot show: real cars near you, minutes-or-days maths, and the live cost counter Nikhil praises */
 .hero-d{--p:0;--lit:0;position:relative;background:#0B0D0D;color:#F2F5F3;overflow:hidden;isolation:isolate}
@@ -475,7 +530,7 @@ section.block{padding-block:clamp(112px,11vw,160px)}
 .hero-d::before{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;
   background:radial-gradient(60% 70% at 72% 38%,rgba(255,255,255,calc(.05 + var(--p) * .07 + var(--lit) * .06)),transparent 70%),
              radial-gradient(90% 40% at 70% 100%,rgba(43,134,89,calc(var(--lit) * .22)),transparent 70%)}
-.hero-d::after{content:"";position:absolute;left:0;right:0;bottom:0;height:34%;z-index:-1;background:linear-gradient(180deg,transparent,rgba(255,255,255,.025));border-top:1px solid rgba(255,255,255,.04)}
+.hero-d::after{content:"";position:absolute;left:0;right:0;bottom:0;height:34%;z-index:-1;background:linear-gradient(180deg,transparent,rgba(255,255,255,.025))}
 .hd-grid{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:40px;align-items:center;min-height:min(760px,calc(100vh - 140px));padding-block:96px}
 .hero-d .eyebrow{color:#9AA39E}
 .hero-d h1{margin-top:18px;max-width:10ch;
@@ -524,17 +579,19 @@ section.block{padding-block:clamp(112px,11vw,160px)}
 .ci-show:hover{background:#E7F8EE}
 .hold-hint{font-size:13px;color:#8E9993;text-align:center;min-height:1.4em}
 /* hold-to-unlock pill */
-.hold{position:relative;z-index:4;display:inline-flex;align-items:center;gap:14px;min-height:64px;padding:0 28px 0 8px;border:0;border-radius:var(--pill);background:var(--surface);box-shadow:0 0 0 6px rgba(255,255,255,.06),0 18px 40px -12px rgba(0,0,0,.6);color:var(--ink);font-weight:650;font-size:17px;cursor:pointer;
+.hold{position:relative;z-index:4;display:inline-flex;align-items:center;justify-content:center;gap:12px;min-height:60px;min-width:min(320px,100%);padding:0 32px;border:0;border-radius:var(--r-btn);background:var(--green);overflow:hidden;isolation:isolate;box-shadow:0 18px 40px -16px rgba(43,134,89,.7);color:#fff;font-weight:700;font-size:17px;cursor:pointer;
   user-select:none;-webkit-user-select:none;touch-action:none;transition:transform 120ms ease,background-color var(--t-norm),color var(--t-norm)}
 .hold:active{transform:scale(.98)}
-.hold .ring{width:48px;height:48px;flex:0 0 48px;position:relative}
-.hold .ring > svg{width:48px;height:48px;transform:rotate(-90deg)}
+/* the fill sweeps through the button while you hold, like a progress bar in the app */
+.hold::before{content:"";position:absolute;inset:0;z-index:-1;background:#1F6B45;transform-origin:left;transform:scaleX(var(--p,0))}
+.hold .ring{width:22px;height:24px;flex:0 0 22px;position:relative}
+.hold .ring > svg{display:none}
 .hold .ring circle{fill:none;stroke-width:4}
 .hold .ring .track{stroke:var(--line)}
 .hold .ring .fill{stroke:var(--green);stroke-linecap:round;stroke-dasharray:138.2;stroke-dashoffset:138.2}
 .hold .lock{position:absolute;inset:0;display:grid;place-items:center}
 .hold .shackle{transition:transform 420ms var(--glide)}
-.hold.done{background:var(--green);color:#fff}
+.hold.done{background:#1F6B45}
 .hold.done .ring .track{stroke:rgba(255,255,255,.3)}
 .hold.done .ring .fill{stroke:#fff}
 .hold.done .shackle{transform:translate(4px,-3px) rotate(28deg)}
@@ -551,77 +608,53 @@ section.block{padding-block:clamp(112px,11vw,160px)}
 .sn-in a:hover{color:var(--ink);background:#E9ECEB}
 .sn-in a[aria-current="true"]{color:var(--ink)}
 .sec-head.center{text-align:center;justify-items:center;margin-inline:auto}
-.ways{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:28px}
-.way{background:#0E1010;color:#fff;border-radius:var(--r-card);overflow:hidden;display:flex;flex-direction:column}
-.way .ph{background:#0E1010;display:flex;justify-content:center;padding:28px 28px 0;height:420px;overflow:hidden}
-.way .ph img{width:auto;height:118%;object-fit:contain;object-position:top}
-.way .wt{padding:24px 28px 28px;display:grid;gap:8px;background:var(--surface);color:var(--ink);flex:1}
-.way h3{font-size:24px}
-.way p{color:var(--muted)}
+.ways{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:56px;margin-top:8px}
+.way{display:grid;gap:14px;align-content:start;justify-items:center;text-align:center}
+.way img{display:block;width:auto;height:min(620px,58vw);max-width:100%;object-fit:contain;margin-bottom:18px}
+.way h3{font-size:26px}
+.way p{color:var(--muted);font-size:17px;max-width:24rem}
 .near-wrap{margin-top:28px}
-.steps4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;list-style:none;margin:0;padding:0;counter-reset:n}
-.steps4 li{background:var(--surface);border-radius:var(--r-card);box-shadow:var(--card-shadow);overflow:hidden;display:flex;flex-direction:column}
-.steps4 img{width:100%;height:auto;aspect-ratio:4/3;object-fit:cover}
-.steps4 .st{padding:20px 22px 24px;display:grid;gap:6px}
-.steps4 .st::before{counter-increment:n;content:"Step " counter(n);font-size:13px;font-weight:700;color:var(--green-text)}
-.steps4 h3{font-size:21px}
-.steps4 p{color:var(--muted);font-size:15px}
+.steps4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:24px;list-style:none;margin:0;padding:0;counter-reset:n}
+.steps4 li{display:grid;align-content:start}
+.steps4 img{width:100%;height:auto;aspect-ratio:4/5;object-fit:cover;border-radius:24px}
+.steps4 .st{padding:22px 0 0;display:grid;gap:8px}
+.steps4 .st::before{counter-increment:n;content:counter(n);font:800 18px/1 var(--display);color:var(--green-text)}
+.steps4 h3{font-size:24px}
+.steps4 p{color:var(--muted);font-size:17px}
+.pays{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:40px}
+.pay{display:grid;align-content:start}
+.pay img{order:-1;width:100%;height:auto;aspect-ratio:4/3;object-fit:cover;object-position:center 40%;border-radius:24px}
+.pay .pt2{padding:28px 0 0;display:grid;gap:10px}
+.pay h3{font-size:30px}
+.pay p{color:var(--muted);font-size:17px}
+.pay .btn{justify-self:start;margin-top:10px}
+.wide-photo{display:block;width:100%;height:clamp(240px,30vw,520px);object-fit:cover;object-position:center 55%}
 .quote{position:relative;color:#fff;min-height:min(640px,80vh);display:grid;align-items:end;overflow:hidden;background:#0E1010}
 .quote>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 40%}
-.quote::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(6,8,7,.85) 0%,rgba(6,8,7,.55) 45%,rgba(6,8,7,.1) 75%)}
-.q-grid{position:relative;z-index:1;display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);gap:48px;align-items:end;padding-block:72px}
-.q-grid blockquote{margin:0;display:grid;gap:18px}
-.q-grid blockquote p{font:800 clamp(26px,3vw,40px)/1.18 var(--display);letter-spacing:-.01em}
-.q-grid cite{font-style:normal;color:#C9D1CD}
-.q-grid cite b{color:#fff;display:block}
-.meter-side{display:grid;gap:12px}
-.meter-side>small{color:#C9D1CD}
-.meter{background:rgba(23,27,26,.92);border:1px solid #2A302E;border-radius:24px;padding:24px;display:grid;gap:18px;color:#fff;backdrop-filter:blur(6px)}
-.meter-row{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
-.meter-row div{display:grid;gap:4px}
-.meter-row b{font:600 clamp(24px,2.6vw,34px)/1 var(--mono);font-variant-numeric:tabular-nums}
-.meter-row span{font-size:13px;color:#9AA39E}
-.meter .total{display:flex;justify-content:space-between;align-items:baseline;border-top:1px solid #2A302E;padding-top:14px}
-.meter .total small{color:#9AA39E}
-.meter .total b{font:700 clamp(36px,4.4vw,56px)/1 var(--mono);color:#6FD39C;font-variant-numeric:tabular-nums}
-.meter .bar{height:6px;border-radius:3px;background:#2A302E;overflow:hidden}
-.meter .bar i{display:block;height:100%;width:var(--p,30%);background:var(--green);transition:width 1s linear}
-.meter>small{font-size:13px;color:#9AA39E}
-.plan-card{background:var(--surface);border-radius:var(--r-card);box-shadow:var(--card-shadow);padding:36px}
-.cls img{background:#F3F5F4;object-fit:contain!important}
-.pays{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:28px}
-.pay{position:relative;border-radius:var(--r-card);overflow:hidden;min-height:520px;display:flex;flex-direction:column;background:var(--surface);box-shadow:var(--card-shadow)}
-.pay .pt2{padding:32px;display:grid;gap:10px}
-.pay .eyebrow{font-size:14px}
-.pay h3{font-size:30px}
-.pay p{color:var(--muted)}
-.pay .btn{justify-self:start;margin-top:6px}
-.pay img{flex:1;min-height:0;width:100%;object-fit:cover;object-position:center 35%}
-.wide-photo{display:block;width:100%;height:clamp(200px,24vw,380px);object-fit:cover}
-
-/* planner (from v1) */
-.scen{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:28px}
-.scen button{border:1px solid var(--line);background:var(--surface);border-radius:var(--pill);padding:12px 18px;cursor:pointer;display:grid;text-align:left;gap:2px;transition:border-color var(--t-norm),background-color var(--t-norm)}
-.scen button b{font-weight:650}
-.scen button span{font-size:13px;color:var(--muted)}
-.scen button[aria-pressed="true"]{border-color:var(--ink);box-shadow:inset 0 0 0 1px var(--ink)}
-.classes{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px;list-style:none;margin:0 0 28px;padding:0}
-.cls{width:100%;border:1px solid var(--line);background:var(--bg);border-radius:var(--r-m);padding:10px 10px 14px;cursor:pointer;display:grid;gap:4px;text-align:left;transition:border-color var(--t-norm),box-shadow var(--t-norm),transform var(--t-norm) var(--glide)}
-.cls:hover{transform:translateY(-2px)}
-.cls img{width:100%;height:auto;aspect-ratio:640/482;object-fit:cover;border-radius:10px;display:block}
-.cls b{font-weight:650;padding-inline:6px}
-.cls span{font-size:13px;color:var(--muted);padding-inline:6px}
-.cls[aria-pressed="true"]{border-color:var(--green);box-shadow:inset 0 0 0 1px var(--green);background:var(--surface)}
-.compare{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
-.opt{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-m);padding:24px;display:grid;gap:12px;align-content:start;position:relative}
-.opt.best{border-color:var(--green);box-shadow:inset 0 0 0 1px var(--green)}
-.opt .badge{position:absolute;top:-12px;left:20px;background:var(--green);color:#fff;border-radius:var(--pill);padding:4px 12px;font-size:13px;font-weight:650;opacity:0;transform:translateY(4px);transition:opacity var(--t-norm),transform var(--t-norm) var(--glide)}
-.opt.best .badge{opacity:1;transform:none}
-.opt .amt{font-weight:750;font-size:44px;line-height:1;letter-spacing:-.03em;font-variant-numeric:tabular-nums}
-.opt dl{margin:0;display:grid;grid-template-columns:auto 1fr;gap:8px 16px;font-size:14px;border-top:1px solid var(--line);padding-top:14px}
-.opt dt{color:var(--muted)}
-.opt dd{margin:0;text-align:right;font-variant-numeric:tabular-nums;font-weight:600}
-.verdict{margin-top:16px;font-size:16px}
+.quote::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(6,8,7,.82) 0%,rgba(6,8,7,.5) 42%,rgba(6,8,7,0) 70%)}
+.q-in{position:relative;z-index:1;width:100%;padding-block:96px}
+.q-in blockquote{margin:0;max-width:34rem;display:grid;gap:24px}
+.q-in blockquote p{font:800 clamp(30px,3.4vw,48px)/1.12 var(--display);letter-spacing:-.015em}
+.q-in cite{font-style:normal;font-size:17px;color:#E1E7E3}
+.classes{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:16px;list-style:none;margin:0;padding:0}
+.cls{width:100%;border:0;background:none;padding:0;cursor:pointer;display:grid;gap:12px;text-align:left;color:var(--ink)}
+.cls img{width:100%;height:auto;aspect-ratio:700/394;object-fit:contain;display:block;border-radius:20px;background:#ECEFED;transition:background 200ms ease,box-shadow 200ms ease}
+.cls:hover img{background:#E3E8E5}
+.cls b{font-weight:650;font-size:17px}
+.cls[aria-pressed="true"] img{box-shadow:inset 0 0 0 2px var(--ink);background:#fff}
+.scen{display:flex;justify-content:center;gap:32px;flex-wrap:wrap;margin:56px 0 0;border-bottom:1px solid var(--line)}
+.scen button{border:0;background:none;padding:0 0 14px;margin-bottom:-1px;font:600 17px/1 var(--font);color:var(--muted);cursor:pointer;border-bottom:2px solid transparent}
+.scen button[aria-pressed="true"]{color:var(--ink);border-bottom-color:var(--ink)}
+.compare{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));margin-top:48px}
+.opt{display:grid;gap:10px;justify-items:center;text-align:center;padding:8px 24px}
+.opt+.opt{border-left:1px solid var(--line)}
+.opt .ol{font-size:17px;font-weight:600;color:var(--muted);display:inline-flex;gap:10px;align-items:center}
+.opt .badge{font-style:normal;font-size:13px;font-weight:700;color:#fff;background:var(--green);border-radius:999px;padding:4px 10px;display:none}
+.opt.best .badge{display:inline-block}
+.opt .amt{font:800 clamp(48px,5vw,72px)/1 var(--display);letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.opt.best .amt{color:var(--green-text)}
+.opt .calc{font-size:15px;color:var(--muted);font-variant-numeric:tabular-nums}
+.verdict{margin-top:36px;font-size:18px;text-align:center}
 .verdict b{color:var(--green-text)}
 /* cars near you: a real map section between the hero and the planner */
 .near-block{padding-bottom:0}
@@ -684,27 +717,30 @@ section.block{padding-block:clamp(112px,11vw,160px)}
 .v-drive .hint{font-size:4cqi;background:rgba(43,134,89,.18);color:#9FE3BD;border-radius:4cqi;padding:3cqi}
 
 @media (max-width:860px){
-  .hd-grid,.q-grid,.pays{grid-template-columns:minmax(0,1fr)}
+  .hd-grid,.pays{grid-template-columns:minmax(0,1fr)}
   .hd-grid{min-height:0;gap:36px;padding-block:56px 48px}
   .car-stage{width:100%;margin:0;transition:margin 500ms ease}
   .car-stage.unlocked{margin-bottom:250px}
   .carinfo{right:0;left:0;top:calc(100% + 16px);width:auto}
   .beam{height:30%}
-  .ways,.steps4{grid-template-columns:minmax(0,1fr)}
-  .way .ph{height:340px}
+  .ways{grid-template-columns:minmax(0,1fr)}
+  .steps4{grid-template-columns:repeat(2,minmax(0,1fr));gap:28px 16px}.steps4 h3{font-size:20px}.steps4 p{font-size:15px}
+  .ways{gap:64px}.way img{height:min(560px,120vw)}
   .subnav{top:64px}.sn-in>b{display:none}
   .quote{min-height:0}
   .quote::after{background:linear-gradient(180deg,rgba(6,8,7,.35),rgba(6,8,7,.9) 55%)}
-  .q-grid{padding-block:200px 40px;gap:28px}
-  .plan-card{padding:24px}
-  .classes{grid-template-columns:repeat(2,minmax(0,1fr))!important}
-  .compare{grid-template-columns:minmax(0,1fr)!important}
-  .pay{min-height:460px}
+  .q-in{padding-block:240px 48px}
+  .classes{display:flex!important;overflow-x:auto;scroll-snap-type:x mandatory;gap:12px;margin:0 -20px;padding:0 20px;scrollbar-width:none}
+  .classes li{flex:0 0 46%;scroll-snap-align:start}
+  .scen{justify-content:flex-start;gap:24px;flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;margin-top:40px}
+  .scen button{white-space:nowrap}
+  .compare{grid-template-columns:minmax(0,1fr)!important;gap:28px}
+  .opt+.opt{border-left:0;border-top:1px solid var(--line);padding-top:28px}
 }
 @media (prefers-reduced-motion:reduce){.hero-d.lit .beam{animation:fadebeam 900ms ease 250ms both}.car-stage.unlocked .l-head{animation:fadeon 700ms ease 260ms both}}
 @keyframes fadebeam{from{opacity:0}to{opacity:.45}}
 @keyframes fadeon{from{opacity:0}to{opacity:1}}
-@media (max-width:560px){.classes{grid-template-columns:repeat(2,minmax(0,1fr))!important}}
+
 </style>
 </head>
 <body>
@@ -719,37 +755,24 @@ section.block{padding-block:clamp(112px,11vw,160px)}
 <header class="site-head" id="siteHead">
   <div class="wrap has-pin">
     <a class="wordmark" href="index.html" aria-label="Bolt concept home">Bolt <small>concept</small></a>
-    <nav aria-label="Main">
-      <ul class="intent" id="intentNav">
-        <li>
-          <button class="intent-btn" type="button" aria-expanded="false" aria-controls="megaGo" aria-current="true">Get around
-            <svg class="chev" viewBox="0 0 10 10" aria-hidden="true"><path d="M1 3l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.6"/></svg></button>
-          <div class="mega" id="megaGo">
-            <a href="rides.html"><b>Rides</b><span>A driver picks you up in minutes</span></a>
-            <a href="scooters.html"><b>Scooters &amp; e-bikes</b><span>Grab one on the next corner</span></a>
-            <a href="drive.html" aria-current="page"><b>Car-sharing</b><span>Drive yourself, by the minute or day</span></a>
-          </div>
-        </li>
-        <li>
-          <button class="intent-btn" type="button" aria-expanded="false" aria-controls="megaDel">Get delivered
-            <svg class="chev" viewBox="0 0 10 10" aria-hidden="true"><path d="M1 3l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.6"/></svg></button>
-          <div class="mega" id="megaDel">
-            <a href="https://bolt.eu/en/food/" target="_blank" rel="noopener"><b>Food<span class="ext" aria-hidden="true">↗</span><span class="visually-hidden"> (opens bolt.eu)</span></b><span>Order in your browser or the app</span></a>
-            <a href="https://bolt.eu/en/food/market/" target="_blank" rel="noopener"><b>Groceries<span class="ext" aria-hidden="true">↗</span><span class="visually-hidden"> (opens bolt.eu)</span></b><span>Essentials in minutes</span></a>
-            <a href="https://bolt.eu/en/rides/features/bolt-send/" target="_blank" rel="noopener"><b>Parcels<span class="ext" aria-hidden="true">↗</span><span class="visually-hidden"> (opens bolt.eu)</span></b><span>Send something across town</span></a>
-          </div>
-        </li>
-        <li><a class="intent-btn" href="index.html#earn">Earn</a></li>
-        <li><a class="intent-btn" href="index.html#business">For business</a></li>
-      </ul>
-    </nav>
     <div class="head-right">
-      <a class="help-link" href="https://bolt.eu/en/support/" target="_blank" rel="noopener">Help<span class="ext" aria-hidden="true">↗</span><span class="visually-hidden"> (opens bolt.eu)</span></a>
-      <button class="btn btn-dark btn-small" type="button" data-handoff>Get the app</button>
-      <button class="menu-btn" type="button" id="menuBtn" aria-expanded="false" aria-controls="intentNav" aria-label="Open menu">
-        <svg width="18" height="14" viewBox="0 0 18 14" aria-hidden="true"><path d="M0 1h18M0 7h18M0 13h18" stroke="currentColor" stroke-width="1.8"/></svg></button>
+      <span class="lang" aria-label="Language: English">EN</span>
+      <a class="head-link" href="https://bolt.eu/en/support/" target="_blank" rel="noopener">Support<span class="visually-hidden"> (opens bolt.eu)</span></a>
+      <button class="btn-head" type="button" data-handoff>Get the app</button>
+      <button class="burger" type="button" id="menuBtn" aria-expanded="false" aria-controls="siteMenu" aria-label="Open menu">
+        <svg class="i-open" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+        <svg class="i-close" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
     </div>
     
+  </div>
+  <div class="site-menu" id="siteMenu" hidden>
+    <div class="wrap menu-grid">
+      <nav class="menu-main" aria-label="Main">
+        <div class="menu-tabs" role="tablist" aria-label="Menu sections"><button type="button" role="tab" id="mt-products" aria-controls="mp-products" aria-selected="true">Products</button><button type="button" role="tab" id="mt-earn" aria-controls="mp-earn" aria-selected="false" tabindex="-1">Earn with Bolt</button><button type="button" role="tab" id="mt-company" aria-controls="mp-company" aria-selected="false" tabindex="-1">Company</button><button type="button" role="tab" id="mt-safety" aria-controls="mp-safety" aria-selected="false" tabindex="-1">Safety</button><button type="button" role="tab" id="mt-support" aria-controls="mp-support" aria-selected="false" tabindex="-1">Support</button></div>
+        <div class="menu-panel" role="tabpanel" id="mp-products" aria-labelledby="mt-products"><ul><li><a href="rides.html">Rides</a></li><li><a href="rides.html#safety">Rider safety</a></li><li><a href="https://bolt.eu/en/driver/" target="_blank" rel="noopener">Become a driver<span class="visually-hidden"> (opens bolt.eu)</span></a></li><li><a href="https://bolt.eu/en/rides/features/bolt-send/" target="_blank" rel="noopener">Bolt Send<span class="visually-hidden"> (opens bolt.eu)</span></a></li></ul><ul><li><a href="scooters.html">Scooters</a></li><li><a href="scooters.html#safety">Scooter safety</a></li><li><a href="bolt7.html">Meet Bolt 7</a></li><li><a href="https://bolt.eu/en/scooters/report/" target="_blank" rel="noopener">Report an issue<span class="visually-hidden"> (opens bolt.eu)</span></a></li></ul><ul><li><a href="drive.html" aria-current="page">Bolt Drive</a></li><li><a href="drive.html#cars">Cars and prices</a></li><li><a href="drive.html#faq">FAQ</a></li><li><a href="https://bolt.eu/en/drive/" target="_blank" rel="noopener">Report a vehicle<span class="visually-hidden"> (opens bolt.eu)</span></a></li></ul><ul><li><a href="https://bolt.eu/en/food/" target="_blank" rel="noopener">Bolt Food<span class="visually-hidden"> (opens bolt.eu)</span></a></li><li><a href="https://bolt.eu/en/food/market/" target="_blank" rel="noopener">Bolt Market<span class="visually-hidden"> (opens bolt.eu)</span></a></li><li><a href="https://bolt.eu/en/food/courier/" target="_blank" rel="noopener">Become a courier<span class="visually-hidden"> (opens bolt.eu)</span></a></li><li><a href="https://bolt.eu/en/food/merchant/" target="_blank" rel="noopener">Add a restaurant or store<span class="visually-hidden"> (opens bolt.eu)</span></a></li></ul><ul><li><a href="https://bolt.eu/en/business/" target="_blank" rel="noopener">Bolt for Business<span class="visually-hidden"> (opens bolt.eu)</span></a></li><li><a href="https://bolt.eu/en/business/" target="_blank" rel="noopener">Benefits<span class="visually-hidden"> (opens bolt.eu)</span></a></li><li><a href="https://bolt.eu/en/business/" target="_blank" rel="noopener">Work profile<span class="visually-hidden"> (opens bolt.eu)</span></a></li></ul><ul><li><a href="https://bolt.eu/en/scooters/" target="_blank" rel="noopener">E-bikes<span class="visually-hidden"> (opens bolt.eu)</span></a></li><li><a href="https://bolt.eu/en/rides/" target="_blank" rel="noopener">Bolt Plus<span class="visually-hidden"> (opens bolt.eu)</span></a></li></ul></div><div class="menu-panel" role="tabpanel" id="mp-earn" aria-labelledby="mt-earn" hidden><ul><li><a href="https://bolt.eu/en/driver/" target="_blank" rel="noopener">Drive with Bolt<span class="visually-hidden"> (opens bolt.eu)</span></a></li><li><a href="https://bolt.eu/en/driver/" target="_blank" rel="noopener">Driver earnings<span class="visually-hidden"> (opens bolt.eu)</span></a></li></ul><ul><li><a href="https://bolt.eu/en/food/courier/" target="_blank" rel="noopener">Deliver with Bolt Food<span class="visually-hidden"> (opens bolt.eu)</span></a></li><li><a href="https://bolt.eu/en/food/courier/" target="_blank" rel="noopener">Courier earnings<span class="visually-hidden"> (opens bolt.eu)</span></a></li></ul><ul><li><a href="https://bolt.eu/en/food/merchant/" target="_blank" rel="noopener">Sell on Bolt Food<span class="visually-hidden"> (opens bolt.eu)</span></a></li><li><a href="https://bolt.eu/en/fleet/" target="_blank" rel="noopener">Bolt Fleets<span class="visually-hidden"> (opens bolt.eu)</span></a></li></ul></div><div class="menu-panel" role="tabpanel" id="mp-company" aria-labelledby="mt-company" hidden><ul><li><a href="https://bolt.eu/en/about/mission/" target="_blank" rel="noopener">About Bolt<span class="visually-hidden"> (opens bolt.eu)</span></a></li><li><a href="https://bolt.eu/en/about/mission/" target="_blank" rel="noopener">Our mission<span class="visually-hidden"> (opens bolt.eu)</span></a></li></ul><ul><li><a href="https://bolt.eu/en/careers/" target="_blank" rel="noopener">Careers<span class="visually-hidden"> (opens bolt.eu)</span></a></li><li><a href="https://bolt.eu/en/blog/" target="_blank" rel="noopener">Blog<span class="visually-hidden"> (opens bolt.eu)</span></a></li></ul></div><div class="menu-panel" role="tabpanel" id="mp-safety" aria-labelledby="mt-safety" hidden><ul><li><a href="rides.html#safety">Rider safety</a></li><li><a href="scooters.html#safety">Scooter safety</a></li></ul><ul><li><a href="https://bolt.eu/en/safety/" target="_blank" rel="noopener">Safety lab<span class="visually-hidden"> (opens bolt.eu)</span></a></li></ul></div><div class="menu-panel" role="tabpanel" id="mp-support" aria-labelledby="mt-support" hidden><ul><li><a href="https://bolt.eu/en/support/" target="_blank" rel="noopener">Riders<span class="visually-hidden"> (opens bolt.eu)</span></a></li><li><a href="https://bolt.eu/en/support/" target="_blank" rel="noopener">Drivers<span class="visually-hidden"> (opens bolt.eu)</span></a></li></ul><ul><li><a href="https://bolt.eu/en/support/" target="_blank" rel="noopener">Bolt Food<span class="visually-hidden"> (opens bolt.eu)</span></a></li><li><a href="https://bolt.eu/en/support/" target="_blank" rel="noopener">Bolt for Business<span class="visually-hidden"> (opens bolt.eu)</span></a></li></ul></div>
+      </nav>
+      <ul class="menu-side"><li><a href="https://bolt.eu/en/driver/" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM4 21c0-4 3.6-7 8-7s8 3 8 7"/></svg><span><b>Become a driver</b><span>Make money on your terms</span></span><span class="visually-hidden"> (opens bolt.eu)</span><svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a></li><li><a href="https://bolt.eu/en/food/courier/" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="6" cy="17" r="3"/><circle cx="18" cy="17" r="3"/><path d="M6 17l4-8h5l3 8M10 9 9 6H7"/></svg><span><b>Become a courier</b><span>Deliver food and get paid weekly</span></span><span class="visually-hidden"> (opens bolt.eu)</span><svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a></li><li><a href="https://bolt.eu/en/food/merchant/" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9h16l-1-5H5zM5 9v11h14V9M10 20v-6h4v6"/></svg><span><b>Add a restaurant or store</b><span>Reach more customers</span></span><span class="visually-hidden"> (opens bolt.eu)</span><svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a></li><li><a href="https://bolt.eu/en/fleet/" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 16V11l2-5h10l2 5v5M3 16h18M7 19v-3M17 19v-3"/></svg><span><b>Sign up as a fleet owner</b><span>Add your fleet to Bolt</span></span><span class="visually-hidden"> (opens bolt.eu)</span><svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a></li><li><a href="https://bolt.eu/en/business/" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8h16v11H4zM9 8V5h6v3"/></svg><span><b>Bolt for Business</b><span>Rides and meals for your team</span></span><span class="visually-hidden"> (opens bolt.eu)</span><svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a></li></ul>
+    </div>
   </div>
 </header>
 
@@ -760,7 +783,7 @@ section.block{padding-block:clamp(112px,11vw,160px)}
       <div>
         <p class="eyebrow">Bolt Drive car rentals</p>
         <h1>A car when you need one</h1>
-        <p class="sub">No service checks, insurance forms, fuel prices or parking fees. New cars at low rates, opened with your phone.</p>
+        <p class="sub">New cars at low rates, opened with your phone. No fuel, insurance or parking fees to sort out.</p>
         <div class="ctas"><button class="btn btn-primary" type="button" data-handoff>Rent a car</button><a class="btn btn-ghost-dark" href="#find">Find a car near you <span aria-hidden="true">↓</span></a></div>
       </div>
       <div class="unlock has-pin">
@@ -816,9 +839,9 @@ Test: clicks to the car map and to Rent a car; guardrail Drive LCP.</button>
     <div class="wrap">
       <div class="sec-head center"><h2 id="waysT">Car rental on demand</h2><p>You pay for the time and distance you drive. Nothing more.</p></div>
       <div class="ways">
-        <article class="way"><div class="ph"><img src="assets/img/d-ph-min.webp" alt="The Bolt app with an Audi Q2 selected: €0.15 a minute plus €0.25 a km" loading="lazy" width="600" height="1067"></div><div class="wt"><h3>Drive for minutes</h3><p>Book a car, unlock it with your phone, and pay for the time and distance you drive.</p></div></article>
-        <article class="way"><div class="ph"><img src="assets/img/d-ph-day.webp" alt="The Bolt app renting a car for one day for €28 with 500 km included" loading="lazy" width="432" height="768"></div><div class="wt"><h3>Drive for days</h3><p>A fixed fee for longer trips, kilometres included. Fuel and parking are not.</p></div></article>
-        <article class="way"><div class="ph"><img src="assets/img/d-ph-park.webp" alt="The Bolt app map of Tallinn with Bolt Drive cars and their prices per minute" loading="lazy" width="600" height="1067"></div><div class="wt"><h3>Park for free</h3><p>No fees in designated areas, whether you take a break or end your trip.</p></div></article>
+        <article class="way"><img src="assets/img/d-ph-min.webp" alt="The Bolt app with an Audi Q2 selected: €0.15 a minute plus €0.25 a km" loading="lazy" width="600" height="1067"><h3>Drive for minutes</h3><p>Unlock with your phone. Pay for the time and distance you drive.</p></article>
+        <article class="way"><img src="assets/img/d-ph-day.webp" alt="The Bolt app renting a car for one day for €28 with 500 km included" loading="lazy" width="432" height="768"><h3>Drive for days</h3><p>One fixed fee for longer trips, kilometres included.</p></article>
+        <article class="way"><img src="assets/img/d-ph-park.webp" alt="The Bolt app map of Tallinn with Bolt Drive cars and their prices per minute" loading="lazy" width="600" height="1067"><h3>Park for free</h3><p>No parking fees in designated areas.</p></article>
       </div>
     </div>
   </section>
@@ -871,38 +894,25 @@ Test: Reserve clicks; guardrail map load time.</button>
 
   <section class="block" id="how" aria-labelledby="howT" style="padding-top:24px">
     <div class="wrap">
-      <div class="sec-head center"><h2 id="howT">How to rent a car in Tallinn</h2><p>Faster than finding a parking space. Drive as long as you need, park for free, and move on with your day.</p></div>
+      <div class="sec-head center"><h2 id="howT">How to rent a car in Tallinn</h2><p>Faster than finding a parking space.</p></div>
       <ol class="steps4">
-        <li><img src="assets/img/d-couple.webp" alt="" loading="lazy" width="900" height="675"><div class="st"><h3>Create an account</h3><p>Verify your driving licence once, in the app.</p></div></li>
-        <li><img src="assets/img/d-man.webp" alt="" loading="lazy" width="768" height="576"><div class="st"><h3>Find a car nearby</h3><p>On the street, or on the map above with fuel and price.</p></div></li>
-        <li><img src="assets/img/d-door.webp" alt="" loading="lazy" width="900" height="675"><div class="st"><h3>Unlock with the app</h3><p>Your phone is the key. Reserve it free while you walk over.</p></div></li>
-        <li><img src="assets/img/d-inside.webp" alt="" loading="lazy" width="900" height="675"><div class="st"><h3>End your trip</h3><p>Park in a green zone, leave the key inside, done.</p></div></li>
+        <li><img src="assets/img/d-couple.webp" alt="" loading="lazy" width="900" height="675"><div class="st"><h3>Sign up</h3><p>Verify your licence once.</p></div></li>
+        <li><img src="assets/img/d-man.webp" alt="" loading="lazy" width="768" height="576"><div class="st"><h3>Find a car</h3><p>On the map, with fuel and price.</p></div></li>
+        <li><img src="assets/img/d-door.webp" alt="" loading="lazy" width="900" height="675"><div class="st"><h3>Unlock it</h3><p>Your phone is the key.</p></div></li>
+        <li><img src="assets/img/d-inside.webp" alt="" loading="lazy" width="900" height="675"><div class="st"><h3>Park and go</h3><p>Leave it in a green zone.</p></div></li>
       </ol>
     </div>
   </section>
 
   <section class="has-pin quote" aria-labelledby="qT"><button class="pin" type="button" style="left:14px;top:14px" data-note="Bolt’s own testimonial, made visible">Why: bolt.eu quotes Nikhil praising the cost counter, but never shows it.
-Changed: the counter runs here and in the hero card after unlock.
-Kept: his words, unedited.</button>
+Changed: the counter he means runs in the hero card after you unlock the car.
+Kept: his words, unedited, and a calm full-width photo like bolt.eu.</button>
     <img src="assets/img/d-fuel.webp" alt="A man pays at a fuel pump next to a Bolt Drive car" loading="lazy" width="1280" height="818">
-    <div class="wrap q-grid">
+    <div class="wrap q-in">
       <blockquote>
         <p id="qT">“I really like the counter where it shows while you're driving how much you're spending, which none of the other apps have.”</p>
-        <cite><b>Nikhil, Berlin</b>Bolt Drive user, quoted on bolt.eu</cite>
+        <cite>Nikhil, Bolt Drive user in Berlin</cite>
       </blockquote>
-      <div class="meter-side">
-        
-      <div class="meter" aria-hidden="true">
-        <div class="meter-row">
-          <div><b id="mTime">18:42</b><span>time</span></div>
-          <div><b id="mKm">7.4</b><span>km</span></div>
-          <div><b>32</b><span>km/h</span></div>
-        </div>
-        <div class="bar"><i id="mBar"></i></div>
-        <div class="total"><small>Trip so far</small><b id="mCost">€5.33</b></div>
-        <small>Everyday car, pay as you go</small>
-      </div>
-      </div>
     </div>
   </section>
 
@@ -910,56 +920,39 @@ Kept: his words, unedited.</button>
     <div class="wrap"><button class="pin" type="button" style="left:8px;top:-12px" data-note="Minutes or days?">Why: bolt.eu explains both ways to pay in text and sends you to the app to compare.
 Changed: pick a trip and a car class; the page works out minutes against the day rate and names the cheaper one.
 Data: example rates, labelled; production reads the rate card per city.</button>
-      <div class="sec-head center"><h2 id="carsT">Rent the car you need, at the price that fits</h2><p>Pick what you are doing and the car. The cheaper way to pay is highlighted.</p></div>
-      <div class="plan-card">
-      <p class="label" id="scenLabel" style="margin-bottom:10px">What are you doing?</p>
-      <div class="scen" role="group" aria-labelledby="scenLabel" id="scen">
-        <button type="button" data-s="errand" aria-pressed="true"><b>Quick errand</b><span>40 min · 12 km</span></button>
-        <button type="button" data-s="furniture" aria-pressed="false"><b>Furniture run</b><span>2 h · 30 km</span></button>
-        <button type="button" data-s="daytrip" aria-pressed="false"><b>Day at the coast</b><span>8 h · 180 km</span></button>
-        <button type="button" data-s="weekend" aria-pressed="false"><b>Weekend away</b><span>2 days · 400 km</span></button>
-      </div>
-
-      <p class="label" id="clsLabel" style="margin-bottom:10px">Which car?</p>
-      <ul class="classes" role="group" aria-labelledby="clsLabel" id="classes">
-        <li><button class="cls" type="button" data-c="everyday" aria-pressed="true"><img src="assets/img/dc-every.webp" alt="" loading="lazy" width="700" height="394"><b>Everyday</b><span>When you just need wheels</span></button></li>
-        <li><button class="cls" type="button" data-c="electric" aria-pressed="false"><img src="assets/img/dc-third.webp" alt="" loading="lazy" width="700" height="394"><b>Electric</b><span>From partner fleets</span></button></li>
-        <li><button class="cls" type="button" data-c="suv" aria-pressed="false"><img src="assets/img/dc-suv.webp" alt="" loading="lazy" width="700" height="394"><b>SUV</b><span>Extra seats and boot</span></button></li>
-        <li><button class="cls" type="button" data-c="van" aria-pressed="false"><img src="assets/img/dc-van.webp" alt="" loading="lazy" width="700" height="394"><b>Van</b><span>For cargo and moves</span></button></li>
-        <li><button class="cls" type="button" data-c="premium" aria-pressed="false"><img src="assets/img/dc-lux.webp" alt="" loading="lazy" width="700" height="394"><b>Premium</b><span>When the trip matters</span></button></li>
+      <div class="sec-head center"><h2 id="carsT">Rent the car you need</h2><p>Pick a car and a trip. We work out the cheaper way to pay.</p></div>
+      <ul class="classes" role="group" aria-label="Car" id="classes">
+        <li><button class="cls" type="button" data-c="everyday" aria-pressed="true"><img src="assets/img/dc-every.webp" alt="" loading="lazy" width="700" height="394"><b>Everyday</b></button></li>
+        <li><button class="cls" type="button" data-c="electric" aria-pressed="false"><img src="assets/img/dc-third.webp" alt="" loading="lazy" width="700" height="394"><b>Electric</b></button></li>
+        <li><button class="cls" type="button" data-c="suv" aria-pressed="false"><img src="assets/img/dc-suv.webp" alt="" loading="lazy" width="700" height="394"><b>SUV</b></button></li>
+        <li><button class="cls" type="button" data-c="van" aria-pressed="false"><img src="assets/img/dc-van.webp" alt="" loading="lazy" width="700" height="394"><b>Van</b></button></li>
+        <li><button class="cls" type="button" data-c="premium" aria-pressed="false"><img src="assets/img/dc-lux.webp" alt="" loading="lazy" width="700" height="394"><b>Premium</b></button></li>
       </ul>
-
+      <div class="scen" role="group" aria-label="Trip" id="scen">
+        <button type="button" data-s="errand" aria-pressed="true">Quick errand</button>
+        <button type="button" data-s="furniture" aria-pressed="false">Furniture run</button>
+        <button type="button" data-s="daytrip" aria-pressed="false">Day at the coast</button>
+        <button type="button" data-s="weekend" aria-pressed="false">Weekend away</button>
+      </div>
       <div class="compare" aria-live="polite">
-        <article class="opt" id="optMin">
-          <span class="badge">Cheaper for this trip</span>
-          <span class="label">Pay as you go</span>
-          <div class="amt" id="minTotal">€10.68</div>
-          <dl><dt>Time</dt><dd id="minTime">40 min × €0.21</dd><dt>Distance</dt><dd id="minKm">12 km × €0.19</dd><dt>Fuel</dt><dd>Included</dd></dl>
-        </article>
-        <article class="opt" id="optFix">
-          <span class="badge">Cheaper for this trip</span>
-          <span class="label" id="fixLabel">Fixed rate · hours</span>
-          <div class="amt" id="fixTotal">€13.34</div>
-          <dl><dt id="fixUnitLabel">Package</dt><dd id="fixUnit">1 h × €11.90</dd><dt>Distance</dt><dd id="fixKm">12 km × €0.12</dd><dt>Fuel</dt><dd id="fixFuel">Included</dd></dl>
-        </article>
+        <div class="opt" id="optMin"><span class="ol">Pay as you go <i class="badge">Cheaper</i></span><b class="amt" id="minTotal">€10.68</b><span class="calc"><span id="minTime">40 min × €0.21</span> + <span id="minKm">12 km × €0.19</span></span></div>
+        <div class="opt" id="optFix"><span class="ol"><span id="fixLabel">Fixed rate · hours</span> <i class="badge">Cheaper</i></span><b class="amt" id="fixTotal">€13.34</b><span class="calc"><span id="fixUnit">1 h × €11.90</span> + <span id="fixKm">12 km × €0.12</span> · fuel <span id="fixFuel">included</span></span></div>
       </div>
       <p class="verdict" id="verdict">For a quick errand in an everyday car, <b>pay as you go</b> saves €2.66.</p>
-      <p class="fine">Example rates. Fuel and parking are not included in daily rentals.</p>
-      </div>
     </div>
   </section>
 
   <section class="block" style="padding-top:0" aria-labelledby="payT">
     <div class="wrap">
-      <div class="sec-head"><h2 id="payT">Pay for time and distance</h2><p>The app shows which options are available in Tallinn.</p></div>
+      <div class="sec-head"><h2 id="payT">Two ways to pay</h2></div>
       <div class="pays">
-        <article class="pay"><div class="pt2"><p class="eyebrow">Pay as you go</p><h3>Book and go anytime</h3><p>Find a car and drive it as far or as long as you like.</p><button class="btn btn-primary btn-small" type="button" data-handoff>Book a car now</button></div><img src="assets/img/d-shop.webp" alt="Two friends load groceries into a Bolt Drive car" loading="lazy" width="700" height="932"></article>
-        <article class="pay"><div class="pt2"><p class="eyebrow">Long-term rental</p><h3>Hours or days, one fixed rate</h3><p>Pay a fixed rate for exactly the hours or days you need.</p><button class="btn btn-primary btn-small" type="button" data-handoff>Rent for hours or days</button></div><img src="assets/img/d-trip.webp" alt="Friends pack hiking gear into a car for a trip" loading="lazy" width="700" height="932"></article>
+        <article class="pay"><div class="pt2"><h3>Pay as you go</h3><p>Drive as far or as long as you like.</p><button class="btn btn-primary" type="button" data-handoff>Book a car</button></div><img src="assets/img/d-shop.webp" alt="Two friends load groceries into a Bolt Drive car" loading="lazy" width="700" height="932"></article>
+        <article class="pay"><div class="pt2"><h3>Hours or days</h3><p>One fixed rate for the time you need.</p><button class="btn btn-quiet" type="button" data-handoff>Rent for longer</button></div><img src="assets/img/d-trip.webp" alt="Friends pack hiking gear into a car for a trip" loading="lazy" width="700" height="932"></article>
       </div>
     </div>
   </section>
 
-  <img class="wide-photo" src="assets/img/d-forest.webp" alt="Friends by a Bolt Drive car at the edge of a forest, one on a Bolt e-bike, one on a Bolt scooter" loading="lazy" width="1280" height="640">
+  <img class="wide-photo" src="assets/img/d-wide.webp" alt="A driver holds a phone with the Bolt app next to the steering wheel" loading="lazy" width="1600" height="467">
 
   <section class="block" id="faq" aria-labelledby="faqT">
     <div class="wrap">
@@ -1058,14 +1051,59 @@ window.Concept = (() => {
   const onPhone = () => matchMedia('(pointer:coarse) and (max-width:980px)').matches;
 
   /* header */
-  const megaBtns = $$('.intent-btn[aria-controls]');
-  const closeMegas = except => megaBtns.forEach(b => { if (b !== except) { b.setAttribute('aria-expanded', 'false'); $('#' + b.getAttribute('aria-controls')).classList.remove('open'); } });
-  megaBtns.forEach(b => b.addEventListener('click', () => {
-    const open = b.getAttribute('aria-expanded') !== 'true'; closeMegas(b);
-    b.setAttribute('aria-expanded', String(open)); $('#' + b.getAttribute('aria-controls')).classList.toggle('open', open);
-  }));
-  document.addEventListener('click', e => { if (!e.target.closest('.intent > li')) closeMegas(); });
-  $('#menuBtn')?.addEventListener('click', e => { const open = $('#siteHead').classList.toggle('menu-open'); e.currentTarget.setAttribute('aria-expanded', String(open)); });
+  const menu = $('#siteMenu'), menuBtn = $('#menuBtn'), head = $('#siteHead');
+  const setMenu = open => {
+    if (!menu) return;
+    if (open) document.documentElement.style.setProperty('--menu-top', head.getBoundingClientRect().bottom + 'px');
+    menu.hidden = !open; head.classList.toggle('menu-open', open); document.body.classList.toggle('menu-lock', open);
+    menuBtn.setAttribute('aria-expanded', String(open)); menuBtn.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+    if (open) { pickTab(tabs[0]); tabs[0]?.focus(); } else menuBtn.focus();
+  };
+  menuBtn?.addEventListener('click', () => setMenu(menu.hidden));
+  document.addEventListener('keydown', e => {
+    if (!menu || menu.hidden) return;
+    if (e.key === 'Escape') return setMenu(false);
+    if (e.key === 'Tab') { // keep focus inside the open menu (header controls stay reachable)
+      const f = $$('a,button', head).filter(x => x.offsetParent !== null);
+      const first = f[0], last = f[f.length - 1];
+      if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+      else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+    }
+  });
+  menu?.addEventListener('click', e => { if (e.target.closest('a[href^="#"],a[href*=".html#"]')) setMenu(false); });
+  const tabs = $$('.menu-tabs [role="tab"]');
+  function pickTab(t) { if (!t) return; tabs.forEach(x => { const on = x === t; x.setAttribute('aria-selected', String(on)); x.tabIndex = on ? 0 : -1; $('#' + x.getAttribute('aria-controls')).hidden = !on; }); }
+  tabs.forEach((t, i) => {
+    t.addEventListener('click', () => pickTab(t));
+    t.addEventListener('keydown', e => {
+      const d = e.key === 'ArrowRight' ? 1 : e.key === 'ArrowLeft' ? -1 : 0; if (!d) return;
+      e.preventDefault(); const n = tabs[(i + d + tabs.length) % tabs.length]; pickTab(n); n.focus();
+    });
+  });
+
+  /* rails: mouse drag (touch scrolls natively), arrow buttons, end states */
+  $$('.rail').forEach(r => {
+    let x0 = 0, s0 = 0, moved = false, id = null;
+    r.addEventListener('pointerdown', e => { if (e.pointerType !== 'mouse' || e.button !== 0) return; id = e.pointerId; x0 = e.clientX; s0 = r.scrollLeft; moved = false; });
+    r.addEventListener('pointermove', e => {
+      if (e.pointerId !== id) return; const dx = e.clientX - x0;
+      if (!moved && Math.abs(dx) > 5) { moved = true; r.classList.add('dragging'); r.setPointerCapture(id); }
+      if (moved) r.scrollLeft = s0 - dx;
+    });
+    const end = () => {
+      if (id === null) return; id = null; if (!moved) return;
+      const kids = [...r.children], pad = parseFloat(getComputedStyle(r).paddingLeft) || 0;
+      const near = kids.reduce((b, k) => Math.abs(k.offsetLeft - pad - r.scrollLeft) < Math.abs(b.offsetLeft - pad - r.scrollLeft) ? k : b, kids[0]);
+      r.classList.remove('dragging'); r.scrollTo({ left: near.offsetLeft - pad, behavior: reduced() ? 'auto' : 'smooth' });
+    };
+    r.addEventListener('pointerup', end); r.addEventListener('pointercancel', end); r.addEventListener('lostpointercapture', end);
+    r.addEventListener('click', e => { if (moved) { e.preventDefault(); e.stopPropagation(); moved = false; } }, true);
+    r.addEventListener('dragstart', e => e.preventDefault());
+    const btns = $$(`[data-rail="${r.id}"]`);
+    const sync = () => btns.forEach(b => { b.disabled = +b.dataset.d < 0 ? r.scrollLeft < 4 : r.scrollLeft > r.scrollWidth - r.clientWidth - 4; });
+    btns.forEach(b => b.addEventListener('click', () => { const k = r.children[0]; r.scrollBy({ left: +b.dataset.d * ((k?.offsetWidth || 300) + 20), behavior: reduced() ? 'auto' : 'smooth' }); }));
+    r.addEventListener('scroll', sync, { passive: true }); addEventListener('resize', sync); sync();
+  });
 
   /* design notes */
   let pop = null;
@@ -1176,7 +1214,7 @@ window.Concept = (() => {
         if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
         else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
       }
-    } else if (e.key === 'Escape') closeMegas();
+    }
   });
   return { $, $$, reduced, init, open, close, showView, drawQR };
 })();
@@ -1249,9 +1287,9 @@ window.Concept = (() => {
     const cost = .21 * secs / 60 + .19 * km;
     for (const [a, b] of [['#mTime', '#phTime'], ['#mKm', '#phKm'], ['#mCost', '#phCost']]) {
       const v = a === '#mTime' ? `${mm}:${ss}` : a === '#mKm' ? km.toFixed(1) : eur(cost);
-      $(a).textContent = v; if ($(b)) $(b).textContent = v;
+      if ($(a)) $(a).textContent = v; if ($(b)) $(b).textContent = v;
     }
-    $('#mBar').style.setProperty('--p', `${Math.min(100, (secs % 1800) / 18)}%`);
+    $('#mBar')?.style.setProperty('--p', `${Math.min(100, (secs % 1800) / 18)}%`);
   };
   tick();
   setInterval(() => { if (document.visibilityState === 'visible') tick(); }, 1000);
@@ -1309,7 +1347,7 @@ window.Concept = (() => {
     cancelAnimationFrame(raf); t0 = 0; heroD.classList.remove('holding');
     ring.style.transition = 'stroke-dashoffset 300ms cubic-bezier(.16,1,.3,1)'; setRing(0);
     setTimeout(() => ring.style.transition = '', 320);
-    hint.textContent = 'Keep holding until the ring closes.';
+    hint.textContent = 'Keep holding until the button fills.';
   }
   hold.addEventListener('pointerdown', e => {
     if (unlocked) return;
@@ -1325,7 +1363,7 @@ window.Concept = (() => {
   hold.addEventListener('contextmenu', e => e.preventDefault());
   relock.addEventListener('click', lockAgain);
   const TOUCH = matchMedia('(pointer:coarse)').matches;
-  const IDLE_HINT = TOUCH ? 'Press and hold. In the app it is one tap.' : 'Press and hold, or press Enter. In the app it is one tap.';
+  const IDLE_HINT = TOUCH ? 'Try it: press and hold.' : 'Try it: press and hold, or press Enter.';
   hint.textContent = IDLE_HINT;
 
   /* sub-navigation shows where you are */
