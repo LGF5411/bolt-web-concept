@@ -523,6 +523,19 @@ section.block{padding-block:clamp(112px,11vw,160px)}
 @media (max-width:640px){.rail{gap:12px}.rail-nav{display:none}.rail-head{margin-bottom:28px}}
 @media (max-width:560px){.hero-c .ctas{flex-direction:column;align-items:stretch;max-width:320px;margin-inline:auto}}
 
+/* dark photo heroes run up under the header, like bolt.eu: the header turns transparent and white over the photo */
+[data-head-over]{margin-top:-72px;padding-top:72px}
+body.head-over .site-head:not(.solid):not(.menu-open){background:transparent;-webkit-backdrop-filter:none;backdrop-filter:none;transition:background-color 250ms ease}
+body.head-over .site-head:not(.solid):not(.menu-open) .wordmark,
+body.head-over .site-head:not(.solid):not(.menu-open) .lang,
+body.head-over .site-head:not(.solid):not(.menu-open) .head-link,
+body.head-over .site-head:not(.solid):not(.menu-open) .burger{color:#fff}
+body.head-over .site-head:not(.solid):not(.menu-open) .wordmark small{color:rgba(255,255,255,.6)}
+body.head-over .site-head:not(.solid):not(.menu-open) .head-link:hover,
+body.head-over .site-head:not(.solid):not(.menu-open) .burger:hover{background:rgba(255,255,255,.12)}
+body.head-over .site-head:not(.solid):not(.menu-open) .btn-head{background:#fff;color:var(--ink)}
+@media (max-width:860px){[data-head-over]{margin-top:-64px;padding-top:64px}}
+
 /* Drive v3: bolt.eu/drive order (dark hero, three ways to use it, how-to, user quote, car classes, pricing, FAQ)
    plus the parts it cannot show: real cars near you, minutes-or-days maths, and the live cost counter Nikhil praises */
 .hero-d{--p:0;--lit:0;position:relative;background:#0B0D0D;color:#F2F5F3;overflow:hidden;isolation:isolate}
@@ -537,7 +550,7 @@ section.block{padding-block:clamp(112px,11vw,160px)}
   background:linear-gradient(100deg,#F2F5F3 0 42%,#fff 47%,#CFF5DE 50%,#fff 53%,#F2F5F3 58% 100%);background-size:260% 100%;background-position:100% 0;-webkit-background-clip:text;background-clip:text;color:transparent}
 .hero-d.lit h1{animation:sweep 1100ms cubic-bezier(.3,.6,.2,1) 250ms both}
 @keyframes sweep{from{background-position:100% 0}to{background-position:0% 0}}
-.hero-d .sub{font-size:20px;line-height:1.55;color:#B9C1BD;max-width:30rem;margin-top:28px}
+.hero-d .sub{font-size:20px;line-height:1.5;font-weight:500;color:#fff;max-width:30rem;margin-top:28px}
 .hero-d .ctas{justify-content:flex-start;margin-top:40px}
 /* beams: two cones of light from the headlights sweep across the dark towards the headline */
 .beam{position:absolute;z-index:0;pointer-events:none;height:46%;width:70vw;max-width:1100px;opacity:0;transform-origin:100% 50%;
@@ -629,13 +642,16 @@ section.block{padding-block:clamp(112px,11vw,160px)}
 .pay p{color:var(--muted);font-size:17px}
 .pay .btn{justify-self:start;margin-top:10px}
 .wide-photo{display:block;width:100%;height:clamp(240px,30vw,520px);object-fit:cover;object-position:center 55%}
-.quote{position:relative;color:#fff;min-height:min(640px,80vh);display:grid;align-items:end;overflow:hidden;background:#0E1010}
-.quote>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 40%}
-.quote::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(6,8,7,.82) 0%,rgba(6,8,7,.5) 42%,rgba(6,8,7,0) 70%)}
-.q-in{position:relative;z-index:1;width:100%;padding-block:96px}
-.q-in blockquote{margin:0;max-width:34rem;display:grid;gap:24px}
-.q-in blockquote p{font:800 clamp(30px,3.4vw,48px)/1.12 var(--display);letter-spacing:-.015em}
-.q-in cite{font-style:normal;font-size:17px;color:#E1E7E3}
+/* bolt.eu's testimonial: a big bright photo, the quote low on the image with a green rule, the name under it */
+.quote{position:relative;color:#fff;min-height:min(860px,92vh);display:grid;align-items:end;overflow:hidden;background:#0E1010}
+.quote>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 35%}
+.quote::after{content:"";position:absolute;inset:0;background:linear-gradient(0deg,rgba(6,8,7,.55) 0%,rgba(6,8,7,.15) 38%,rgba(6,8,7,0) 60%),linear-gradient(90deg,rgba(6,8,7,.35) 0%,rgba(6,8,7,0) 45%)}
+.q-in{position:relative;z-index:1;width:100%;padding-block:0 clamp(56px,7vw,104px);display:grid;justify-items:center}
+.q-in blockquote{margin:0;max-width:46rem;display:grid;gap:18px}
+.q-in blockquote p{font:600 clamp(22px,2vw,30px)/1.35 var(--display);letter-spacing:-.01em;border-left:4px solid #34C27A;padding-left:24px;text-shadow:0 1px 24px rgba(0,0,0,.35)}
+.q-in cite{font-style:normal;display:grid;gap:4px;padding-left:28px}
+.q-in cite b{font:700 20px/1.2 var(--display)}
+.q-in cite span{font-size:16px;color:#D5DCD8}
 .classes{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:16px;list-style:none;margin:0;padding:0}
 .cls{width:100%;border:0;background:none;padding:0;cursor:pointer;display:grid;gap:12px;text-align:left;color:var(--ink)}
 .cls img{width:100%;height:auto;aspect-ratio:700/394;object-fit:contain;display:block;border-radius:20px;background:#ECEFED;transition:background 200ms ease,box-shadow 200ms ease}
@@ -728,8 +744,9 @@ section.block{padding-block:clamp(112px,11vw,160px)}
   .ways{gap:64px}.way img{height:min(560px,120vw)}
   .subnav{top:64px}.sn-in>b{display:none}
   .quote{min-height:0}
-  .quote::after{background:linear-gradient(180deg,rgba(6,8,7,.35),rgba(6,8,7,.9) 55%)}
-  .q-in{padding-block:240px 48px}
+  .quote{min-height:640px}
+  .quote::after{background:linear-gradient(0deg,rgba(6,8,7,.85) 0%,rgba(6,8,7,.3) 55%,rgba(6,8,7,0) 75%)}
+  .q-in{padding-block:0 40px;justify-items:start}
   .classes{display:flex!important;overflow-x:auto;scroll-snap-type:x mandatory;gap:12px;margin:0 -20px;padding:0 20px;scrollbar-width:none}
   .classes li{flex:0 0 46%;scroll-snap-align:start}
   .scen{justify-content:flex-start;gap:24px;flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;margin-top:40px}
@@ -777,7 +794,7 @@ section.block{padding-block:clamp(112px,11vw,160px)}
 </header>
 
 <main id="top">
-  <section class="hero-d" id="heroD">
+  <section class="hero-d" id="heroD" data-head-over>
     <i class="beam" id="beamA" aria-hidden="true"></i><i class="beam" id="beamB" aria-hidden="true"></i>
     <div class="wrap hd-grid">
       <div>
@@ -910,8 +927,8 @@ Kept: his words, unedited, and a calm full-width photo like bolt.eu.</button>
     <img src="assets/img/d-fuel.webp" alt="A man pays at a fuel pump next to a Bolt Drive car" loading="lazy" width="1280" height="818">
     <div class="wrap q-in">
       <blockquote>
-        <p id="qT">“I really like the counter where it shows while you're driving how much you're spending, which none of the other apps have.”</p>
-        <cite>Nikhil, Bolt Drive user in Berlin</cite>
+        <p id="qT">“I think the app is also quite intuitive. I really like the counter where it shows while you're driving how much you're spending, which none of the other apps have.”</p>
+        <cite><b>Nikhil, Berlin</b><span>Bolt Drive user</span></cite>
       </blockquote>
     </div>
   </section>
@@ -996,7 +1013,7 @@ Data: example rates, labelled; production reads the rate card per city.</button>
       <div class="foot-id"><span class="wordmark foot-mark">Bolt</span><span class="region"><svg width="14" height="14" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 15s5-4.6 5-8.5A5 5 0 0 0 3 6.5C3 10.4 8 15 8 15z" fill="none" stroke="currentColor" stroke-width="1.6"/><circle cx="8" cy="6.5" r="1.8" fill="currentColor"/></svg>Tallinn, Estonia · English</span></div>
       <div class="foot-cta"><button class="btn btn-small foot-btn" type="button" data-handoff>Get Bolt</button><a class="btn btn-small foot-btn" href="https://bolt.eu/en/food/" target="_blank" rel="noopener">Get Bolt Food<span class="ext" aria-hidden="true">↗</span><span class="visually-hidden"> (opens bolt.eu)</span></a></div>
     </div>
-    <div class="legal"><span>Unofficial redesign concept for a portfolio by Andrii. Not affiliated with or endorsed by Bolt Technology OÜ. Photos are Bolt’s own, from bolt.eu, used for a non-commercial portfolio. Illustrations, the ride-type car images and the Drive studio frames are AI-generated. Links marked ↗ open the real bolt.eu.</span><span class="mono">2026</span></div>
+    <div class="legal"><span>Unofficial redesign concept for a portfolio by Andrii. Not affiliated with or endorsed by Bolt Technology OÜ. Photos and the 3D characters are Bolt’s own, from bolt.eu, used for a non-commercial portfolio. Illustrations, the ride-type car images and the Drive studio frames are AI-generated. Links marked ↗ open the real bolt.eu.</span><span class="mono">2026</span></div>
     
   </div>
 </footer>
@@ -1080,6 +1097,12 @@ window.Concept = (() => {
       e.preventDefault(); const n = tabs[(i + d + tabs.length) % tabs.length]; pickTab(n); n.focus();
     });
   });
+
+  /* header over a dark hero: transparent until the hero has scrolled under it */
+  { const over = $('[data-head-over]'), head = $('#siteHead');
+    if (over && head) { document.body.classList.add('head-over');
+      const io = new IntersectionObserver(([e]) => head.classList.toggle('solid', !e.isIntersecting), { rootMargin: `-${head.offsetHeight}px 0px 0px 0px` });
+      io.observe(over); } }
 
   /* rails: mouse drag (touch scrolls natively), arrow buttons, end states */
   $$('.rail').forEach(r => {

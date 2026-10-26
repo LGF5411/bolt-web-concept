@@ -523,6 +523,19 @@ section.block{padding-block:clamp(112px,11vw,160px)}
 @media (max-width:640px){.rail{gap:12px}.rail-nav{display:none}.rail-head{margin-bottom:28px}}
 @media (max-width:560px){.hero-c .ctas{flex-direction:column;align-items:stretch;max-width:320px;margin-inline:auto}}
 
+/* dark photo heroes run up under the header, like bolt.eu: the header turns transparent and white over the photo */
+[data-head-over]{margin-top:-72px;padding-top:72px}
+body.head-over .site-head:not(.solid):not(.menu-open){background:transparent;-webkit-backdrop-filter:none;backdrop-filter:none;transition:background-color 250ms ease}
+body.head-over .site-head:not(.solid):not(.menu-open) .wordmark,
+body.head-over .site-head:not(.solid):not(.menu-open) .lang,
+body.head-over .site-head:not(.solid):not(.menu-open) .head-link,
+body.head-over .site-head:not(.solid):not(.menu-open) .burger{color:#fff}
+body.head-over .site-head:not(.solid):not(.menu-open) .wordmark small{color:rgba(255,255,255,.6)}
+body.head-over .site-head:not(.solid):not(.menu-open) .head-link:hover,
+body.head-over .site-head:not(.solid):not(.menu-open) .burger:hover{background:rgba(255,255,255,.12)}
+body.head-over .site-head:not(.solid):not(.menu-open) .btn-head{background:#fff;color:var(--ink)}
+@media (max-width:860px){[data-head-over]{margin-top:-64px;padding-top:64px}}
+
 /* Scooters: every parked scooter on the real map, real zones, and a ride previewed on the handlebar display. */
 .mapcard .panel #h1{font-size:34px;letter-spacing:-.02em;line-height:1.02}
 .seg{display:grid;grid-template-columns:1fr 1fr;background:var(--bg);border-radius:var(--pill);padding:4px}
@@ -618,16 +631,15 @@ section.block{padding-block:clamp(112px,11vw,160px)}
 .gallery{display:flex;gap:16px;overflow-x:auto;scroll-snap-type:x mandatory;padding:0 max(20px,calc((100vw - 1240px) / 2 + 20px)) 8px;scroll-padding-inline:max(20px,calc((100vw - 1240px) / 2 + 20px));scrollbar-width:none}
 .gallery::-webkit-scrollbar{display:none}
 .gallery img{flex:0 0 auto;height:clamp(200px,24vw,300px);width:auto;border-radius:22px;scroll-snap-align:start;object-fit:cover}
-.plans{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:28px}
-.plan{background:#F4F5F5;border-radius:var(--r-card);padding:36px;display:grid;gap:12px;align-content:start;border:2px solid transparent}
-.plan.featured{border-color:var(--green)}
-.plan h3{font-size:26px}
-.plan .for{color:var(--muted);font-size:16px;margin:-6px 0 6px}
-.plan .amt{font:900 44px/1 var(--display);letter-spacing:-.02em;font-variant-numeric:tabular-nums}
-.plan .amt small{font:500 15px/1 var(--font);color:var(--muted);letter-spacing:0}
-.plan dl{margin:8px 0 0;display:grid;grid-template-columns:auto 1fr;gap:10px 16px;font-size:16px;border-top:1px solid #E1E4E2;padding-top:18px}
-.plan dt{color:var(--muted)}
-.plan dd{margin:0;text-align:right;font-variant-numeric:tabular-nums;font-weight:600}
+.plans{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px}
+/* bolt.eu's pricing cards: who it is for, the plan, one line of price, Bolt's own 3D character; plus the unlock fee they leave out */
+.plan{background:#FFFFFF;border:1px solid #E6E8E7;border-radius:28px;padding:44px 40px 0;display:grid;grid-template-rows:auto auto auto 1fr;overflow:hidden;min-height:560px}
+.plan .for{color:var(--muted);font-size:17px;margin:0 0 6px}
+.plan h3{font-size:30px;letter-spacing:-.02em}
+.plan .amt{color:#3E4643;font-size:19px;margin-top:14px;line-height:1.45}
+.plan .amt b{color:var(--ink)}
+.plan img{align-self:end;justify-self:center;width:100%;max-width:400px;height:auto;margin:8px 0 -2px;transition:transform 600ms var(--glide)}
+.plan:hover img{transform:translateY(-6px)}
 .your-trip{justify-self:start;background:#E6F4EC;color:var(--green-text);font-weight:700;padding:10px 14px;border-radius:12px;font-size:15px}
 .fine2{font-size:13px;color:var(--muted);margin-top:16px}
 .dock{background:#0E1010;color:#F2F5F3;padding:clamp(120px,12vw,168px) 0 0;text-align:center;overflow:hidden}
@@ -641,10 +653,14 @@ section.block{padding-block:clamp(112px,11vw,160px)}
 .scard img{display:block;width:100%;height:auto;aspect-ratio:4/5;object-fit:cover;border-radius:24px;background:#0B100E;margin-bottom:18px}
 .scard b{font:700 24px/1.15 var(--display);letter-spacing:-.02em}
 .scard span{color:var(--muted);font-size:17px}
-.report{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:28px;align-items:center;border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:40px 0}
-.rep-ico{width:72px;height:72px;border-radius:50%;background:#F5B82E;color:#fff;display:grid;place-items:center;font:900 40px/1 var(--display)}
-.report h3{font-size:26px}
-.report p{color:var(--muted);margin-top:6px;max-width:44rem}
+.report-band{background:#F7F8F8;overflow:hidden;padding-top:clamp(56px,7vw,104px)}
+.report{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:64px;align-items:center}
+.report img{width:min(100%,500px);height:auto;justify-self:center;align-self:end;display:block}
+.report>div{padding-bottom:clamp(56px,7vw,104px)}
+.report h2{font-size:clamp(32px,3.4vw,48px)}
+.report .lead{font-size:20px;font-weight:600;line-height:1.45;margin-top:20px;max-width:30rem}
+.report p:not(.lead){color:var(--muted);font-size:18px;margin-top:12px;max-width:30rem}
+.report .btn{margin-top:32px}
 .b7s{position:relative;background:#000;color:#fff;min-height:min(760px,90vh);display:grid;align-items:center;overflow:hidden}
 .b7s-vid{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.95;transform:translateX(18%) scale(1.3);transform-origin:50% 40%}
 .b7s::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(0,0,0,.85) 0%,rgba(0,0,0,.35) 60%,rgba(0,0,0,0) 100%)}
@@ -671,13 +687,13 @@ section.block{padding-block:clamp(112px,11vw,160px)}
   .handle .lever{top:72px}
   .spd b{font-size:44px}.limit{width:46px;height:46px;font-size:17px;border-width:5px}
   .plans,.steps3,.bento{grid-template-columns:minmax(0,1fr)}
-  .plan{padding:26px}
+  .plan{padding:32px 28px 0;min-height:0}
   .hp-grid{grid-template-columns:minmax(0,1fr);min-height:0;gap:0}
   .hp-text{padding:40px 0 8px}
   .hp-img{-webkit-mask-image:none;mask-image:none;max-width:520px;justify-self:center}
   .wide,.b-card{border-radius:20px}
   .dock{padding-top:72px}
-  .report{grid-template-columns:minmax(0,1fr);gap:16px}
+  .report{grid-template-columns:minmax(0,1fr);gap:8px}.report img{order:2;width:min(80%,360px);margin-top:16px}
   .b7s{min-height:0}.b7s-in{padding-block:72px}
   .b7s::after{background:linear-gradient(180deg,rgba(0,0,0,.8),rgba(0,0,0,.5))}
   .b7s-vid{transform:scale(1.3)}
@@ -843,11 +859,11 @@ Test: Rent a scooter clicks after the map was used vs. not.</button>
 Changed: every plan shows the unlock fee and a 10-minute example, so the first bill matches the page (audit F6).
 Kept: the three plans and who each one is for.
 Test: CTA click-through on Scooters; guardrail price-related support contacts.</button>
-      <div class="sec-head"><h2>Ride more, spend less</h2><p>Three ways to pay.</p><p class="your-trip" id="yourTrip" hidden></p></div>
+      <div class="sec-head"><h2>Ride more, spend less</h2><p>Three ways to pay. Every price includes the unlock fee, so the first bill matches this page.</p><p class="your-trip" id="yourTrip" hidden></p></div>
       <div class="plans">
-        <article class="plan"><h3>Pay as you go</h3><p class="for">Most flexible</p><div class="amt">€0.15<small> / min</small></div><dl><dt>Unlock</dt><dd>€1.00</dd><dt>10-min trip</dt><dd>€2.50</dd></dl></article>
-        <article class="plan featured"><h3>Unlimited unlocks</h3><p class="for">For 3+ rides a week</p><div class="amt">€0.99<small> / month</small></div><dl><dt>Unlock</dt><dd>€0.00</dd><dt>10-min trip</dt><dd>€1.50</dd></dl></article>
-        <article class="plan"><h3>Minute passes</h3><p class="for">Lowest price per minute</p><div class="amt">€9.90<small> / 100 min</small></div><dl><dt>Per minute</dt><dd>€0.099</dd><dt>Valid</dt><dd>30 days</dd></dl></article>
+        <article class="plan"><p class="for">Most flexible</p><h3>Pay as you go</h3><p class="amt">From <b>€0.15 per minute</b> plus €1 to unlock. A 10-minute ride is about €2.50.</p><img src="assets/img/b-payg.webp" alt="" loading="lazy" width="736" height="680"></article>
+        <article class="plan"><p class="for">For frequent riders</p><h3>Unlimited unlocks</h3><p class="amt">From <b>€0.99 a month</b>, no unlock fee. A 10-minute ride is about €1.50.</p><img src="assets/img/b-unlim.webp" alt="" loading="lazy" width="736" height="680"></article>
+        <article class="plan"><p class="for">Lowest price per minute</p><h3>Minute passes</h3><p class="amt"><b>100 minutes for €9.90</b>, under €0.10 a minute, valid 30 days.</p><img src="assets/img/b-pass.webp" alt="" loading="lazy" width="736" height="680"></article>
       </div>
       <p class="fine2">Example rates. E-bikes from €0.18 per minute.</p>
     </div>
@@ -876,11 +892,11 @@ Test: CTA click-through on Scooters; guardrail price-related support contacts.</
     </div>
   </section>
 
-  <section class="block" style="padding-top:0">
+  <section class="report-band" aria-labelledby="repT">
     <div class="wrap report">
-      <div class="rep-ico" aria-hidden="true">!</div>
-      <div><h3>Report a badly parked scooter</h3><p>Blocking the pavement? Tell us in the app or online.</p></div>
-      <a class="btn btn-primary" href="https://bolt.eu/en/support/" target="_blank" rel="noopener">Report a scooter <span class="ext" aria-hidden="true">↗</span></a>
+      <img src="assets/img/b-report.webp" alt="" loading="lazy" width="931" height="1160">
+      <div><h2 id="repT">Report a badly parked scooter</h2><p class="lead">See a scooter blocking the pavement or parked where it shouldn't be? Report it in the app or with the online form.</p><p>It keeps the city safer and easier to walk for everyone.</p>
+      <a class="btn btn-primary" href="https://bolt.eu/en/support/" target="_blank" rel="noopener">Report a scooter <span class="ext" aria-hidden="true">↗</span></a></div>
     </div>
   </section>
 
@@ -952,7 +968,7 @@ Build: Video block, props: src, poster, cta. Video is 0.15 MB and stops off scre
       <div class="foot-id"><span class="wordmark foot-mark">Bolt</span><span class="region"><svg width="14" height="14" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 15s5-4.6 5-8.5A5 5 0 0 0 3 6.5C3 10.4 8 15 8 15z" fill="none" stroke="currentColor" stroke-width="1.6"/><circle cx="8" cy="6.5" r="1.8" fill="currentColor"/></svg>Tallinn, Estonia · English</span></div>
       <div class="foot-cta"><button class="btn btn-small foot-btn" type="button" data-handoff>Get Bolt</button><a class="btn btn-small foot-btn" href="https://bolt.eu/en/food/" target="_blank" rel="noopener">Get Bolt Food<span class="ext" aria-hidden="true">↗</span><span class="visually-hidden"> (opens bolt.eu)</span></a></div>
     </div>
-    <div class="legal"><span>Unofficial redesign concept for a portfolio by Andrii. Not affiliated with or endorsed by Bolt Technology OÜ. Photos are Bolt’s own, from bolt.eu, used for a non-commercial portfolio. Illustrations, the ride-type car images and the Drive studio frames are AI-generated. Links marked ↗ open the real bolt.eu.</span><span class="mono">2026</span></div>
+    <div class="legal"><span>Unofficial redesign concept for a portfolio by Andrii. Not affiliated with or endorsed by Bolt Technology OÜ. Photos and the 3D characters are Bolt’s own, from bolt.eu, used for a non-commercial portfolio. Illustrations, the ride-type car images and the Drive studio frames are AI-generated. Links marked ↗ open the real bolt.eu.</span><span class="mono">2026</span></div>
     
   </div>
 </footer>
@@ -1034,6 +1050,12 @@ window.Concept = (() => {
       e.preventDefault(); const n = tabs[(i + d + tabs.length) % tabs.length]; pickTab(n); n.focus();
     });
   });
+
+  /* header over a dark hero: transparent until the hero has scrolled under it */
+  { const over = $('[data-head-over]'), head = $('#siteHead');
+    if (over && head) { document.body.classList.add('head-over');
+      const io = new IntersectionObserver(([e]) => head.classList.toggle('solid', !e.isIntersecting), { rootMargin: `-${head.offsetHeight}px 0px 0px 0px` });
+      io.observe(over); } }
 
   /* rails: mouse drag (touch scrolls natively), arrow buttons, end states */
   $$('.rail').forEach(r => {

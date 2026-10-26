@@ -523,6 +523,19 @@ section.block{padding-block:clamp(112px,11vw,160px)}
 @media (max-width:640px){.rail{gap:12px}.rail-nav{display:none}.rail-head{margin-bottom:28px}}
 @media (max-width:560px){.hero-c .ctas{flex-direction:column;align-items:stretch;max-width:320px;margin-inline:auto}}
 
+/* dark photo heroes run up under the header, like bolt.eu: the header turns transparent and white over the photo */
+[data-head-over]{margin-top:-72px;padding-top:72px}
+body.head-over .site-head:not(.solid):not(.menu-open){background:transparent;-webkit-backdrop-filter:none;backdrop-filter:none;transition:background-color 250ms ease}
+body.head-over .site-head:not(.solid):not(.menu-open) .wordmark,
+body.head-over .site-head:not(.solid):not(.menu-open) .lang,
+body.head-over .site-head:not(.solid):not(.menu-open) .head-link,
+body.head-over .site-head:not(.solid):not(.menu-open) .burger{color:#fff}
+body.head-over .site-head:not(.solid):not(.menu-open) .wordmark small{color:rgba(255,255,255,.6)}
+body.head-over .site-head:not(.solid):not(.menu-open) .head-link:hover,
+body.head-over .site-head:not(.solid):not(.menu-open) .burger:hover{background:rgba(255,255,255,.12)}
+body.head-over .site-head:not(.solid):not(.menu-open) .btn-head{background:#fff;color:var(--ink)}
+@media (max-width:860px){[data-head-over]{margin-top:-64px;padding-top:64px}}
+
 .meta{display:flex;gap:14px;flex-wrap:wrap;font-size:14px;color:var(--muted);padding-top:2px}
 .meta b{color:var(--ink);font-variant-numeric:tabular-nums}
 .via{font-size:13px;color:var(--muted);margin-top:-8px}
@@ -586,10 +599,15 @@ section.block{padding-block:clamp(112px,11vw,160px)}
 .biz-list span{color:#C3D3CA}
 .biz .ctas{justify-content:flex-start}
 .biz-grid>img{width:100%;height:auto;border-radius:28px}
-.sc{width:min(380px,78vw);display:grid;gap:6px;align-content:start}
-.sc img{display:block;width:100%;height:auto;aspect-ratio:4/5;object-fit:cover;object-position:var(--op,center 30%);border-radius:24px;background:#F4F5F5;margin-bottom:18px}
-.sc b{font:700 24px/1.15 var(--display);letter-spacing:-.02em}
-.sc span{color:var(--muted);font-size:17px}
+/* bolt.eu's safety cards: the whole sentence on top, a big photo or app screen filling the rest; light or black to match the picture */
+.sc{width:min(400px,82vw);height:640px;border-radius:28px;overflow:hidden;background:#F9F9F9;border:1px solid #EDEEEE;display:flex;flex-direction:column}
+.sc .t{padding:36px 32px 20px;display:grid;gap:14px;align-content:start}
+.sc b{font:700 28px/1.12 var(--display);letter-spacing:-.02em}
+.sc .t>span{color:#5C6660;font-size:18px;line-height:1.5}
+.sc .btn{justify-self:start;min-height:48px;padding:0 24px;margin-top:6px}
+.sc img{flex:1;min-height:0;width:100%;object-fit:cover;object-position:var(--op,center top);display:block}
+
+.sc.dark{background:#000;border-color:#000;color:#fff}.sc.dark .t>span{color:#C9CFCC}
 .air{display:grid;grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr);gap:56px;align-items:center}
 .air-img{width:100%;height:auto;border-radius:28px}
 .air-t h2{margin-top:12px}
@@ -772,12 +790,12 @@ A11y: photos repeat the card text, so they are marked decorative; the card text 
       <div class="rail-head"><div><h2 id="safeT">Staying safe with Bolt</h2><p>Over 500 people on the Bolt Safety Team stand behind every ride. Features vary by country.</p></div><div class="rail-nav"><button class="rbtn" type="button" data-rail="safeRail" data-d="-1" aria-label="Previous safety feature"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg></button><button class="rbtn" type="button" data-rail="safeRail" data-d="1" aria-label="Next safety feature"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button></div></div>
     </div>
     <div class="rail" id="safeRail" tabindex="0" aria-label="Safety features, scroll sideways">
-        <article class="sc"><img src="assets/img/r-emergency.webp" alt="" loading="lazy" style="--op:center top"><b>Emergency assist</b><span>Alert the Safety team from the app.</span></article>
-        <article class="sc"><img src="assets/img/r-women.webp" alt="" loading="lazy"><b>Women for women</b><span>Ride with female drivers, where available.</span></article>
-        <article class="sc"><img src="assets/img/r-night.webp" alt="" loading="lazy"><b>Ride Check</b><span>Long, unexpected stops are checked.</span></article>
-        <article class="sc"><img src="assets/img/r-toolkit.webp" alt="" loading="lazy" style="--op:center top"><b>Share your trip</b><span>Send your live location in one tap.</span></article>
-        <article class="sc"><img src="assets/img/r-shield.webp" alt="" loading="lazy" style="--op:center"><b>Your number stays private</b><span>Calls go through the app.</span></article>
-        <article class="sc" style="--op:center 35%"><img src="assets/img/r-team.webp" alt="" loading="lazy"><b>24/7 support</b><span>Real people, any hour.</span></article>
+        <article class="sc"><div class="t"><b>Emergency assist</b><span>Discreetly alert an emergency team from the app. Bolt's Safety team is notified too and calls you straight away.</span></div><img src="assets/img/r-emergency.webp" alt="" loading="lazy" style="--op:left top"></article>
+        <article class="sc"><div class="t"><b>Women for women</b><span>A ride type that lets women request rides only from female drivers, where available.</span></div><img src="assets/img/r-women.webp" alt="" loading="lazy" style="--op:center 20%"></article>
+        <article class="sc dark"><div class="t"><b>Ride Check</b><span>Unexpected or unusually long stops during a ride are noticed, and we check in with you.</span></div><img src="assets/img/r-night.webp" alt="" loading="lazy" style="--op:center 35%"></article>
+        <article class="sc dark"><div class="t"><b>Share your trip</b><span>Send the car, its plate and your live location to friends or family with one link.</span></div><img src="assets/img/r-toolkit.webp" alt="" loading="lazy" style="--op:center top"></article>
+        <article class="sc" style="background:#FDFDFD"><div class="t"><b>Your number stays private</b><span>Calls between you and the driver go through the app, so neither of you sees the other's number.</span></div><img src="assets/img/r-shield.webp" alt="" loading="lazy" style="--op:center"></article>
+        <article class="sc" style="background:#E4E7E3"><div class="t"><b>Help at any hour</b><span>Real people answer in the app or by phone, day and night. Every ride is tracked and recorded.</span></div><img src="assets/img/r-team.webp" alt="" loading="lazy" style="--op:center 35%"></article>
     </div>
   </section>
 
@@ -847,7 +865,7 @@ Test: organic entrances on airport queries; route-list clicks.</button>
       <div class="foot-id"><span class="wordmark foot-mark">Bolt</span><span class="region"><svg width="14" height="14" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 15s5-4.6 5-8.5A5 5 0 0 0 3 6.5C3 10.4 8 15 8 15z" fill="none" stroke="currentColor" stroke-width="1.6"/><circle cx="8" cy="6.5" r="1.8" fill="currentColor"/></svg>Tallinn, Estonia · English</span></div>
       <div class="foot-cta"><button class="btn btn-small foot-btn" type="button" data-handoff>Get Bolt</button><a class="btn btn-small foot-btn" href="https://bolt.eu/en/food/" target="_blank" rel="noopener">Get Bolt Food<span class="ext" aria-hidden="true">↗</span><span class="visually-hidden"> (opens bolt.eu)</span></a></div>
     </div>
-    <div class="legal"><span>Unofficial redesign concept for a portfolio by Andrii. Not affiliated with or endorsed by Bolt Technology OÜ. Photos are Bolt’s own, from bolt.eu, used for a non-commercial portfolio. Illustrations, the ride-type car images and the Drive studio frames are AI-generated. Links marked ↗ open the real bolt.eu.</span><span class="mono">2026</span></div>
+    <div class="legal"><span>Unofficial redesign concept for a portfolio by Andrii. Not affiliated with or endorsed by Bolt Technology OÜ. Photos and the 3D characters are Bolt’s own, from bolt.eu, used for a non-commercial portfolio. Illustrations, the ride-type car images and the Drive studio frames are AI-generated. Links marked ↗ open the real bolt.eu.</span><span class="mono">2026</span></div>
     
   </div>
 </footer>
@@ -929,6 +947,12 @@ window.Concept = (() => {
       e.preventDefault(); const n = tabs[(i + d + tabs.length) % tabs.length]; pickTab(n); n.focus();
     });
   });
+
+  /* header over a dark hero: transparent until the hero has scrolled under it */
+  { const over = $('[data-head-over]'), head = $('#siteHead');
+    if (over && head) { document.body.classList.add('head-over');
+      const io = new IntersectionObserver(([e]) => head.classList.toggle('solid', !e.isIntersecting), { rootMargin: `-${head.offsetHeight}px 0px 0px 0px` });
+      io.observe(over); } }
 
   /* rails: mouse drag (touch scrolls natively), arrow buttons, end states */
   $$('.rail').forEach(r => {

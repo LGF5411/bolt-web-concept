@@ -449,6 +449,19 @@ section.block{padding-block:clamp(112px,11vw,160px)}
 @media (max-width:640px){.rail{gap:12px}.rail-nav{display:none}.rail-head{margin-bottom:28px}}
 @media (max-width:560px){.hero-c .ctas{flex-direction:column;align-items:stretch;max-width:320px;margin-inline:auto}}
 
+/* dark photo heroes run up under the header, like bolt.eu: the header turns transparent and white over the photo */
+[data-head-over]{margin-top:-72px;padding-top:72px}
+body.head-over .site-head:not(.solid):not(.menu-open){background:transparent;-webkit-backdrop-filter:none;backdrop-filter:none;transition:background-color 250ms ease}
+body.head-over .site-head:not(.solid):not(.menu-open) .wordmark,
+body.head-over .site-head:not(.solid):not(.menu-open) .lang,
+body.head-over .site-head:not(.solid):not(.menu-open) .head-link,
+body.head-over .site-head:not(.solid):not(.menu-open) .burger{color:#fff}
+body.head-over .site-head:not(.solid):not(.menu-open) .wordmark small{color:rgba(255,255,255,.6)}
+body.head-over .site-head:not(.solid):not(.menu-open) .head-link:hover,
+body.head-over .site-head:not(.solid):not(.menu-open) .burger:hover{background:rgba(255,255,255,.12)}
+body.head-over .site-head:not(.solid):not(.menu-open) .btn-head{background:#fff;color:var(--ink)}
+@media (max-width:860px){[data-head-over]{margin-top:-64px;padding-top:64px}}
+
 /* Bolt 7 launch page: a campaign built only from the site's own components (dark band, video block, fact cards, final CTA),
    plus one scroll story where the handlebar display walks through a ride. Answers audit F3: "Learn more" finally lands on Bolt 7. */
 .l-hero{position:relative;background:#000;color:#fff;min-height:min(780px,calc(100svh - 76px));display:grid;align-items:center;overflow:hidden;isolation:isolate}
@@ -585,7 +598,7 @@ section.block{padding-block:clamp(112px,11vw,160px)}
 </header>
 
 <main id="top">
-  <section class="l-hero has-pin" aria-labelledby="h1"><button class="pin" type="button" style="right:16px;top:16px" data-note="A campaign page from the same parts">Why: on bolt.eu the Bolt 7 promo's “Learn more” opens the Bolt 6 story (audit F3). A launch needs a page of its own.
+  <section class="l-hero has-pin" aria-labelledby="h1" data-head-over><button class="pin" type="button" style="right:16px;top:16px" data-note="A campaign page from the same parts">Why: on bolt.eu the Bolt 7 promo's “Learn more” opens the Bolt 6 story (audit F3). A launch needs a page of its own.
 Kept: Bolt's video, Bolt's facts, the black product band, the site header and footer.
 Build: no new components: hero (dark variant), video block with pause, fact cards, final CTA. The only new piece is the scroll story, which reuses the handlebar display from Scooters.
 Test: Rent a scooter clicks from the launch page vs. the Scooters page; scroll depth through the story.</button>
@@ -697,7 +710,7 @@ A11y: with reduced motion the steps still fade, but nothing moves.</button>
       <div class="foot-id"><span class="wordmark foot-mark">Bolt</span><span class="region"><svg width="14" height="14" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 15s5-4.6 5-8.5A5 5 0 0 0 3 6.5C3 10.4 8 15 8 15z" fill="none" stroke="currentColor" stroke-width="1.6"/><circle cx="8" cy="6.5" r="1.8" fill="currentColor"/></svg>Tallinn, Estonia · English</span></div>
       <div class="foot-cta"><button class="btn btn-small foot-btn" type="button" data-handoff>Get Bolt</button><a class="btn btn-small foot-btn" href="https://bolt.eu/en/food/" target="_blank" rel="noopener">Get Bolt Food<span class="ext" aria-hidden="true">↗</span><span class="visually-hidden"> (opens bolt.eu)</span></a></div>
     </div>
-    <div class="legal"><span>Unofficial redesign concept for a portfolio by Andrii. Not affiliated with or endorsed by Bolt Technology OÜ. Photos are Bolt’s own, from bolt.eu, used for a non-commercial portfolio. Illustrations, the ride-type car images and the Drive studio frames are AI-generated. Links marked ↗ open the real bolt.eu.</span><span class="mono">2026</span></div>
+    <div class="legal"><span>Unofficial redesign concept for a portfolio by Andrii. Not affiliated with or endorsed by Bolt Technology OÜ. Photos and the 3D characters are Bolt’s own, from bolt.eu, used for a non-commercial portfolio. Illustrations, the ride-type car images and the Drive studio frames are AI-generated. Links marked ↗ open the real bolt.eu.</span><span class="mono">2026</span></div>
     
   </div>
 </footer>
@@ -777,6 +790,12 @@ window.Concept = (() => {
       e.preventDefault(); const n = tabs[(i + d + tabs.length) % tabs.length]; pickTab(n); n.focus();
     });
   });
+
+  /* header over a dark hero: transparent until the hero has scrolled under it */
+  { const over = $('[data-head-over]'), head = $('#siteHead');
+    if (over && head) { document.body.classList.add('head-over');
+      const io = new IntersectionObserver(([e]) => head.classList.toggle('solid', !e.isIntersecting), { rootMargin: `-${head.offsetHeight}px 0px 0px 0px` });
+      io.observe(over); } }
 
   /* rails: mouse drag (touch scrolls natively), arrow buttons, end states */
   $$('.rail').forEach(r => {
