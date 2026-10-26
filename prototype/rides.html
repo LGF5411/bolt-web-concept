@@ -543,11 +543,6 @@ section.block{padding-block:clamp(112px,11vw,160px)}
 .handoff-note svg{flex-shrink:0;margin-top:1px;color:var(--green-text)}
 .cta .btn-primary{display:flex;justify-content:space-between;align-items:center;gap:12px;white-space:nowrap;padding-inline:22px}
 .cta .btn-primary span{font-variant-numeric:tabular-nums;opacity:.9}
-.tlist{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0 40px}
-.tlist li{border-top:2px solid var(--ink);padding-top:22px;display:grid;gap:10px;align-content:start}
-.tlist h3{font-size:28px}
-.tlist p{color:var(--muted);font-size:17px;line-height:1.5}
-.tlist span{font-size:14px;font-weight:600;color:var(--ink)}
 /* v3: bolt.eu/rides order (photo hero, why-cards, ride types, growing photo, business, safety, airports, scheduling, FAQ)
    plus what it cannot do: the price of your trip on the page, and airport fares on real streets */
 .hero-r{padding:clamp(96px,9vw,144px) 0 0;text-align:center}
@@ -620,7 +615,6 @@ section.block{padding-block:clamp(112px,11vw,160px)}
 
 @media (max-width:860px){
   .sched{padding:28px 28px 0}
-  .tlist{grid-template-columns:repeat(2,minmax(0,1fr));gap:36px 32px}
   .why,.sgrid,.biz-grid,.air,.sb-grid{grid-template-columns:minmax(0,1fr)}
   .wcard{min-height:0}.wcard.photo{min-height:440px}.sb-grid img{width:100%;margin:0}
   .subnav{top:64px}.sn-in>b{display:none}
@@ -629,7 +623,6 @@ section.block{padding-block:clamp(112px,11vw,160px)}
   .hero-r .sub{font-size:18px}
 }
 @media (max-width:560px){
-  .tlist{grid-template-columns:minmax(0,1fr);gap:28px}
 }
 @media (prefers-reduced-motion:reduce){.skel{animation:none}.grow{height:auto}.grow-in{position:static;height:auto}.grow-in img{width:100%;height:auto}}
 </style>
@@ -683,7 +676,6 @@ section.block{padding-block:clamp(112px,11vw,160px)}
       <b>Rides</b>
       <ul>
         <li><a href="#price">Price your ride</a></li>
-        <li><a href="#types">Ride types</a></li>
         <li><a href="#safety">Safety</a></li>
         <li><a href="#airport">Airport</a></li>
         <li><a href="#business">Business</a></li>
@@ -704,7 +696,7 @@ section.block{padding-block:clamp(112px,11vw,160px)}
   </section>
 
   <section class="planner block" id="price" aria-labelledby="priceT">
-   <div class="wrap"><div class="sec-head center"><h2 id="priceT">Your price, before you install</h2><p>Real Tallinn streets, four ride types, the pickup time and the fare. Then confirm it in Bolt with everything filled in.</p></div></div>
+   <div class="wrap"><div class="sec-head center"><h2 id="priceT">Your price, before you install</h2><p>Four ride types, priced on real Tallinn streets.</p></div></div>
    <div class="wrap planner-wrap">
     <div class="mapstage mapcard" id="plan">
     <div class="map" id="map"><div class="loading" id="loading">Loading the map of Tallinn…</div></div>
@@ -720,7 +712,7 @@ section.block{padding-block:clamp(112px,11vw,160px)}
     <div class="panel has-pin" id="panel">
       <!-- plan -->
       <div id="planView" style="display:grid;gap:16px">
-        <div style="display:grid;gap:6px"><p class="eyebrow">Plan a ride · Tallinn</p><h2>Where to?</h2></div>
+        <div style="display:grid;gap:6px"><h2>Where to?</h2></div>
         <div class="legs">
           <div class="fields">
             <div class="field has" id="fFrom"><span class="dot a" aria-hidden="true"></span>
@@ -759,17 +751,6 @@ Test: handoffs with a filled-in trip; guardrails LCP, price-related support cont
    </div>
   </section>
 
-  <section class="block" id="types" style="padding-top:24px">
-    <div class="wrap">
-      <div class="sec-head"><h2>Pick the ride for the trip</h2><p>Availability depends on the city. Every option shows its price before you book.</p></div>
-      <ul class="tlist">
-        <li><h3>Bolt</h3><p>Fast and affordable for most trips across town.</p><span>Everyday · up to 4</span></li>
-        <li><h3>Electric</h3><p>Quiet electric cars for a small premium.</p><span>Zero emission · up to 4</span></li>
-        <li><h3>Comfort</h3><p>Newer cars and more legroom for work or a night out.</p><span>Top-rated drivers · up to 4</span></li>
-        <li><h3>XL</h3><p>For groups, luggage and airport runs.</p><span>Larger cars · up to 6</span></li>
-      </ul>
-    </div>
-  </section>
 
   <section class="grow" aria-hidden="true"><div class="grow-in"><img src="assets/img/r-couple.webp" alt="" loading="lazy" width="1440" height="721"></div></section>
 
