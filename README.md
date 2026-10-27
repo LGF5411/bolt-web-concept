@@ -11,7 +11,7 @@ Turn on **Design notes** in the top bar of any prototype page to see why each pa
 
 Independent portfolio concept. Not affiliated with, commissioned or endorsed by Bolt Technology OÜ.
 Prices, wait times and vehicles in the prototype are examples. Map data © OpenStreetMap contributors (ODbL).
-Photos are Bolt's own, from bolt.eu, used for a non-commercial portfolio. Illustrations, the ride-type car images and the Drive studio frames are AI-generated. The prototype pages are marked `noindex` and are kept out of search engines.
+Photos and the 3D characters are Bolt's own, from bolt.eu, used for a non-commercial portfolio. The Drive studio frames are AI-generated from a Bolt photo. The prototype pages are marked `noindex` and are kept out of search engines.
 
 ## Run locally
 
