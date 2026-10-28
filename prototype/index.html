@@ -321,8 +321,7 @@ h3{font-family:var(--display);font-weight:700;letter-spacing:-.02em;font-size:22
 .eyebrow{font-size:15px}
 
 /* header: bolt.eu structure. Logo left; language, Support, one dark pill and the menu on the right. */
-.site-head{background:rgba(255,255,255,.94);border-bottom:0}
-@supports (backdrop-filter:blur(1px)){.site-head{background:rgba(255,255,255,.84)}}
+.site-head{background:#fff;border-bottom:0}
 .site-head .wrap{height:72px}
 .wordmark{font:900 32px/1 var(--display);letter-spacing:-.02em;position:relative;z-index:2}
 .head-right{gap:8px}
@@ -526,14 +525,14 @@ section.block{padding-block:clamp(112px,11vw,160px)}
 /* dark photo heroes run up under the header, like bolt.eu: the header turns transparent and white over the photo */
 [data-head-over]{margin-top:-72px;padding-top:72px}
 body.head-over .site-head:not(.solid):not(.menu-open){background:transparent;-webkit-backdrop-filter:none;backdrop-filter:none;transition:background-color 250ms ease}
-body.head-over .site-head:not(.solid):not(.menu-open) .wordmark,
-body.head-over .site-head:not(.solid):not(.menu-open) .lang,
-body.head-over .site-head:not(.solid):not(.menu-open) .head-link,
-body.head-over .site-head:not(.solid):not(.menu-open) .burger{color:#fff}
-body.head-over .site-head:not(.solid):not(.menu-open) .wordmark small{color:rgba(255,255,255,.6)}
-body.head-over .site-head:not(.solid):not(.menu-open) .head-link:hover,
-body.head-over .site-head:not(.solid):not(.menu-open) .burger:hover{background:rgba(255,255,255,.12)}
-body.head-over .site-head:not(.solid):not(.menu-open) .btn-head{background:#fff;color:var(--ink)}
+body.head-over:not(.head-light) .site-head:not(.solid):not(.menu-open) .wordmark,
+body.head-over:not(.head-light) .site-head:not(.solid):not(.menu-open) .lang,
+body.head-over:not(.head-light) .site-head:not(.solid):not(.menu-open) .head-link,
+body.head-over:not(.head-light) .site-head:not(.solid):not(.menu-open) .burger{color:#fff}
+body.head-over:not(.head-light) .site-head:not(.solid):not(.menu-open) .wordmark small{color:rgba(255,255,255,.6)}
+body.head-over:not(.head-light) .site-head:not(.solid):not(.menu-open) .head-link:hover,
+body.head-over:not(.head-light) .site-head:not(.solid):not(.menu-open) .burger:hover{background:rgba(255,255,255,.12)}
+body.head-over:not(.head-light) .site-head:not(.solid):not(.menu-open) .btn-head{background:#fff;color:var(--ink)}
 @media (max-width:860px){[data-head-over]{margin-top:-64px;padding-top:64px}}
 .app-ico{width:56px;height:56px;border-radius:16px;background:var(--green);color:#fff;display:grid;place-items:center}
 .app-ico svg{width:28px;height:28px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
@@ -542,7 +541,7 @@ body.head-over .site-head:not(.solid):not(.menu-open) .btn-head{background:#fff;
 .sc{width:min(400px,82vw);height:640px;border-radius:28px;overflow:hidden;background:#F9F9F9;border:1px solid #EDEEEE;display:flex;flex-direction:column}
 .sc .t{padding:36px 32px 20px;display:grid;gap:14px;align-content:start}
 .sc b{font:700 28px/1.12 var(--display);letter-spacing:-.02em}
-.sc .t>span{color:#5C6660;font-size:18px;line-height:1.5}
+.sc .t>span{color:#3E4643;font-size:18px;line-height:1.5}
 .sc .btn{justify-self:start;min-height:48px;padding:0 24px;margin-top:6px}
 .sc img{flex:1;min-height:0;width:100%;object-fit:cover;object-position:var(--op,center top);display:block}
 .sc.dark{background:#000;border-color:#000;color:#fff}.sc.dark .t>span{color:#C9CFCC}
@@ -1062,9 +1061,9 @@ window.Concept = (() => {
 
   /* header over a dark hero: transparent until the hero has scrolled under it */
   { const over = $('[data-head-over]'), head = $('#siteHead');
-    if (over && head) { document.body.classList.add('head-over');
-      const io = new IntersectionObserver(([e]) => head.classList.toggle('solid', !e.isIntersecting), { rootMargin: `-${head.offsetHeight}px 0px 0px 0px` });
-      io.observe(over); } }
+    if (over && head) { document.body.classList.add('head-over'); if (over.dataset.headOver === 'light') document.body.classList.add('head-light');
+      const tick = () => head.classList.toggle('solid', scrollY > 8);   // like bolt.eu: transparent only at the very top
+      addEventListener('scroll', tick, { passive: true }); tick(); } }
 
   /* rails: mouse drag (touch scrolls natively), arrow buttons, end states */
   $$('.rail').forEach(r => {

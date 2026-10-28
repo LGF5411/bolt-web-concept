@@ -40,9 +40,9 @@ window.Concept = (() => {
 
   /* header over a dark hero: transparent until the hero has scrolled under it */
   { const over = $('[data-head-over]'), head = $('#siteHead');
-    if (over && head) { document.body.classList.add('head-over');
-      const io = new IntersectionObserver(([e]) => head.classList.toggle('solid', !e.isIntersecting), { rootMargin: `-${head.offsetHeight}px 0px 0px 0px` });
-      io.observe(over); } }
+    if (over && head) { document.body.classList.add('head-over'); if (over.dataset.headOver === 'light') document.body.classList.add('head-light');
+      const tick = () => head.classList.toggle('solid', scrollY > 8);   // like bolt.eu: transparent only at the very top
+      addEventListener('scroll', tick, { passive: true }); tick(); } }
 
   /* rails: mouse drag (touch scrolls natively), arrow buttons, end states */
   $$('.rail').forEach(r => {

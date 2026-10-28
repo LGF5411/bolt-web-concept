@@ -247,8 +247,7 @@ h3{font-family:var(--display);font-weight:700;letter-spacing:-.02em;font-size:22
 .eyebrow{font-size:15px}
 
 /* header: bolt.eu structure. Logo left; language, Support, one dark pill and the menu on the right. */
-.site-head{background:rgba(255,255,255,.94);border-bottom:0}
-@supports (backdrop-filter:blur(1px)){.site-head{background:rgba(255,255,255,.84)}}
+.site-head{background:#fff;border-bottom:0}
 .site-head .wrap{height:72px}
 .wordmark{font:900 32px/1 var(--display);letter-spacing:-.02em;position:relative;z-index:2}
 .head-right{gap:8px}
@@ -452,14 +451,14 @@ section.block{padding-block:clamp(112px,11vw,160px)}
 /* dark photo heroes run up under the header, like bolt.eu: the header turns transparent and white over the photo */
 [data-head-over]{margin-top:-72px;padding-top:72px}
 body.head-over .site-head:not(.solid):not(.menu-open){background:transparent;-webkit-backdrop-filter:none;backdrop-filter:none;transition:background-color 250ms ease}
-body.head-over .site-head:not(.solid):not(.menu-open) .wordmark,
-body.head-over .site-head:not(.solid):not(.menu-open) .lang,
-body.head-over .site-head:not(.solid):not(.menu-open) .head-link,
-body.head-over .site-head:not(.solid):not(.menu-open) .burger{color:#fff}
-body.head-over .site-head:not(.solid):not(.menu-open) .wordmark small{color:rgba(255,255,255,.6)}
-body.head-over .site-head:not(.solid):not(.menu-open) .head-link:hover,
-body.head-over .site-head:not(.solid):not(.menu-open) .burger:hover{background:rgba(255,255,255,.12)}
-body.head-over .site-head:not(.solid):not(.menu-open) .btn-head{background:#fff;color:var(--ink)}
+body.head-over:not(.head-light) .site-head:not(.solid):not(.menu-open) .wordmark,
+body.head-over:not(.head-light) .site-head:not(.solid):not(.menu-open) .lang,
+body.head-over:not(.head-light) .site-head:not(.solid):not(.menu-open) .head-link,
+body.head-over:not(.head-light) .site-head:not(.solid):not(.menu-open) .burger{color:#fff}
+body.head-over:not(.head-light) .site-head:not(.solid):not(.menu-open) .wordmark small{color:rgba(255,255,255,.6)}
+body.head-over:not(.head-light) .site-head:not(.solid):not(.menu-open) .head-link:hover,
+body.head-over:not(.head-light) .site-head:not(.solid):not(.menu-open) .burger:hover{background:rgba(255,255,255,.12)}
+body.head-over:not(.head-light) .site-head:not(.solid):not(.menu-open) .btn-head{background:#fff;color:var(--ink)}
 @media (max-width:860px){[data-head-over]{margin-top:-64px;padding-top:64px}}
 .app-ico{width:56px;height:56px;border-radius:16px;background:var(--green);color:#fff;display:grid;place-items:center}
 .app-ico svg{width:28px;height:28px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
@@ -468,7 +467,7 @@ body.head-over .site-head:not(.solid):not(.menu-open) .btn-head{background:#fff;
 .sc{width:min(400px,82vw);height:640px;border-radius:28px;overflow:hidden;background:#F9F9F9;border:1px solid #EDEEEE;display:flex;flex-direction:column}
 .sc .t{padding:36px 32px 20px;display:grid;gap:14px;align-content:start}
 .sc b{font:700 28px/1.12 var(--display);letter-spacing:-.02em}
-.sc .t>span{color:#5C6660;font-size:18px;line-height:1.5}
+.sc .t>span{color:#3E4643;font-size:18px;line-height:1.5}
 .sc .btn{justify-self:start;min-height:48px;padding:0 24px;margin-top:6px}
 .sc img{flex:1;min-height:0;width:100%;object-fit:cover;object-position:var(--op,center top);display:block}
 .sc.dark{background:#000;border-color:#000;color:#fff}.sc.dark .t>span{color:#C9CFCC}
@@ -478,7 +477,7 @@ body.head-over .site-head:not(.solid):not(.menu-open) .btn-head{background:#fff;
    plus one scroll story where the handlebar display walks through a ride. Answers audit F3: "Learn more" finally lands on Bolt 7. */
 .l-hero{position:relative;background:#000;color:#fff;min-height:min(780px,calc(100svh - 76px));display:grid;align-items:center;overflow:hidden;isolation:isolate}
 .l-hero video{position:absolute;top:0;left:42%;width:64%;height:100%;object-fit:cover;z-index:-2}
-.l-hero::after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(90deg,#000 0%,#000 42%,rgba(0,0,0,.55) 52%,rgba(0,0,0,0) 66%),linear-gradient(0deg,rgba(0,0,0,.6) 0%,rgba(0,0,0,0) 30%)}
+.l-hero::after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(0deg,#0E1010 0,rgba(14,16,16,0) 160px),linear-gradient(90deg,#000 0%,#000 42%,rgba(0,0,0,.55) 52%,rgba(0,0,0,0) 66%)}   /* fades into the story band below, so there is no seam */
 .l-hero .wrap{width:100%;padding-block:96px 72px;display:grid;gap:22px}
 .l-hero .eyebrow{color:#9FE3BE}
 .l-hero h1{font-size:clamp(56px,8.4vw,128px);line-height:.95;letter-spacing:-.025em;max-width:9ch}
@@ -490,7 +489,7 @@ body.head-over .site-head:not(.solid):not(.menu-open) .btn-head{background:#fff;
 .story{background:#0E1010;color:#F2F5F3}
 .story .sec-head p{color:#B9C1BD}
 .story-grid{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);gap:64px;align-items:start}
-.story-sticky{position:sticky;top:calc(50vh - 190px);height:380px;display:grid;place-items:center}
+.story-sticky{position:sticky;top:calc(50vh - 200px);display:grid;place-items:center}
 .story-steps{list-style:none;margin:0;padding:0}
 .story-steps li{min-height:72vh;display:grid;align-content:center;gap:14px;opacity:.38;transition:opacity 400ms var(--glide)}
 .story-steps li:first-child{min-height:56vh}
@@ -498,44 +497,42 @@ body.head-over .site-head:not(.solid):not(.menu-open) .btn-head{background:#fff;
 .story-steps .k{font:500 13px/1 var(--mono);letter-spacing:.06em;text-transform:uppercase;color:#6FD39C}
 .story-steps h3{font-size:clamp(28px,3vw,40px);line-height:1.08;letter-spacing:-.02em}
 .story-steps p{color:#C9D1CD;font-size:18px;line-height:1.55;max-width:30rem}
-/* the handlebar (shared with Scooters) */
-.handle{position:relative;width:min(560px,100%);height:200px}
-.handle .stem{position:absolute;left:4%;right:4%;top:66px;height:24px;border-radius:12px;background:linear-gradient(#3A4240,#1E2422);box-shadow:0 10px 24px -8px rgba(0,0,0,.5)}
-.handle .grip{position:absolute;top:57px;width:15%;height:42px;border-radius:21px;background:repeating-linear-gradient(90deg,#121615 0 5px,#1B201E 5px 9px)}
-.handle .grip.l{left:0}.handle .grip.r{right:0}
-.handle .lever{position:absolute;top:94px;width:16%;height:8px;border-radius:4px;background:#4A5350}
-.handle .lever.l{left:9%;transform:rotate(-7deg)}.handle .lever.r{right:9%;transform:rotate(7deg)}
-.hb-screen{position:absolute;left:50%;top:0;transform:translateX(-50%);width:64%;height:190px;border-radius:28px;background:#0B0E0D;border:3px solid #2A3230;box-shadow:0 30px 60px -20px rgba(0,0,0,.8),0 0 0 1px rgba(255,255,255,.04),0 0 80px -10px rgba(61,220,132,.18);color:#fff;padding:16px 20px;display:grid;grid-template-rows:auto 1fr auto;gap:6px;overflow:hidden}
-.scr-top{display:flex;justify-content:space-between;align-items:center;font:600 12px/1 var(--font);color:#9AA59F}
-.scr-top .bt{display:inline-flex;gap:6px;align-items:center;color:#fff}
-.scr-top .bt i{width:22px;height:11px;border:1.5px solid #fff;border-radius:3px;position:relative}
-.scr-top .bt i::after{content:"";position:absolute;left:1.5px;top:1.5px;bottom:1.5px;width:calc((100% - 3px) * .72);background:#3DDC84;border-radius:1px}
-.scr-mid{display:grid;grid-template-columns:auto 1fr;gap:16px;align-items:center}
-.limit{width:58px;height:58px;border-radius:50%;background:#fff;border:6px solid #E5484D;color:#0B0E0D;display:grid;place-items:center;font:800 21px/1 var(--font);font-variant-numeric:tabular-nums;transition:transform 300ms var(--glide)}
-.limit.pulse{transform:scale(1.15)}
-.spd{display:flex;align-items:baseline;gap:6px}
-.spd b{font:800 56px/1 var(--font);letter-spacing:-.02em;font-variant-numeric:tabular-nums;transition:color 300ms ease}
-.spd span{font:600 13px/1 var(--font);color:#9AA59F}
-.turn{display:grid;grid-template-columns:30px minmax(0,1fr);gap:10px;align-items:center;font-size:13px}
-.turn svg{width:30px;height:30px;color:#3DDC84;transition:transform 300ms var(--glide),color 300ms ease}
-.turn b{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:650;font-size:14px}
-.turn span{color:#9AA59F}
-.zonepill{display:none;border-radius:999px;padding:4px 8px;font:700 11px/1 var(--font)}
-.hb-screen[data-s="slow"] .zonepill{display:inline-block;background:#F5A524;color:#0B0E0D}
-.hb-screen[data-s="pavement"]{border-color:#E5484D;box-shadow:0 30px 60px -20px rgba(0,0,0,.8),0 0 80px -10px rgba(229,72,77,.35)}
-.hb-screen[data-s="pavement"] .zonepill{display:inline-block;background:#E5484D;color:#fff}
-.hb-screen[data-s="pavement"] .turn svg{color:#E5484D}
-.hb-screen[data-s="pavement"] .spd b{color:#FFB3B5}
-.hb-screen[data-s="park"] .zonepill{display:inline-block;background:#3DDC84;color:#0B0E0D}
+/* the real Bolt 7 handlebar (Bolt's photo); our screen states are mapped onto its display with a perspective transform */
+.dev{position:relative;width:100%;aspect-ratio:5/3;overflow:hidden;-webkit-mask-image:radial-gradient(50% 50% at 50% 48%,#000 62%,transparent 100%);mask-image:radial-gradient(50% 50% at 50% 48%,#000 62%,transparent 100%)}
+.dev>img{position:absolute;width:228.572%;max-width:none;left:-64.286%;top:-42.857%;height:auto;display:block}
+.scr{position:absolute;left:0;top:0;width:320px;height:300px;transform-origin:0 0;background:#fff;overflow:hidden;font-family:"Inter Tight",var(--font);color:#111;backface-visibility:hidden}
+.scr-bar{position:absolute;left:0;right:0;top:0;height:28px;display:flex;align-items:center;justify-content:space-between;padding:0 14px;font:700 15px/1 "Inter Tight",var(--font);z-index:2}
+.scr-bar .bat{display:inline-flex;align-items:center;gap:6px}
+.scr-bar .bat i{width:26px;height:12px;border:2px solid #111;border-radius:3px;position:relative}
+.scr-bar .bat i::after{content:"";position:absolute;inset:1px;right:6px;background:#111;border-radius:1px}
+.scr-map{position:absolute;left:0;right:0;top:0;height:170px;background:#F4F2EE}
+.scr-map svg{position:absolute;inset:0;width:100%;height:100%}
+.scr-map .zone{transition:opacity 400ms ease}
+.scr-ban{position:absolute;left:0;right:0;bottom:0;height:140px;border-radius:14px 14px 0 0;display:grid;grid-template-columns:72px minmax(0,1fr);gap:16px;align-items:center;padding:0 22px;color:#fff;transition:background-color 400ms ease}
+.scr-ban .ico{width:72px;height:66px;border:4px solid #fff;border-radius:12px;display:grid;place-items:center;font:800 40px/1 "Inter Tight",var(--font)}
+.scr-ban .ico svg{width:40px;height:40px;fill:none;stroke:#fff;stroke-width:4;stroke-linecap:round;stroke-linejoin:round}
+.scr-ban b{font:800 30px/1.05 "Inter Tight",var(--font);letter-spacing:-.01em}
+.scr[data-s="route"] .scr-ban{background:#1D6FE8}
+.scr[data-s="slow"] .scr-ban{background:#F2A01E;color:#111}.scr[data-s="slow"] .scr-ban .ico{border-color:#111;background:#fff;color:#111;border-radius:50%;border:7px solid #E5484D;width:70px;height:70px;font-size:30px}
+.scr[data-s="pavement"] .scr-ban{background:#E5484D}
+.scr[data-s="park"] .scr-ban{background:#2E9D5B}
+.scr .st{display:none}.scr[data-s="route"] .st-route,.scr[data-s="slow"] .st-slow,.scr[data-s="pavement"] .st-pave,.scr[data-s="park"] .st-park{display:contents}
+.scr .z-slow,.scr .z-pave{opacity:0}.scr[data-s="slow"] .z-slow{opacity:1}.scr[data-s="pavement"] .z-pave{opacity:1}
 .story-note{margin-top:28px;font-size:14px;color:#8E9993;text-align:center}
 
 /* facts */
-.facts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:48px 40px}
-.fact{border-top:2px solid var(--ink);padding:24px 0 8px;display:grid;gap:10px;align-content:start}
-.fact b{font:800 clamp(48px,5vw,72px)/1 var(--display);letter-spacing:-.03em;color:var(--ink)}
-.fact h3{font-size:24px}
-.fact p{color:var(--muted);font-size:17px;line-height:1.55}
-.fact.green{border-color:var(--green)}.fact.green b{color:var(--green-text)}
+/* facts: bolt.eu's grey stat cards, one in Bolt green; the smaller changes share one grey panel with icons */
+.facts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px}
+.fact{background:#F4F5F5;border-radius:28px;padding:40px 36px;display:grid;gap:12px;align-content:start;min-height:300px}
+.fact b{font:800 clamp(56px,5.4vw,84px)/1 var(--display);letter-spacing:-.03em;color:var(--ink);margin-bottom:auto}
+.fact h3{font-size:26px;margin-top:28px}
+.fact p{color:#4A524E;font-size:17px;line-height:1.5}
+.fact.green{background:#2B8659;color:#fff}.fact.green b,.fact.green h3{color:#fff}.fact.green p{color:#fff}
+.more-feats{margin-top:20px;background:#F4F5F5;border-radius:28px;padding:40px 36px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:36px}
+.more-feats li{display:grid;grid-template-columns:48px minmax(0,1fr);gap:16px;align-items:start}
+.more-feats svg{width:48px;height:48px;padding:11px;border-radius:14px;background:#fff;fill:none;stroke:var(--ink);stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.more-feats h3{font-size:21px}
+.more-feats p{color:#4A524E;font-size:16px;margin-top:4px}
 @supports (animation-timeline: view()){
   .fact{animation:rise linear both;animation-timeline:view();animation-range:entry 0% entry 60%}
   @keyframes rise{from{opacity:0;transform:translateY(40px)}to{opacity:1;transform:none}}
@@ -548,29 +545,33 @@ body.head-over .site-head:not(.solid):not(.menu-open) .btn-head{background:#fff;
 .b7-photo cite{font-style:normal;color:#9AA39E;font-size:16px}
 
 /* where */
-.where{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:32px}
-.place{border-top:2px solid var(--ink);padding-top:22px;display:grid;gap:8px;align-content:start}
-.place h3{font-size:26px}
-.place .flag{order:2;color:var(--muted);font-size:17px}
-.place p{order:3;color:var(--muted);font-size:17px}
-.here{margin-top:72px;border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:36px 0;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:24px;align-items:center}
-.here h3{font-size:26px}
-.here p{color:var(--muted);margin-top:8px;font-size:17px;max-width:40rem}
+/* where: one grey panel with the three markets, then a green Bolt banner for everyone else */
+.where{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));background:#F4F5F5;border-radius:28px;padding:40px 36px;gap:36px}
+.place{display:grid;gap:6px;align-content:start}
+.place+.place{border-left:1px solid #E1E4E2;padding-left:36px}
+.place h3{font-size:28px}
+.place .flag{order:2;color:#4A524E;font-size:17px;font-weight:600}
+.place p{order:3;color:#4A524E;font-size:17px}
+.here{margin-top:20px;background:#2B8659;color:#fff;border-radius:28px;padding:44px 40px;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:24px;align-items:center}
+.here h3{font-size:clamp(26px,2.6vw,36px);color:#fff}
+.here p{color:#fff;margin-top:10px;font-size:18px;max-width:40rem}
+.here .btn{background:#fff;color:var(--ink)}.here .btn:hover{background:#E9F5EE}
 .src{margin-top:28px;font-size:14px;color:var(--muted);max-width:60rem}
 .src a{color:var(--green-text)}
 
 @media (max-width:860px){
   .story-grid{grid-template-columns:minmax(0,1fr);gap:0}
   .story-sticky{top:76px;height:auto;padding:16px 0 24px;background:linear-gradient(#0E1010 80%,rgba(14,16,16,0));z-index:2}
-  .handle{height:170px}.hb-screen{width:78%;height:160px;padding:12px 14px;border-radius:22px}.spd b{font-size:44px}.limit{width:48px;height:48px;font-size:18px;border-width:5px}
-  .handle .stem{top:56px}.handle .grip{top:48px}.handle .lever{top:82px}
   .story-steps li,.story-steps li:first-child{min-height:58vh}
-  .facts,.where{grid-template-columns:minmax(0,1fr)}
+  .facts,.where,.more-feats{grid-template-columns:minmax(0,1fr)}
+  .place+.place{border-left:0;padding-left:0;border-top:1px solid #E1E4E2;padding-top:24px}
+  .fact{min-height:0}
   .fact{min-height:0}
   .here{grid-template-columns:minmax(0,1fr)}
   .l-hero{display:block;min-height:0}
   .l-hero video{position:relative;display:block;left:auto;width:100%;height:auto;aspect-ratio:16/10}
   .l-hero::after{background:linear-gradient(0deg,#000 0%,rgba(0,0,0,0) 22%);bottom:auto;height:calc(100vw * .625)}
+  .l-hero{background:linear-gradient(#000 70%,#0E1010)}
   .l-hero .wrap{padding-block:8px 56px}
 }
 @media (prefers-reduced-motion:reduce){.limit,.turn svg{transition:none}}
@@ -619,7 +620,7 @@ Test: Rent a scooter clicks from the launch page vs. the Scooters page; scroll d
     <div class="wrap">
       <p class="eyebrow">New on the streets</p>
       <h1 id="h1">Meet Bolt&nbsp;7</h1>
-      <p class="sub">The scooter that knows the rules. A display on the handlebar shows the way, the slow zones and where to park.</p>
+      <p class="sub">Older scooters told you the rules in the app, then fined you after the ride. Bolt 7 shows them on the handlebar while you ride.</p>
       <div class="ctas"><button class="btn btn-primary" type="button" data-handoff>Rent a scooter</button><a class="btn btn-ghost-dark" href="#story">See one ride <span aria-hidden="true">↓</span></a></div>
       <div class="meta"><span>Rolling out first in Germany, Belgium and Switzerland.</span></div>
     </div>
@@ -627,18 +628,30 @@ Test: Rent a scooter clicks from the launch page vs. the Scooters page; scroll d
 
   <section class="story block" id="story" aria-labelledby="storyT">
     <div class="wrap">
-      <div class="sec-head"><p class="eyebrow" style="color:#9FE3BE">One ride, four moments</p><h2 id="storyT">The rules, on the handlebar, while you ride.</h2><p>Earlier scooters explained the rules in the app before the ride and fined you after it. Bolt 7 shows them at the moment they matter.</p></div>
+      <div class="sec-head"><p class="eyebrow" style="color:#9FE3BE">One ride, four moments</p><h2 id="storyT">The rules, on the handlebar, while you ride.</h2><p>Shown on the real Bolt 7 display.</p></div>
       <div class="story-grid has-pin"><button class="pin" type="button" style="left:8px;top:-12px" data-note="Scroll story">Why: the four AI and display features are hard to picture from a list.
 Changed: the handlebar display stays in view and changes as each moment scrolls past: route, slow zone, pavement, parking.
 Build: IntersectionObserver sets data-s on the display; text stays in the page, the display is decorative (aria-hidden), so screen-reader users get the same story as plain text.
 A11y: with reduced motion the steps still fade, but nothing moves.</button>
         <div class="story-sticky" aria-hidden="true">
-          <div class="handle">
-            <span class="lever l"></span><span class="lever r"></span><span class="stem"></span><span class="grip l"></span><span class="grip r"></span>
-            <div class="hb-screen" id="scr" data-s="route">
-              <div class="scr-top"><span id="sClock">4:12 · €1.63</span><span class="zonepill" id="sPill">SLOW ZONE</span><span class="bt"><i></i><span>72%</span></span></div>
-              <div class="scr-mid"><div class="limit" id="sLimit">25</div><div class="spd"><b id="sSpd">18</b><span>km/h</span></div></div>
-              <div class="turn"><svg viewBox="0 0 30 30" id="sArrow"><path d="M15 25V8M15 8l-6 6M15 8l6 6" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg><div><b id="sTurn">Turn right in 120 m</b><span id="sSub">Then 600 m to your destination</span></div></div>
+          <div class="dev" id="dev">
+            <img src="assets/img/b7.webp" alt="" width="1600" height="900" loading="lazy">
+            <div class="scr" id="scr" data-s="route">
+              <div class="scr-map"><svg viewBox="0 0 320 170" preserveAspectRatio="none">
+                <path d="M0 30 C60 20 90 60 120 110 L120 170 L0 170Z" fill="#F7D9DE"/><path d="M0 0 H150 C130 40 130 70 150 100 L0 120Z" fill="#F9E6D9" opacity=".7"/>
+                <path class="zone z-slow" d="M150 40 H320 V150 H150 C170 110 170 80 150 40Z" fill="#F7C873" opacity=".55"/>
+                <path class="zone z-pave" d="M182 28 H214 V170 H182Z" fill="#F4A3A6"/>
+                <path d="M168 0 L172 60 L178 170" stroke="#E23B3B" stroke-width="5" fill="none"/>
+                <circle cx="176" cy="92" r="17" fill="#1D6FE8" stroke="#fff" stroke-width="4"/><path d="M176 82 l8 15 -8 -4 -8 4z" fill="#fff"/>
+                <rect x="120" y="128" width="22" height="20" rx="4" fill="#173B8C"/><text x="131" y="143" fill="#fff" font-size="14" font-weight="800" text-anchor="middle" font-family="Inter Tight, Inter, sans-serif">P</text>
+              </svg></div>
+              <div class="scr-bar"><span>14:35</span><span class="bat">36 km <i></i></span></div>
+              <div class="scr-ban">
+                <span class="st st-route"><span class="ico"><svg viewBox="0 0 40 40"><path d="M12 34V20a6 6 0 0 1 6-6h12M24 8l6 6-6 6"/></svg></span><b>Turn right<br>in 120 m</b></span>
+                <span class="st st-slow"><span class="ico">10</span><b>Slow zone<br>10 km/h</b></span>
+                <span class="st st-pave"><span class="ico">!</span><b>Back to<br>the road</b></span>
+                <span class="st st-park"><span class="ico">P</span><b>Can park<br>here</b></span>
+              </div>
             </div>
           </div>
         </div>
@@ -668,11 +681,13 @@ A11y: with reduced motion the steps still fade, but nothing moves.</button>
       <div class="facts">
         <article class="fact green"><b>4×</b><h3>Brighter headlight</h3><p>Four times stronger than the previous model, for seeing and being seen.</p></article>
         <article class="fact"><b>15%+</b><h3>More durable</h3><p>Simpler parts break less often and are faster to repair, so more scooters stay on the street.</p></article>
-        <article class="fact"><b>22k+</b><h3>On the way</h3><p>More than 22,000 Bolt 7 scooters are being deployed across Germany, Belgium and Switzerland.</p></article>
-        <article class="fact"><h3>Smoother brakes</h3><p>Recalibrated braking that feels calmer and more controlled.</p></article>
-        <article class="fact"><h3>A warning on steep hills</h3><p>An audible alert when you go too fast downhill.</p></article>
-        <article class="fact"><h3>Fits more riders</h3><p>A slightly lower handlebar makes it comfortable for more people.</p></article>
+        <article class="fact"><b>22k+</b><h3>On the way</h3><p>Bolt 7 scooters being deployed across Germany, Belgium and Switzerland.</p></article>
       </div>
+      <ul class="more-feats" role="list">
+        <li><svg viewBox="0 0 26 26" aria-hidden="true"><circle cx="13" cy="13" r="9"/><circle cx="13" cy="13" r="3.5"/></svg><div><h3>Smoother brakes</h3><p>Recalibrated braking that feels calmer and more controlled.</p></div></li>
+        <li><svg viewBox="0 0 26 26" aria-hidden="true"><path d="M3 21h20L3 7z"/><path d="M14 4v5M14 12v.5"/></svg><div><h3>A warning on steep hills</h3><p>An audible alert when you go too fast downhill.</p></div></li>
+        <li><svg viewBox="0 0 26 26" aria-hidden="true"><circle cx="13" cy="6" r="3"/><path d="M7 23v-8a6 6 0 0 1 12 0v8"/></svg><div><h3>Fits more riders</h3><p>A slightly lower handlebar suits more people.</p></div></li>
+      </ul>
     </div>
   </section>
 
@@ -805,9 +820,9 @@ window.Concept = (() => {
 
   /* header over a dark hero: transparent until the hero has scrolled under it */
   { const over = $('[data-head-over]'), head = $('#siteHead');
-    if (over && head) { document.body.classList.add('head-over');
-      const io = new IntersectionObserver(([e]) => head.classList.toggle('solid', !e.isIntersecting), { rootMargin: `-${head.offsetHeight}px 0px 0px 0px` });
-      io.observe(over); } }
+    if (over && head) { document.body.classList.add('head-over'); if (over.dataset.headOver === 'light') document.body.classList.add('head-light');
+      const tick = () => head.classList.toggle('solid', scrollY > 8);   // like bolt.eu: transparent only at the very top
+      addEventListener('scroll', tick, { passive: true }); tick(); } }
 
   /* rails: mouse drag (touch scrolls natively), arrow buttons, end states */
   $$('.rail').forEach(r => {
@@ -963,20 +978,20 @@ window.Concept = (() => {
   new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting && !userPaused) v.play().catch(() => {}); else v.pause(); }), { threshold: .2 }).observe(v);
   setBtn();
 
-  /* scroll story: the display follows the step in view */
-  const S = {
-    route:    { limit: 25, spd: 18, pill: '', turn: 'Turn right in 120 m', sub: 'Then 600 m to your destination', rot: 90 },
-    slow:     { limit: 10, spd: 10, pill: 'SLOW ZONE', turn: 'Pedestrian zone ahead', sub: 'Limit 10 km/h for 300 m', rot: 0 },
-    pavement: { limit: 10, spd: 6, pill: 'PAVEMENT', turn: 'Back to the road, please', sub: 'Slowing down', rot: -90 },
-    park:     { limit: 10, spd: 0, pill: 'CAN PARK HERE', turn: 'Parking rack in 30 m', sub: 'End your ride in the green zone', rot: 0 },
-  };
-  const scr = $('#scr'), L = $('#sLimit');
-  const show = k => {
-    const s = S[k]; if (!s || scr.dataset.s === k) return; scr.dataset.s = k;
-    if (L.textContent !== String(s.limit)) { L.textContent = s.limit; if (!reduced) { L.classList.add('pulse'); setTimeout(() => L.classList.remove('pulse'), 320); } }
-    $('#sSpd').textContent = s.spd; $('#sPill').textContent = s.pill || 'SLOW ZONE'; $('#sTurn').textContent = s.turn; $('#sSub').textContent = s.sub;
-    $('#sArrow').style.transform = `rotate(${s.rot}deg)`;
-  };
+  /* scroll story: the real display shows the state of the step in view */
+  const scr = $('#scr'), dev = $('#dev');
+  const show = k => { if (scr.dataset.s !== k) scr.dataset.s = k; };
+  // map the 320×300 screen onto the display corners in Bolt's photo (image px 1600×900), cropped to x 450–1150, y 180–600
+  const Q = [[688, 271.5], [913, 271.5], [982.5, 455.5], [622.5, 455.5]];
+  const solve = (A, b) => { const n = b.length; for (let i = 0; i < n; i++) { let m = i; for (let r = i + 1; r < n; r++) if (Math.abs(A[r][i]) > Math.abs(A[m][i])) m = r; [A[i], A[m]] = [A[m], A[i]]; [b[i], b[m]] = [b[m], b[i]];
+    for (let r = i + 1; r < n; r++) { const f = A[r][i] / A[i][i]; for (let c = i; c < n; c++) A[r][c] -= f * A[i][c]; b[r] -= f * b[i]; } }
+    const x = Array(n).fill(0); for (let i = n - 1; i >= 0; i--) { let t = b[i]; for (let c = i + 1; c < n; c++) t -= A[i][c] * x[c]; x[i] = t / A[i][i]; } return x; };
+  const fit = () => { const W = dev.clientWidth, H = dev.clientHeight; const P = Q.map(([x, y]) => [(x - 450) / 700 * W, (y - 180) / 420 * H]);
+    const S = [[0, 0], [320, 0], [320, 300], [0, 300]], A = [], b = [];
+    for (let i = 0; i < 4; i++) { const [x, y] = S[i], [u, v] = P[i]; A.push([x, y, 1, 0, 0, 0, -u * x, -u * y]); b.push(u); A.push([0, 0, 0, x, y, 1, -v * x, -v * y]); b.push(v); }
+    const [a1, a2, a3, b1, b2, b3, c1, c2] = solve(A, b);
+    scr.style.transform = `matrix3d(${a1},${b1},0,${c1},${a2},${b2},0,${c2},0,0,1,0,${a3},${b3},0,1)`; };
+  new ResizeObserver(fit).observe(dev); fit();
   const steps = $$("#storySteps li");
   const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { steps.forEach(x => x.classList.toggle('on', x === e.target)); show(e.target.dataset.s); } }), { rootMargin: '-45% 0px -45% 0px' });
   steps.forEach(s => io.observe(s)); steps[0].classList.add('on');
